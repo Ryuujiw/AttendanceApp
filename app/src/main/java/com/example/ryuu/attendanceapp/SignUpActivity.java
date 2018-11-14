@@ -7,23 +7,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
-    Button btn_login;
+    Button btn_sign_up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
 
-        btn_login = findViewById(R.id.btn_login);
+        btn_sign_up = findViewById(R.id.btn_sign_up);
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        btn_sign_up.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this,ClassActivity.class);
+                Toast.makeText(SignUpActivity.this,"Sign Up Successful",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
                 startActivity(intent);
 
             }
