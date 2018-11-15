@@ -23,10 +23,16 @@ public class ClassActivity extends AppCompatActivity {
     FloatingActionButton fabtn_add_class;
     private String classCode = "";
 
+    //MODE
+    private String loginMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
+
+        // GET LOGIN MODE
+        loginMode = getIntent().getStringExtra("LOGIN_MODE");
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
