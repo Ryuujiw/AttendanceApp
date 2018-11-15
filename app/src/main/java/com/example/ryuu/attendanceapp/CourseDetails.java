@@ -15,7 +15,7 @@ public class CourseDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details);
 
-        btn_done = findViewById(R.id.btn_create);
+        btn_done = findViewById(R.id.btn_done);
 
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
