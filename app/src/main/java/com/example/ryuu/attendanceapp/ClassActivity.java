@@ -24,7 +24,7 @@ public class ClassActivity extends AppCompatActivity {
     private String classCode = "";
 
     //MODE
-    private String loginMode;
+    String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,11 @@ public class ClassActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+//                if(loginMode == "student"){
+//                    Toast.makeText(ClassActivity.this, "sdsdsd", Toast.LENGTH_SHORT).show();
+//                } else if (loginMode == "teacher"){
+//                    Toast.makeText(ClassActivity.this, "ttctctc", Toast.LENGTH_SHORT).show();
+//                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
                 builder.setTitle("Enter your class code : ");
 
@@ -74,7 +79,6 @@ public class ClassActivity extends AppCompatActivity {
                 });
 
                 builder.show();
-
             }
         });
     }
