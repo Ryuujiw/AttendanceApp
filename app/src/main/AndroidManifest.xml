@@ -20,6 +20,7 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ClassActivity" />
         <activity android:name=".ClassDetailsActivity" />
+        <activity android:name=".CreateCourseActivity"></activity>
     </application>
 
 </manifest>
