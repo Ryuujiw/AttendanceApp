@@ -1,6 +1,7 @@
 package com.example.ryuu.attendanceapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,8 @@ public class ClassActivity extends AppCompatActivity {
         // GET LOGIN MODE
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
 
+        Toast.makeText(ClassActivity.this,loginMode,Toast.LENGTH_SHORT).show();
+
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
 
@@ -48,37 +51,37 @@ public class ClassActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-//                if(loginMode == "student"){
-//                    Toast.makeText(ClassActivity.this, "sdsdsd", Toast.LENGTH_SHORT).show();
-//                } else if (loginMode == "teacher"){
-//                    Toast.makeText(ClassActivity.this, "ttctctc", Toast.LENGTH_SHORT).show();
-//                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
-                builder.setTitle("Enter your class code : ");
+                if(loginMode.equals("student")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                    builder.setTitle("Enter your class code : ");
 
-                // Set up the input
-                final EditText input = new EditText(ClassActivity.this);
-                // Specify the type of input expected;
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
+                    // Set up the input
+                    final EditText input = new EditText(ClassActivity.this);
+                    // Specify the type of input expected;
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(input);
 
-                // Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        classCode = input.getText().toString();
-                        Toast.makeText(ClassActivity.this,"Class Added",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ClassActivity.this,"Canceled",Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                });
+                    // Set up the buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            classCode = input.getText().toString();
+                            Toast.makeText(ClassActivity.this,"Class Added",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(ClassActivity.this,"Canceled",Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
+                        }
+                    });
 
-                builder.show();
+                    builder.show();
+                } else if (loginMode.equals("teacher")){
+                    Intent intent = new Intent(ClassActivity.this,CreateCourseActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
