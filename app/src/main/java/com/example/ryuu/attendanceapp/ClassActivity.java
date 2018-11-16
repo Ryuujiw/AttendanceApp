@@ -8,7 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +27,7 @@ public class ClassActivity extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
     FloatingActionButton fabtn_add_class;
+    ClassRecyclerViewAdapter classRecyclerViewAdapter;
     private String classCode = "";
 
     //MODE
@@ -40,11 +46,14 @@ public class ClassActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         List<Class> allClassInfor = getAllClassInfor();
-        ClassRecyclerViewAdapter classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClassInfor);
+        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClassInfor);
         recyclerView.setAdapter(classRecyclerViewAdapter);
 
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +94,29 @@ public class ClassActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater =  getMenuInflater();
+        inflater.inflate(R.menu.tb_profile,menu);
 
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                classRecyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
     private List<Class> getAllClassInfor(){
 
         List<Class> allClass = new ArrayList<Class>();
