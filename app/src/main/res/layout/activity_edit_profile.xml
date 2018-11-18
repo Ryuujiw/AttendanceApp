@@ -37,7 +37,7 @@
 
             <EditText
                 android:id="@+id/et_email3"
-                android:layout_width="368dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -69,7 +69,7 @@
 
             <EditText
                 android:id="@+id/et_name_edit"
-                android:layout_width="368dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -115,7 +115,7 @@
 
             <EditText
                 android:id="@+id/et_email4"
-                android:layout_width="368dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -133,7 +133,7 @@
 
             <EditText
                 android:id="@+id/et_matric"
-                android:layout_width="368dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -183,7 +183,7 @@
 
             <EditText
                 android:id="@+id/et_course"
-                android:layout_width="368dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
