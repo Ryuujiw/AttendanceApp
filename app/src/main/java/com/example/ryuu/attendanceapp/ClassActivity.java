@@ -96,8 +96,9 @@ public class ClassActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater =  getMenuInflater();
-        inflater.inflate(R.menu.tb_profile,menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu,menu);
 
         MenuItem item = menu.findItem(R.id.menu_search);
         SearchView searchView = (SearchView)item.getActionView();
@@ -115,7 +116,7 @@ public class ClassActivity extends AppCompatActivity {
             }
         });
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
     private List<Class> getAllClassInfor(){
 
