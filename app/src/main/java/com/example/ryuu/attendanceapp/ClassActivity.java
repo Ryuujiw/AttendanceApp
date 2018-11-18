@@ -133,4 +133,18 @@ public class ClassActivity extends AppCompatActivity {
 
         return allClass;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent;
+        switch(item.getItemId())
+        {
+            case R.id.menu_myprofile:
+                Toast.makeText(ClassActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
+                intent = new Intent(ClassActivity.this, acitvity_myprofile.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
