@@ -31,7 +31,8 @@
             android:value="barcode" />
 
         <activity android:name=".QRScanner" />
-        <activity android:name=".acitvity_myprofile"></activity>
+        <activity android:name=".acitvity_myprofile" />
+        <activity android:name=".activity_edit_profile"></activity>
     </application>
 
 </manifest>
