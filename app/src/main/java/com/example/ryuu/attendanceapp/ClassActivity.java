@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class ClassActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.tb_class);
         setSupportActionBar(toolbar);
 
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
@@ -103,6 +104,8 @@ public class ClassActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.menu_search);
         SearchView searchView = (SearchView)item.getActionView();
 
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -111,12 +114,13 @@ public class ClassActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 classRecyclerViewAdapter.getFilter().filter(newText);
                 return false;
             }
         });
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
+//        return true;
     }
     private List<Class> getAllClassInfor(){
 
