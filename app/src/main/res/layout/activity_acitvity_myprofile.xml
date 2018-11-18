@@ -70,55 +70,40 @@
 
                     android:src="@android:drawable/ic_menu_edit" />
 
-                <EditText
-                    android:id="@+id/et_name"
+                <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="70dp"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="center_vertical|center"
-                    android:inputType="textPersonName"
                     android:text="Name"
+                    android:textColor="#fff"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"/>
+                    android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/et_matric"
+                <TextView
+                    android:id="@+id/tv_matric"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/et_name"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/tv_name"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="103dp"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="center_vertical|center"
-                    android:inputType="textPersonName"
+                    android:layout_marginTop="10dp"
                     android:text="Matric"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"/>
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/et_email"
+                <TextView
+                    android:id="@+id/tv_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/et_matric"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/tv_matric"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="136dp"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="center_vertical|center"
-                    android:inputType="textPersonName"
+                    android:layout_marginTop="10dp"
                     android:text="Email"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="22sp"
-                    android:textStyle="bold|italic" />
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
 
             </RelativeLayout>
 
