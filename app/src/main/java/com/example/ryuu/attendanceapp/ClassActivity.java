@@ -8,8 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +28,7 @@ public class ClassActivity extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
     FloatingActionButton fabtn_add_class;
+    ClassRecyclerViewAdapter classRecyclerViewAdapter;
     private String classCode = "";
 
     //MODE
@@ -40,11 +47,14 @@ public class ClassActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
 
+        Toolbar toolbar = findViewById(R.id.tb_class);
+        setSupportActionBar(toolbar);
+
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         List<Class> allClassInfor = getAllClassInfor();
-        ClassRecyclerViewAdapter classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClassInfor);
+        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClassInfor);
         recyclerView.setAdapter(classRecyclerViewAdapter);
 
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +95,33 @@ public class ClassActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu,menu);
+
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                classRecyclerViewAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+//        return true;
+    }
     private List<Class> getAllClassInfor(){
 
         List<Class> allClass = new ArrayList<Class>();
@@ -96,5 +132,19 @@ public class ClassActivity extends AppCompatActivity {
         allClass.add(new Class("Network Programming",R.drawable.network));
 
         return allClass;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent;
+        switch(item.getItemId())
+        {
+            case R.id.menu_myprofile:
+                Toast.makeText(ClassActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
+                intent = new Intent(ClassActivity.this, acitvity_myprofile.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

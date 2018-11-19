@@ -24,14 +24,15 @@
         <activity android:name=".ClassActivity" />
         <activity android:name=".ClassDetailsActivity" />
         <activity android:name=".CreateCourseActivity" />
-        <activity android:name=".CourseDetails"></activity>
+        <activity android:name=".CourseDetails" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".QRScanner"></activity>
-
+        <activity android:name=".QRScanner" />
+        <activity android:name=".acitvity_myprofile" />
+        <activity android:name=".activity_edit_profile"></activity>
     </application>
 
 </manifest>

@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,17 +16,20 @@ import com.example.ryuu.attendanceapp.Class;
 import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ClassViewHolder> {
+public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ClassViewHolder> implements Filterable {
 
     public List<Class> classList;
+    public List<Class> classListFull;
     private Context context;
 
 
     public ClassRecyclerViewAdapter(Context context, List<Class> classList ) {
         this.context = context;
         this.classList = classList;
+        classListFull = new ArrayList<>(classList); //copy of courselist to be used in filter search
     }
 
     @NonNull
@@ -47,7 +52,42 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         return classList.size();
     }
 
-    public class ClassViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public Filter getFilter() {
+        return classFilter;
+    }
+
+    private Filter classFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraints) {
+            List<Class> filteredList = new ArrayList<>();
+
+            if (constraints == null || constraints.length() == 0) {
+                filteredList.addAll(classListFull);
+            } else {
+                String filterPattern = constraints.toString().toLowerCase().trim();
+
+                for (Class course : classListFull) {
+                    if (course.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(course);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            classList.clear();
+            classList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+        public class ClassViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView tvClassName;
         public ImageView imgViewClassImage;
