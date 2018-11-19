@@ -15,7 +15,6 @@ import android.view.ViewGroup;
  */
 public class ForumFragment extends Fragment {
 
-    FloatingActionButton floatingActionButton;
     public ForumFragment() {
         // Required empty public constructor
     }
@@ -27,15 +26,6 @@ public class ForumFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forum, container, false);
 
-        floatingActionButton = view.findViewById(R.id.fab_QRScanner);
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),QRScanner.class);
-                startActivity(intent);
-            }
-        });
         return view;
     }
 

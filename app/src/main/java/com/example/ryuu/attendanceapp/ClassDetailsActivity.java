@@ -39,9 +39,6 @@ public class ClassDetailsActivity extends AppCompatActivity {
                     case 1:
                         Toast.makeText(ClassDetailsActivity.this,"Forum is selected", Toast.LENGTH_SHORT).show();
                         break;
-                    case 2:
-                        Toast.makeText(ClassDetailsActivity.this,"Details is selected", Toast.LENGTH_SHORT).show();
-                        break;
                 }
             }
 
@@ -59,7 +56,6 @@ public class ClassDetailsActivity extends AppCompatActivity {
         ClassFragmentPagerAdapter adapter = new ClassFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new AttendanceFragment(),"Attendance");
         adapter.addFrag(new ForumFragment(),"Forum");
-        adapter.addFrag(new DetailsFragment(),"Details");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
