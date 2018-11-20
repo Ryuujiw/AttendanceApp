@@ -1,16 +1,38 @@
 package com.example.ryuu.attendanceapp.objects;
 
+import java.util.ArrayList;
+
 public class Question {
 
     private int id;
+    private String title;
     private String description;
     private int upvote;
     private int downvote;
     private String answer;
+    private ArrayList<String> tags;
 
-    public Question(int id, String description) {
+    public Question(int id, String title, String description, ArrayList<String> tags) {
         this.id = id;
+        this.title = title;
         this.description = description;
+        this.tags = tags;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
     public int getId() {
