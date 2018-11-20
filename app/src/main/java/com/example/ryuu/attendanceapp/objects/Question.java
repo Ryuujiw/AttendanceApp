@@ -2,6 +2,12 @@ package com.example.ryuu.attendanceapp.objects;
 
 public class Question {
 
+    private int id;
+    private String description;
+    private int upvote;
+    private int downvote;
+    private String answer;
+
     public Question(int id, String description) {
         this.id = id;
         this.description = description;
@@ -46,12 +52,4 @@ public class Question {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
-
-    private int id;
-    private String description;
-    private int upvote;
-    private int downvote;
-    private String answer;
-
-
 }
