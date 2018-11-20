@@ -10,13 +10,23 @@ public class Question {
     private int upvote;
     private int downvote;
     private String answer;
-    private ArrayList<String> tags;
+    private String username;
+    private String tags;
 
-    public Question(int id, String title, String description, ArrayList<String> tags) {
+    public Question(int id, String title, String description, String tags, String username) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.tags = tags;
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {
@@ -27,11 +37,11 @@ public class Question {
         this.title = title;
     }
 
-    public ArrayList<String> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
