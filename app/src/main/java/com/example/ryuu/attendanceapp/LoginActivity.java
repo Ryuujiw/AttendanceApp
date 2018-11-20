@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         // Propose to add a ROLE column in DB for user table to store whether student or teacher
         // Temporary workaround is to parse the username and see if the regex matches student id or not
 
-        return username.matches("@siswa.ukm.edu.my") ? "student" : "teacher";
+        return username.contains("@siswa.ukm.edu.my") ? "student" : "teacher";
     }
 
     @Override
