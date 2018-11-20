@@ -97,19 +97,19 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Intent intent;
-
-        switch (item.getItemId()){
-            case R.id.menu_forum:
-                intent = new Intent(ClassList_Teacher_Activity.this, ForumFragment.class);
-                startActivity(intent);
-                break;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        Intent intent;
+//
+//        switch (item.getItemId()){
+//            case R.id.menu_forum:
+//                intent = new Intent(ClassList_Teacher_Activity.this, ForumFragment.class);
+//                startActivity(intent);
+//                break;
+//
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }
