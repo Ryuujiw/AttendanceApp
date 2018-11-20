@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ryuu.attendanceapp.Class;
+import com.example.ryuu.attendanceapp.ClassActivity;
 import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
@@ -104,6 +105,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
             intent.putExtra("className", classList.get(getAdapterPosition()).getName());
+            intent.putExtra("LOGIN_MODE", ClassActivity.loginMode);
             view.getContext().startActivity(intent);
         }
     }

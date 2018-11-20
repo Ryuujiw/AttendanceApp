@@ -40,11 +40,11 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setDisplayHomeAsUpEnabled(false);
 
-        recyclerView = findViewById(R.id.recycler_view_class_list);
         linearLayoutManager = new LinearLayoutManager(ClassList_Teacher_Activity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerView = findViewById(R.id.recycler_view_class_list);
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(ClassList_Teacher_Activity.this, DividerItemDecoration.VERTICAL));
-
 
         List<ClassList> allClassListInfo = getAllClassListInfo();
         classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassListInfo);
@@ -54,7 +54,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
 
     private List<ClassList> getAllClassListInfo() {
 
-        List<ClassList> allClassList = new ArrayList<ClassList>();
+        List<ClassList> allClassList = new ArrayList<>();
 
         //retrieve class list from database
         allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "2.00 p.m."));
@@ -71,31 +71,31 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.classlist_menu,menu);
-
-        MenuItem item = menu.findItem(R.id.menu_search_classlist);
-        SearchView searchView = (SearchView)item.getActionView();
-
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.classlist_menu,menu);
+//
+//        MenuItem item = menu.findItem(R.id.menu_search_classlist);
+//        SearchView searchView = (SearchView)item.getActionView();
+//
+//        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {

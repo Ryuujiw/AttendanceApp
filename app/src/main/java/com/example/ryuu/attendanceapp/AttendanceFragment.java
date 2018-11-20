@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.Toast;
  * A simple {@link Fragment} subclass.
  */
 public class AttendanceFragment extends Fragment {
+    private String loginMode;
     CardView cardView_status, cardView_classSummary;
     FloatingActionButton floatingActionButton;
     TextView tv_classStatus;
@@ -29,6 +31,7 @@ public class AttendanceFragment extends Fragment {
     public AttendanceFragment() {
         // Required empty public constructor
     }
+
     int colorMode =0;
 
     @Override
@@ -37,13 +40,24 @@ public class AttendanceFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_attendance, container, false);
 
+        // GET LOGIN MODE
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            loginMode = bundle.getString("LOGIN_MODE", "");
+        }
+
         floatingActionButton = view.findViewById(R.id.fab_QRScanner);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),QRScanner.class);
-                startActivity(intent);
+                if(loginMode.equals("teacher")){
+                    Intent intent = new Intent(getActivity(), ClassList_Teacher_Activity.class);
+                    startActivity(intent);
+                } else if(loginMode.equals("student")){
+                    Intent intent = new Intent(getActivity(),QRScanner.class);
+                    startActivity(intent);
+                }
             }
         });
         iv_QRcode = view.findViewById(R.id.iv_generated_qrcode);
@@ -52,11 +66,11 @@ public class AttendanceFragment extends Fragment {
         cardView_classSummary = view.findViewById(R.id.cv_classSummary);
         cardView_classSummary.setVisibility(View.INVISIBLE);
         cardView_status = view.findViewById(R.id.cv_attendance_status);
+
+
         cardView_status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 switch (colorMode){
                     case 0:
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());

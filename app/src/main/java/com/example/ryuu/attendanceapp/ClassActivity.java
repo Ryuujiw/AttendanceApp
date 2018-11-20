@@ -30,12 +30,12 @@ public class ClassActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     FloatingActionButton fabtn_add_class;
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
-    private String classCode = "";
+    String classCode = "";
 
     private FirebaseAuth firebaseAuth;
 
     //MODE
-    String loginMode;
+    public static String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

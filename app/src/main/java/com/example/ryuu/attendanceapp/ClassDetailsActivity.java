@@ -1,6 +1,7 @@
 package com.example.ryuu.attendanceapp;
 
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +15,24 @@ public class ClassDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
+    AttendanceFragment attendanceFragment;
+
+    private String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_details);
-        //Intent intent = getIntent();
+
+        attendanceFragment = new AttendanceFragment();
+
+        // LOGIN MODE
+        loginMode = getIntent().getStringExtra("LOGIN_MODE");
+        Toast.makeText(ClassDetailsActivity.this, loginMode, Toast.LENGTH_LONG).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("LOGIN_MODE", loginMode);
+        attendanceFragment.setArguments(bundle);
 
         toolbar = findViewById(R.id.toolbar_class);
         tabLayout = findViewById(R.id.tabs_class);
@@ -54,7 +67,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
 
     private void setupViewPager(){
         ClassFragmentPagerAdapter adapter = new ClassFragmentPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new AttendanceFragment(),"Attendance");
+        adapter.addFrag(attendanceFragment,"Attendance");
         adapter.addFrag(new ForumFragment(),"Forum");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
