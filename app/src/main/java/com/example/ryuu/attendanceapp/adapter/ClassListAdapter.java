@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import android.widget.Filter;
@@ -13,6 +14,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.ryuu.attendanceapp.ClassList;
+import com.example.ryuu.attendanceapp.ClassListDetails;
 import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
@@ -93,9 +95,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
         }
     };
 
-    public class ClassListViewHolder extends RecyclerView.ViewHolder {
-//        implements
-//    } View.OnClickListener{
+    public class ClassListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
 
         TextView className, classDate, classStartTime;
 
@@ -106,16 +107,18 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
             className = itemView.findViewById(R.id.txt_class_name);
             classDate = itemView.findViewById(R.id.txt_class_date);
             classStartTime = itemView.findViewById(R.id.txt_class_start_time);
-//        itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
         }
 
-//    @Override
-//    public void onClick(View view) {
-//        Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
-//        intent.putExtra("className", classList.get(getAdapterPosition()).getName());
-//        view.getContext().startActivity(intent);
-//    }
+
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(view.getContext(), ClassListDetails.class);
+            intent.putExtra("className", classListData.get(getAdapterPosition()).getClassName());
+            view.getContext().startActivity(intent);
+        }
     }
 
 
