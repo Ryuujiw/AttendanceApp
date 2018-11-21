@@ -1,11 +1,16 @@
 package com.example.ryuu.attendanceapp;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassFragmentPagerAdapter;
@@ -18,6 +23,8 @@ public class ClassDetailsActivity extends AppCompatActivity {
     AttendanceFragment attendanceFragment;
 
     private String loginMode;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,9 @@ public class ClassDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setupViewPager();
 
+        ActionBar myActionBar = getSupportActionBar();
+        myActionBar.setDisplayHomeAsUpEnabled(false);
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
@@ -63,6 +73,29 @@ public class ClassDetailsActivity extends AppCompatActivity {
 
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.classdetails_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent;
+        switch (item.getItemId()){
+
+            case R.id.menu_class_info:
+                Toast.makeText(ClassDetailsActivity.this, "Class Info", Toast.LENGTH_SHORT).show();
+                intent = new Intent(ClassDetailsActivity.this, ClassListDetails.class);
+                startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupViewPager(){

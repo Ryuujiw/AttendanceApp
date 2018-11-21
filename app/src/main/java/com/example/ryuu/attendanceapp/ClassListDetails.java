@@ -1,6 +1,5 @@
 package com.example.ryuu.attendanceapp;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,12 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 public class ClassListDetails extends AppCompatActivity {
 
-    Button btn_startClass;
+
     Toolbar toolbar;
 
     @Override
@@ -23,21 +20,10 @@ public class ClassListDetails extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar_classlist_details);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Class Details");
 
         ActionBar myActionBar = getSupportActionBar();
-        myActionBar.setDisplayHomeAsUpEnabled(false);
+        myActionBar.setDisplayHomeAsUpEnabled(true);
 
-        btn_startClass = findViewById(R.id.btn_startclass);
-
-        btn_startClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(ClassListDetails.this, );
-//                startActivity(intent);
-            }
-
-        });
     }
 
     @Override
@@ -52,13 +38,10 @@ public class ClassListDetails extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent;
-
         switch (item.getItemId()){
-            case R.id.classList_menu_forum:
-                intent = new Intent(ClassListDetails.this, ForumFragment.class);
-                startActivity(intent);
-                break;
+
+            case android.R.id.home:
+                finish(); // close current activity and return to previous activity
 
         }
         return super.onOptionsItemSelected(item);

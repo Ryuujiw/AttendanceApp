@@ -13,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.ClassList;
 import com.example.ryuu.attendanceapp.ClassListDetails;
 import com.example.ryuu.attendanceapp.R;
@@ -115,7 +116,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ClassListDetails.class);
+            Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
             intent.putExtra("className", classListData.get(getAdapterPosition()).getClassName());
             view.getContext().startActivity(intent);
         }
