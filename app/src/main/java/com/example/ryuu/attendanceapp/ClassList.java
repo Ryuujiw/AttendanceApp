@@ -1,38 +1,37 @@
 package com.example.ryuu.attendanceapp;
 
 public class ClassList {
-    String class_name;
-    String class_date;
-    String class_start_time;
+    String className;
+    String classDate;
+    String classStartTime;
 
     public ClassList(String className, String classDate, String classStartTime){
-        className = class_name;
-        classDate = class_date;
-        classStartTime = class_start_time;
+        this.className = className;
+        this.classDate = classDate;
+        this.classStartTime = classStartTime;
     }
 
-    public String getClass_name() {
-        return class_name;
+    public String getClassName() {
+        return className;
     }
 
-    public String getClass_date() {
-        return class_date;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public void setClass_name(String class_name) {
-        this.class_name = class_name;
+    public String getClassDate() {
+        return classDate;
     }
 
-    public void setClass_date(String class_date) {
-        this.class_date = class_date;
+    public void setClassDate(String classDate) {
+        this.classDate = classDate;
     }
 
-    public void setClass_start_time(String class_start_time) {
-        this.class_start_time = class_start_time;
+    public String getClassStartTime() {
+        return classStartTime;
     }
 
-    public String getClass_start_time() {
-
-        return class_start_time;
+    public void setClassStartTime(String classStartTime) {
+        this.classStartTime = classStartTime;
     }
 }

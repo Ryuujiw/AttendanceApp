@@ -35,7 +35,6 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_classlist);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Class List");
 
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setDisplayHomeAsUpEnabled(false);
@@ -54,7 +53,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
 
     private List<ClassList> getAllClassListInfo() {
 
-        List<ClassList> allClassList = new ArrayList<>();
+        List<ClassList> allClassList = new ArrayList<ClassList>();
 
         //retrieve class list from database
         allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "2.00 p.m."));
