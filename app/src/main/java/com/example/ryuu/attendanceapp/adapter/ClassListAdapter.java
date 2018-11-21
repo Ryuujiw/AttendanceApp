@@ -43,9 +43,9 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     @Override
     public void onBindViewHolder(@NonNull ClassListViewHolder holder, int position) {
 
-        holder.className.setText(classListData.get(position).getClass_name());
-        holder.classDate.setText(classListData.get(position).getClass_date());
-        holder.classStartTime.setText(classListData.get(position).getClass_start_time());
+        holder.className.setText(classListData.get(position).getClassName());
+        holder.classDate.setText(classListData.get(position).getClassDate());
+        holder.classStartTime.setText(classListData.get(position).getClassStartTime());
 
     }
 
@@ -73,7 +73,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 for(ClassList class_list : classListDataFull){
-                    if(class_list.getClass_name().toLowerCase().contains(filterPattern)){
+                    if(class_list.getClassName().toLowerCase().contains(filterPattern)){
                         filter_classList.add(class_list);
                     }
                 }
