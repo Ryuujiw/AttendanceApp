@@ -34,7 +34,8 @@
         <activity android:name=".acitvity_myprofile" />
         <activity android:name=".activity_edit_profile" />
         <activity android:name=".ClassList_Teacher_Activity" />
-        <activity android:name=".ClassListDetails"></activity>
+        <activity android:name=".ClassListDetails" />
+        <activity android:name=".Add_Class_Activity"></activity>
     </application>
 
 </manifest>

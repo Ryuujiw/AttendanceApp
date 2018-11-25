@@ -1,8 +1,10 @@
 package com.example.ryuu.attendanceapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -10,10 +12,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
 
@@ -26,6 +33,11 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
+    String classTitle = "";
+    String classDate = "";
+    String classTime = "";
+    List<ClassList> allClassList;
+
 
 
     @Override
@@ -49,11 +61,41 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
         classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassListInfo);
         recyclerView.setAdapter(classListAdapter);
 
+        floatingActionButton = findViewById(R.id.fabutton_add);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassList_Teacher_Activity.this);
+
+                LayoutInflater inflater = ClassList_Teacher_Activity.this.getLayoutInflater();
+
+                builder.setView(inflater.inflate(R.layout.activity_add__class_,null));
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //how to retrieve data from Add_Class_Activity.class?
+                        
+                        allClassList.add(new ClassList(classTitle, classDate, classTime));
+                        Toast.makeText(ClassList_Teacher_Activity.this, "Class added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+            }
+        });
+
     }
 
-    private List<ClassList> getAllClassListInfo() {
+    public List<ClassList> getAllClassListInfo() {
 
-        List<ClassList> allClassList = new ArrayList<ClassList>();
+        allClassList = new ArrayList<ClassList>();
 
         //retrieve class list from database
         allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "2.00 p.m."));
