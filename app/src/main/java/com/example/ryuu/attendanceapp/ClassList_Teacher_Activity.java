@@ -27,18 +27,15 @@ import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassList_Teacher_Activity extends AppCompatActivity {
+public class ClassList_Teacher_Activity extends AppCompatActivity implements Add_Class_Activity.addClassActivityListener{
 
     ClassListAdapter classListAdapter;
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
-    String classTitle = "";
-    String classDate = "";
-    String classTime = "";
+    String classTitle, classDate, classTime;
     List<ClassList> allClassList;
-
-
+    Add_Class_Activity addClassActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,43 +58,39 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
         classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassListInfo);
         recyclerView.setAdapter(classListAdapter);
 
+
+
         floatingActionButton = findViewById(R.id.fabutton_add);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassList_Teacher_Activity.this);
-
-                LayoutInflater inflater = ClassList_Teacher_Activity.this.getLayoutInflater();
-
-                builder.setView(inflater.inflate(R.layout.activity_add__class_,null));
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //how to retrieve data from Add_Class_Activity.class?
-                        
-                        allClassList.add(new ClassList(classTitle, classDate, classTime));
-                        Toast.makeText(ClassList_Teacher_Activity.this, "Class added", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
+                openDialog();
             }
         });
 
     }
 
-    public List<ClassList> getAllClassListInfo() {
+    public void openDialog(){
+        addClassActivity = new Add_Class_Activity();
+        addClassActivity.show(getSupportFragmentManager(), "add class dialog");
+    }
+
+    @Override
+    public void applyText(String title, String date, String time) {
+
+        classTitle = title;
+        classDate = date;
+        classTime = time;
+
+    }
+
+    public List<ClassList> getAllClassListInfo(){
 
         allClassList = new ArrayList<ClassList>();
 
-        //retrieve class list from database
+        //retrieve class list from ClassList.java
+        allClassList.add(new ClassList(classTitle, classDate, classTime));
         allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "2.00 p.m."));
         allClassList.add(new ClassList("Lecture Week 4", "2018-07-30", "2.00 p.m."));
         allClassList.add(new ClassList("Lecture Week 5", "2018-08-02", "10.00 a.m."));
@@ -111,46 +104,4 @@ public class ClassList_Teacher_Activity extends AppCompatActivity {
 
     }
 
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.classlist_menu,menu);
-//
-//        MenuItem item = menu.findItem(R.id.menu_search_classlist);
-//        SearchView searchView = (SearchView)item.getActionView();
-//
-//        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        Intent intent;
-//
-//        switch (item.getItemId()){
-//            case R.id.menu_forum:
-//                intent = new Intent(ClassList_Teacher_Activity.this, ForumFragment.class);
-//                startActivity(intent);
-//                break;
-//
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }
