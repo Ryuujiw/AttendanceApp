@@ -197,25 +197,9 @@
                     android:text="Bachelor in Computer Science"
                     android:textSize="20sp"
                     app:layout_constraintLeft_toRightOf="@+id/tv_course"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" /><![CDATA[
 
-                <Button
-                    android:id="@+id/btn_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Logout"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/password" />
 
-                <![CDATA[
 
                 android:ems="10"
                     android:inputType="textPersonName"
@@ -223,8 +207,9 @@
                     tools:layout_editor_absoluteX="52dp"
                     tools:layout_editor_absoluteY="40dp" />
 
-            ]]>
 
+
+            ]]>
             </android.support.constraint.ConstraintLayout>
 
             <ImageButton
