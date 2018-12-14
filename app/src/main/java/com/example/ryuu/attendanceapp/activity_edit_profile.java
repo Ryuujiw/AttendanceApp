@@ -59,13 +59,13 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
         {
             case R.id.menu_item_save:
                 Toast.makeText(activity_edit_profile.this, "Change saved", Toast.LENGTH_SHORT).show();
-                intent = new Intent(activity_edit_profile.this, acitvity_myprofile.class);
+                intent = new Intent(activity_edit_profile.this, activity_myprofile.class);
                 //save and update database
                 startActivity(intent);
                 break;
             case R.id.menu_item_close:
                 Toast.makeText(activity_edit_profile.this, "Change discarded", Toast.LENGTH_SHORT).show();
-                intent = new Intent(activity_edit_profile.this, acitvity_myprofile.class);
+                intent = new Intent(activity_edit_profile.this, activity_myprofile.class);
                 //back
                 startActivity(intent);
                 break;

@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.object;
 
 public class Class {
     String name;

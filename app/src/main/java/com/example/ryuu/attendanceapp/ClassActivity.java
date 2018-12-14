@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
+import com.example.ryuu.attendanceapp.object.Class;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +142,7 @@ public class ClassActivity extends AppCompatActivity {
         {
             case R.id.menu_myprofile:
                 Toast.makeText(ClassActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
-                intent = new Intent(ClassActivity.this, acitvity_myprofile.class);
+                intent = new Intent(ClassActivity.this, activity_myprofile.class);
                 startActivity(intent);
                 break;
         }
