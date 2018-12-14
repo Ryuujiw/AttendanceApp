@@ -1,26 +1,14 @@
 package com.example.ryuu.attendanceapp;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
 
@@ -78,7 +66,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
 
     @Override
     public void applyText(String title, String date, String time) {
-
+        //set data from dialog
         classTitle = title;
         classDate = date;
         classTime = time;
@@ -90,18 +78,17 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         allClassList = new ArrayList<ClassList>();
 
         //retrieve class list from ClassList.java
-        allClassList.add(new ClassList(classTitle, classDate, classTime));
-        allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "2.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 4", "2018-07-30", "2.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 5", "2018-08-02", "10.00 a.m."));
-        allClassList.add(new ClassList("Lecture Week 6", "2018-08-10", "2.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 7", "2018-08-15", "4.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 8", "2018-08-22", "2.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 9", "2018-08-27", "2.00 p.m."));
-        allClassList.add(new ClassList("Lecture Week 10", "2018-09-03", "8.00 a.m."));
+        allClassList.add(new ClassList(classTitle, classDate, classTime)); // adding new class that created
+        allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "14:00"));
+        allClassList.add(new ClassList("Lecture Week 4", "2018-07-30", "14:00"));
+        allClassList.add(new ClassList("Lecture Week 5", "2018-08-02", "10:00"));
+        allClassList.add(new ClassList("Lecture Week 6", "2018-08-10", "14:00"));
+        allClassList.add(new ClassList("Lecture Week 7", "2018-08-15", "16:00"));
+        allClassList.add(new ClassList("Lecture Week 8", "2018-08-22", "14:00"));
+        allClassList.add(new ClassList("Lecture Week 9", "2018-08-27", "14:00"));
+        allClassList.add(new ClassList("Lecture Week 10", "2018-09-03", "8:00"));
 
         return allClassList;
 
     }
-
 }

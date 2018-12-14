@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import java.util.Calendar;
 
 public class Add_Class_Activity extends AppCompatDialogFragment {
@@ -52,6 +54,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 String date = class_date.getText().toString();
                 String time = class_time.getText().toString();
                 addClassListener.applyText(title, date, time);
+                Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
 
             }
 
