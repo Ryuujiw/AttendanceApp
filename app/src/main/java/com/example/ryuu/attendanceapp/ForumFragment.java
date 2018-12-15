@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Question;
@@ -20,15 +22,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ForumFragment extends Fragment {
     private List<Question> questionList = new ArrayList<>();
     private RecyclerView recyclerView;
     private QuestionRecyclerViewAdapter questionRecyclerViewAdapter;
+    private DatabaseReference database;
 
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference conditionRef = rootRef.child("votes");
+    private Button addQuestion;
+
+    private static final String TAG = "Forum Fragments";
+
+    //    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    //    DatabaseReference conditionRef = rootRef.child("votes");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,33 +51,30 @@ public class ForumFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        conditionRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // UPDATE LIKES
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        database = FirebaseDatabase.getInstance().getReference();
         View view = inflater.inflate(R.layout.fragment_forum, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        addQuestion = view.findViewById(R.id.btn_add_question);
+        addQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         //populate questionList
-        questionList.add(new Question(1, "How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question(2, "How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question(3, "How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question(4, "How", "What is life?", "#life", "Ryan"));
+        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
+        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
+        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
+        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
 
         questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
 
@@ -77,6 +83,38 @@ public class ForumFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         return view;
+    }
+
+    private void writeNewQuestion(String title, String description, String tags, String username){
+
+        String key = database.child("questions").push().getKey();
+
+        final Question newQuestion = new Question(title, description, tags, username);
+
+        database.child("questions");
+
+        ValueEventListener questionNum = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int lastChildNumber = (int) dataSnapshot.getChildrenCount();
+                newQuestion.setId("q" + lastChildNumber);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Failed to read from Database");
+            }
+        };
+
+        database.addValueEventListener(questionNum);
+
+        Map<String, Object> questionValues = newQuestion.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        childUpdates.put("/questions/" + key, questionValues);
+
+        database.updateChildren(childUpdates);
     }
 
 }

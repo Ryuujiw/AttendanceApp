@@ -1,10 +1,14 @@
 package com.example.ryuu.attendanceapp.objects;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Question {
 
-    private int id;
+    private String id;
     private String title;
     private String description;
     private int upvote;
@@ -13,12 +17,17 @@ public class Question {
     private String username;
     private String tags;
 
-    public Question(int id, String title, String description, String tags, String username) {
-        this.id = id;
+    public Question(String title, String description, String tags, String username) {
         this.title = title;
         this.description = description;
         this.tags = tags;
         this.username = username;
+    }
+
+    public static String generateId(int lastChildNumber){
+        int newId = lastChildNumber + 1;
+
+        return "q"+ String.valueOf(newId);
     }
 
     public String getUsername() {
@@ -45,11 +54,11 @@ public class Question {
         this.tags = tags;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -83,5 +92,17 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
+    }
+
+    @Exclude
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> newQuestion = new HashMap<>();
+        newQuestion.put("id", id);
+        newQuestion.put("title", title);
+        newQuestion.put("description", description);
+        newQuestion.put("username", username);
+        newQuestion.put("tags", tags);
+
+        return newQuestion;
     }
 }
