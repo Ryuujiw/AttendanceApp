@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Class;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class ClassActivity extends AppCompatActivity {
     FloatingActionButton fabtn_add_class;
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
     private String classCode = "";
+
+    private FirebaseAuth firebaseAuth;
 
     //MODE
     String loginMode;

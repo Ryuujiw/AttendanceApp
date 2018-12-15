@@ -7,84 +7,54 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/txt_description"
-        android:layout_width="326dp"
-        android:layout_height="327dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:ems="10"
-        android:hint="Enter your question here!"
-        android:inputType="textLongMessage"
-        android:singleLine="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_title" />
-
-    <EditText
-        android:id="@+id/txt_title"
+        android:id="@+id/txt_new_question_title"
         android:layout_width="321dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="52dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txt_tags"
+        android:id="@+id/txt_new_question_tags"
         android:layout_width="324dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="13dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_description" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_new_question_description" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <EditText
+        android:id="@+id/txt_new_question_description"
+        android:layout_width="321dp"
+        android:layout_height="317dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Post a Question"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_title"
+        android:ems="10"
+        android:hint="Describe your question here!"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/txt_new_question_tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_post_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Post!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_tags" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_new_question_title" />
 
 </android.support.constraint.ConstraintLayout>

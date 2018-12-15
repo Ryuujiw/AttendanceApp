@@ -26,7 +26,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
             txt_question = itemView.findViewById(R.id.txt_question);
             txt_user = itemView.findViewById(R.id.txt_user);
 //            txt_answer = itemView.findViewById(R.id.);
-            txt_description = itemView.findViewById(R.id.txt_description);
+            txt_description = itemView.findViewById(R.id.txt_new_question_description);
             txt_votes = itemView.findViewById(R.id.txt_votes);
 
             btn_up = itemView.findViewById(R.id.btn_up);

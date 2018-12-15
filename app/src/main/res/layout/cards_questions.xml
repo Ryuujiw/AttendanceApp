@@ -57,7 +57,7 @@
                 app:layout_constraintGuide_begin="214dp" />
 
             <TextView
-                android:id="@+id/txt_description"
+                android:id="@+id/txt_new_question_description"
                 android:layout_width="316dp"
                 android:layout_height="49dp"
                 android:layout_marginLeft="8dp"
@@ -114,7 +114,7 @@
                 android:text="Read"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_description" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_new_question_description" />
 
         </android.support.constraint.ConstraintLayout>
 
