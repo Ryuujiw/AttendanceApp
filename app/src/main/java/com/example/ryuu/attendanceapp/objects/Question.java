@@ -24,12 +24,6 @@ public class Question {
         this.username = username;
     }
 
-    public static String generateId(int lastChildNumber){
-        int newId = lastChildNumber + 1;
-
-        return "q"+ String.valueOf(newId);
-    }
-
     public String getUsername() {
         return username;
     }

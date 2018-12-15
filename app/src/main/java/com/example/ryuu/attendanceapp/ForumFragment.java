@@ -136,34 +136,20 @@ public class ForumFragment extends Fragment {
 
     private void writeNewQuestion(String title, String description, String tags, String username){
 
-        String key = database.child("questions").push().getKey();
-
         final Question newQuestion = new Question(title, description, tags, username);
 
-        database.child("questions");
-
-        ValueEventListener questionNum = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int lastChildNumber = (int) dataSnapshot.getChildrenCount();
-                newQuestion.setId("q" + lastChildNumber);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "Failed to read from Database");
-            }
-        };
-
-        database.addValueEventListener(questionNum);
+        String key = database.child("questions").push().getKey();
 
         Map<String, Object> questionValues = newQuestion.toMap();
-
         Map<String, Object> childUpdates = new HashMap<>();
-
         childUpdates.put("/questions/" + key, questionValues);
-
         database.updateChildren(childUpdates);
-    }
 
+        database.child("classes/networkw1/forum");
+
+        Map<String, Object> classChildUpdates = new HashMap<>();
+        classChildUpdates.put("/classes/networkw1/forum/" + key, true);
+
+        database.updateChildren(classChildUpdates);
+    }
 }
