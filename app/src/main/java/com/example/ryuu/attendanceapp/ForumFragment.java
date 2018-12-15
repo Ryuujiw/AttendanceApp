@@ -2,6 +2,7 @@ package com.example.ryuu.attendanceapp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,11 @@ import android.view.ViewGroup;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Question;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,9 @@ public class ForumFragment extends Fragment {
     private RecyclerView recyclerView;
     private QuestionRecyclerViewAdapter questionRecyclerViewAdapter;
 
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference conditionRef = rootRef.child("votes");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +37,23 @@ public class ForumFragment extends Fragment {
 
     public ForumFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        conditionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // UPDATE LIKES
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

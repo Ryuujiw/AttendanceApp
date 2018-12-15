@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.google.android.gms:play-services:9.8.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
 }

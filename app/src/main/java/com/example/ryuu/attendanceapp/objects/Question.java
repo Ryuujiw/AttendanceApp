@@ -9,7 +9,7 @@ public class Question {
     private String description;
     private int upvote;
     private int downvote;
-    private String answer;
+    private ArrayList<Answer> answers;
     private String username;
     private String tags;
 
@@ -77,11 +77,11 @@ public class Question {
         this.downvote = downvote;
     }
 
-    public String getAnswer() {
-        return answer;
+    public ArrayList<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
     }
 }
