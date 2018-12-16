@@ -17,6 +17,9 @@ public class Question {
     private String username;
     private String tags;
 
+    public Question() {
+    }
+
     public Question(String title, String description, String tags, String username) {
         this.title = title;
         this.description = description;

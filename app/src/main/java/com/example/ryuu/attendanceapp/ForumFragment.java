@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Question;
+import com.google.android.gms.games.quest.Quest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,10 +28,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ForumFragment extends Fragment {
     private List<Question> questionList = new ArrayList<>();
@@ -119,11 +123,37 @@ public class ForumFragment extends Fragment {
             }
         });
 
+        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/");
+
         //populate questionList
-        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
-        questionList.add(new Question("How", "What is life?", "#life", "Ryan"));
+        final ValueEventListener questionListener = new ValueEventListener() {
+            ArrayList<String> questionIdLists = new ArrayList<>();
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
+                    questionIdLists.add(questionSnapshot.getKey());
+//                    questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+//                    recyclerView.setAdapter(questionRecyclerViewAdapter);
+                }
+
+                database = FirebaseDatabase.getInstance().getReference("/questions/");
+
+
+
+                for(String id: questionIdLists){
+                    System.out.println(id);
+                    // LOOKUP IN QUESTIONS
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        database.addValueEventListener(questionListener);
 
         questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
 
@@ -138,17 +168,19 @@ public class ForumFragment extends Fragment {
 
         final Question newQuestion = new Question(title, description, tags, username);
 
-        String key = database.child("questions").push().getKey();
+        database = FirebaseDatabase.getInstance().getReference("/questions/");
+
+        String key = database.child("networkw1").push().getKey();
 
         Map<String, Object> questionValues = newQuestion.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/questions/" + key, questionValues);
+        childUpdates.put(key, questionValues);
         database.updateChildren(childUpdates);
 
-        database.child("classes/networkw1/forum");
+        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/");
 
         Map<String, Object> classChildUpdates = new HashMap<>();
-        classChildUpdates.put("/classes/networkw1/forum/" + key, true);
+        classChildUpdates.put(key, true);
 
         database.updateChildren(classChildUpdates);
     }
