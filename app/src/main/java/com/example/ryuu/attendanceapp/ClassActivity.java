@@ -61,6 +61,8 @@ public class ClassActivity extends AppCompatActivity {
         classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClassInfor);
         recyclerView.setAdapter(classRecyclerViewAdapter);
 
+        firebaseAuth = firebaseAuth.getInstance();
+
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -148,6 +150,11 @@ public class ClassActivity extends AppCompatActivity {
                 intent = new Intent(ClassActivity.this, acitvity_myprofile.class);
                 startActivity(intent);
                 break;
+
+            case R.id.menu_logout:
+                firebaseAuth.signOut();
+                intent = new Intent(ClassActivity.this, LoginActivity.class);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
