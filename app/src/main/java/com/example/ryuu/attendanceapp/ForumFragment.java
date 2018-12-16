@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class ForumFragment extends Fragment {
     private List<Question> questionList = new ArrayList<>();
@@ -123,29 +124,26 @@ public class ForumFragment extends Fragment {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1");
+
 
         //populate questionList
         final ValueEventListener questionListener = new ValueEventListener() {
-            ArrayList<String> questionIdLists = new ArrayList<>();
-
+            Stack<Question> questionBuffer = new Stack<Question>();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                questionList.clear();
                 for(DataSnapshot questionSnapshot: dataSnapshot.getChildren()) {
-                    questionIdLists.add(questionSnapshot.getKey());
-//                    questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
-//                    recyclerView.setAdapter(questionRecyclerViewAdapter);
+                    Question question = questionSnapshot.getValue(Question.class);
+                    questionBuffer.push(question);
                 }
 
-                database = FirebaseDatabase.getInstance().getReference("/questions/");
-
-
-
-                for(String id: questionIdLists){
-                    System.out.println(id);
-                    // LOOKUP IN QUESTIONS
-
+                while(!questionBuffer.isEmpty()){
+                    questionList.add(questionBuffer.pop());
                 }
+
+                questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+                recyclerView.setAdapter(questionRecyclerViewAdapter);
             }
 
             @Override
@@ -174,7 +172,7 @@ public class ForumFragment extends Fragment {
 
         Map<String, Object> questionValues = newQuestion.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(key, questionValues);
+        childUpdates.put("/networkw1/" + key, questionValues);
         database.updateChildren(childUpdates);
 
         database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/");
