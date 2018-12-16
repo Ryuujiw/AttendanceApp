@@ -119,7 +119,6 @@ public class ForumFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance().getReference("/questions/networkw1");
 
-
         //populate questionList
         final ValueEventListener questionListener = new ValueEventListener() {
             Stack<Question> questionBuffer = new Stack<Question>();

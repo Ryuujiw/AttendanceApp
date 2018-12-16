@@ -21,22 +21,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/lbl_readq_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Tags: Ecchi, Romance"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
-
     <EditText
         android:id="@+id/txt_readq_answer"
         android:layout_width="364dp"
         android:layout_height="61dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -45,6 +34,7 @@
         android:ems="10"
         android:hint="Help a friend!"
         android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/btn_readq_answer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,48 +44,12 @@
         android:id="@+id/btn_readq_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="Answer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_readq_answer" />
-
-    <ImageButton
-        android:id="@+id/btn_readq_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="152dp"
-        android:layout_marginStart="152dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/btn_readq_answer"
-        app:layout_constraintTop_toBottomOf="@+id/txt_readq_answer"
-        app:srcCompat="@drawable/ic_thumb_up_black_24dp" />
-
-    <ImageButton
-        android:id="@+id/btn_readq_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_readq_up"
-        app:layout_constraintTop_toBottomOf="@+id/txt_readq_answer"
-        app:srcCompat="@drawable/ic_thumb_down_black_24dp" />
-
-    <TextView
-        android:id="@+id/lbl_readq_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Ryuu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/lbl_readq_description"
@@ -113,14 +67,36 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recylcerview_answer"
-        android:layout_width="368dp"
-        android:layout_height="216dp"
+        android:layout_width="354dp"
+        android:layout_height="220dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_tags" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_user" />
+
+    <TextView
+        android:id="@+id/lbl_readq_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="Tags: Ecchi, Romance"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
+
+    <TextView
+        android:id="@+id/lbl_readq_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Ryuu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
 
 </android.support.constraint.ConstraintLayout>

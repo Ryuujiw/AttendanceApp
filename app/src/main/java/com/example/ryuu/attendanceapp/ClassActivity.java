@@ -46,7 +46,7 @@ public class ClassActivity extends AppCompatActivity {
         // GET LOGIN MODE
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
 
-        Toast.makeText(ClassActivity.this,loginMode,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ClassActivity.this,loginMode,Toast.LENGTH_SHORT).show();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
