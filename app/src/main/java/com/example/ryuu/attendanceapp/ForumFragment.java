@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
@@ -36,18 +38,16 @@ public class ForumFragment extends Fragment {
     private QuestionRecyclerViewAdapter questionRecyclerViewAdapter;
     private DatabaseReference database;
     private String loginMode;
+    private static final String TAG = "Forum Fragments";
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     // FROM QUESTION CARDVIEW
     private Button btn_read;
     private Button btn_upvote, btn_downvote;
 
-    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
     // FROM THE NEW QUESTION DIALOG
     private Button addQuestion;
     private EditText questionTitle, questionDescription, questionTags;
-
-    private static final String TAG = "Forum Fragments";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +77,6 @@ public class ForumFragment extends Fragment {
         if (bundle != null) {
             loginMode = bundle.getString("LOGIN_MODE", "");
         }
-
-        btn_read = view.findViewById(R.id.btn_read);
-        btn_upvote = view.findViewById(R.id.btn_up);
-        btn_downvote = view.findViewById(R.id.btn_down);
 
         // alert dialog for posting a new question.
         addQuestion = view.findViewById(R.id.btn_add_question);
@@ -143,8 +139,6 @@ public class ForumFragment extends Fragment {
 
                 questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
                 recyclerView.setAdapter(questionRecyclerViewAdapter);
-
-                Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -182,5 +176,6 @@ public class ForumFragment extends Fragment {
         classChildUpdates.put(key, true);
 
         database.updateChildren(classChildUpdates);
+        Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();
     }
 }

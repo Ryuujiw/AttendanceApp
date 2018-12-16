@@ -30,20 +30,20 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
-        android:scrollbar="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_readq_title"
         tools:text=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sem velit, mattis ut metus a, gravida fermentum metus. Pellentesque suscipit aliquet magna, in varius neque commodo sed. Donec volutpat efficitur nibh sit amet faucibus. Vivamus sit amet diam ut turpis euismod aliquam nec non quam. Suspendisse in lorem eget justo laoreet feugiat. Sed tincidunt faucibus mattis. " />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/lbl_readq_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Tags: "
+        android:text="Tags: Ecchi, Romance"
+        android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
 
@@ -61,7 +61,7 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_tags" />
 
     <Button
         android:id="@+id/btn_readq_answer"
@@ -98,5 +98,16 @@
         app:layout_constraintStart_toEndOf="@+id/btn_readq_up"
         app:layout_constraintTop_toBottomOf="@+id/txt_readq_answer"
         app:srcCompat="@drawable/ic_thumb_down_black_24dp" />
+
+    <TextView
+        android:id="@+id/lbl_readq_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Ryuu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_readq_description" />
 
 </android.support.constraint.ConstraintLayout>

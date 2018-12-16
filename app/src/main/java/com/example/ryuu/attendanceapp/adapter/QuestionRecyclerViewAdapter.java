@@ -1,5 +1,8 @@
 package com.example.ryuu.attendanceapp.adapter;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.AnswerActivity;
+import com.example.ryuu.attendanceapp.ClassActivity;
+import com.example.ryuu.attendanceapp.LoginActivity;
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Question;
 
@@ -16,6 +23,11 @@ import java.util.List;
 
 public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder> {
     private List<Question> questionList;
+
+    // FROM THE ANSWER DIALOG
+    private TextView lbl_readq_title, lbl_readq_description, lbl_readq_tags, lbl_readq_user, txt_readq_answer;
+    private ImageButton btn_readq_up, btn_readq_down;
+    private Button btn_readq_answer;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView txt_question, txt_user, txt_answer, txt_description, txt_votes;
@@ -32,7 +44,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
             btn_up = itemView.findViewById(R.id.btn_up);
             btn_down = itemView.findViewById(R.id.btn_down);
             btn_read = itemView.findViewById(R.id.btn_read);
-        }
+            }
     }
 
     public QuestionRecyclerViewAdapter(List<Question> questionList) {
@@ -55,6 +67,17 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.txt_description.setText(question.getDescription());
         int votes = question.getUpvote() + question.getDownvote();
         holder.txt_votes.setText(String.valueOf(votes));
+
+        holder.btn_read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getRootView().getContext(), "CLICK", Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(view.getContext(), AnswerActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
