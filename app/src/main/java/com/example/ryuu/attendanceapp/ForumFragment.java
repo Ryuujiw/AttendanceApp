@@ -1,15 +1,12 @@
 package com.example.ryuu.attendanceapp;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Question;
-import com.google.android.gms.games.quest.Quest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,13 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 public class ForumFragment extends Fragment {
@@ -51,9 +44,6 @@ public class ForumFragment extends Fragment {
     private EditText questionTitle, questionDescription, questionTags;
 
     private static final String TAG = "Forum Fragments";
-
-    //    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-    //    DatabaseReference conditionRef = rootRef.child("votes");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +74,8 @@ public class ForumFragment extends Fragment {
             loginMode = bundle.getString("LOGIN_MODE", "");
         }
 
+
+        // alert dialog for posting a new question.
         addQuestion = view.findViewById(R.id.btn_add_question);
         addQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +103,7 @@ public class ForumFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String qTitle = questionTitle.getText().toString();
                         String qDesc = questionDescription.getText().toString();
-                        String qTags = questionDescription.getText().toString();
+                        String qTags = questionTags.getText().toString();
                         String qUser = "Anonymous";
                         if (loginMode == "student"){
                             qUser = currentUser.getEmail().substring(0,7);
@@ -144,6 +136,8 @@ public class ForumFragment extends Fragment {
 
                 questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
                 recyclerView.setAdapter(questionRecyclerViewAdapter);
+
+                Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
