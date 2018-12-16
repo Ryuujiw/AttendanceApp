@@ -129,28 +129,4 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
         void applyText(String title, String date, String time);
     }
 
-
-    public EditText getClass_title() {
-        return class_title;
-    }
-
-    public void setClass_title(EditText class_title) {
-        this.class_title = class_title;
-    }
-
-    public EditText getClass_date() {
-        return class_date;
-    }
-
-    public void setClass_date(EditText class_date) {
-        this.class_date = class_date;
-    }
-
-    public EditText getClass_time() {
-        return class_time;
-    }
-
-    public void setClass_time(EditText class_time) {
-        this.class_time = class_time;
-    }
 }

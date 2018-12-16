@@ -1,13 +1,16 @@
 package com.example.ryuu.attendanceapp;
 
+import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
@@ -21,9 +24,10 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
-    String classTitle, classDate, classTime;
+    String classTitle="", classDate="", classTime="";
     List<ClassList> allClassList;
     Add_Class_Activity addClassActivity;
+    ClassList classData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +46,15 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(ClassList_Teacher_Activity.this, DividerItemDecoration.VERTICAL));
 
-        List<ClassList> allClassListInfo = getAllClassListInfo();
-        classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassListInfo);
+        //show list
+        applyText(classTitle, classDate, classTime);
+        allClassList = getAllClassListInfo();
+        classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList);
+        classListAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(classListAdapter);
 
 
-
         floatingActionButton = findViewById(R.id.fabutton_add);
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,30 +70,22 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     }
 
     @Override
-    public void applyText(String title, String date, String time) {
+    public void applyText(String title, String date, String time) { //process
         //set data from dialog
         classTitle = title;
         classDate = date;
         classTime = time;
 
+        if(allClassList==null){
+            allClassList = new ArrayList<>();
+        }
+
+        classData = new ClassList(classTitle, classDate, classTime);
+        allClassList.add(classData);
+
     }
 
-    public List<ClassList> getAllClassListInfo(){
-
-        allClassList = new ArrayList<ClassList>();
-
-        //retrieve class list from ClassList.java
-        allClassList.add(new ClassList(classTitle, classDate, classTime)); // adding new class that created
-        allClassList.add(new ClassList("Lecture Week 3", "2018-07-28", "14:00"));
-        allClassList.add(new ClassList("Lecture Week 4", "2018-07-30", "14:00"));
-        allClassList.add(new ClassList("Lecture Week 5", "2018-08-02", "10:00"));
-        allClassList.add(new ClassList("Lecture Week 6", "2018-08-10", "14:00"));
-        allClassList.add(new ClassList("Lecture Week 7", "2018-08-15", "16:00"));
-        allClassList.add(new ClassList("Lecture Week 8", "2018-08-22", "14:00"));
-        allClassList.add(new ClassList("Lecture Week 9", "2018-08-27", "14:00"));
-        allClassList.add(new ClassList("Lecture Week 10", "2018-09-03", "8:00"));
-
+    public List<ClassList> getAllClassListInfo(){ //getdatatweets
         return allClassList;
-
     }
 }
