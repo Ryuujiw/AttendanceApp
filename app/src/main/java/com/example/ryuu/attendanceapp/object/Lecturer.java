@@ -7,8 +7,8 @@ public class Lecturer extends user {
     private String lecturer_id;
     private List<Class> listOfCourse;
 
-    public Lecturer(String name, String email, String phone_num, String gender, String profile_image,String lecturer_id ,List<Class> listOfCourse) {
-        super(name, email, phone_num, gender, profile_image);
+    public Lecturer(String name, String email, String gender,String lecturer_id ,List<Class> listOfCourse) {
+        super(name, email, gender);
         this.listOfCourse = listOfCourse;
         this.lecturer_id = lecturer_id;
     }

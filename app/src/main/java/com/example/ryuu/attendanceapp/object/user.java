@@ -4,16 +4,16 @@ public class user {
 
     private String name;
     private String email;
-    private String phone_num;
     private String gender;
     private String profile_image;
 
-    public user(String name, String email, String phone_num, String gender, String profile_image) {
+    public user(String name, String email, String gender) {
         this.name = name;
         this.email = email;
-        this.phone_num = phone_num;
         this.gender = gender;
-        this.profile_image = profile_image;
+    }
+    public String getProfile_image() {
+        return profile_image;
     }
 
     public String getName() {
@@ -24,12 +24,12 @@ public class user {
         return email;
     }
 
-    public String getPhone_num() {
-        return phone_num;
-    }
-
     public String getGender() {
         return gender;
+    }
+
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
     }
 
     public void setName(String name) {
@@ -38,10 +38,6 @@ public class user {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPhone_num(String phone_num) {
-        this.phone_num = phone_num;
     }
 
     public void setGender(String gender) {

@@ -8,8 +8,8 @@ public class Student extends user {
     private String course;
     private List<Class> listofClass;
 
-    public Student(String name, String email, String phone_num, String gender, String profile_image, String matric_num ,String course) {
-        super(name, email, phone_num, gender, profile_image);
+    public Student(String name, String email, String gender, String matric_num ,String course) {
+        super(name, email, gender);
         this.matric_num = matric_num;
         this.course = course;
     }
