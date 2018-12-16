@@ -24,18 +24,14 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
     private DatabaseReference database;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView txt_question, txt_user, txt_description, txt_votes;
-        public ImageButton btn_up, btn_down;
+        public TextView txt_question, txt_user, txt_description;
         public Button btn_read;
         public MyViewHolder(View itemView) {
             super(itemView);
             txt_question = itemView.findViewById(R.id.txt_question);
             txt_user = itemView.findViewById(R.id.txt_user);
             txt_description = itemView.findViewById(R.id.txt_new_question_description);
-            txt_votes = itemView.findViewById(R.id.txt_votes);
 
-            btn_up = itemView.findViewById(R.id.btn_up);
-            btn_down = itemView.findViewById(R.id.btn_down);
             btn_read = itemView.findViewById(R.id.btn_read);
         }
     }
@@ -59,15 +55,12 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.txt_user.setText(question.getUsername());
         holder.txt_description.setText(question.getDescription());
         int votes = question.getUpvote() + question.getDownvote();
-        holder.txt_votes.setText(String.valueOf(votes));
 
         holder.btn_read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 database = FirebaseDatabase.getInstance().getReference();
-
-                Toast.makeText(view.getRootView().getContext(), "CLICKED: " + questionList.get(position).getId(), Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(view.getContext(), AnswerActivity.class);
 

@@ -46,6 +46,8 @@ public class AnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         lbl_readq_title = findViewById(R.id.lbl_readq_title);
         lbl_readq_description = findViewById(R.id.lbl_readq_description);
         lbl_readq_tags = findViewById(R.id.lbl_readq_tags);

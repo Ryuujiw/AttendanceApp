@@ -16,7 +16,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="180dp">
 
             <TextView
                 android:id="@+id/txt_question"
@@ -67,41 +67,6 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_user" />
-
-            <ImageButton
-                android:id="@+id/btn_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/cardview_light_background"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_read"
-                app:srcCompat="@drawable/ic_thumb_up_black_24dp" />
-
-            <ImageButton
-                android:id="@+id/btn_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/cardview_light_background"
-                app:layout_constraintStart_toEndOf="@+id/btn_up"
-                app:layout_constraintTop_toBottomOf="@+id/btn_read"
-                app:srcCompat="@drawable/ic_thumb_down_black_24dp" />
-
-            <TextView
-                android:id="@+id/txt_votes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="+ 10"
-                app:layout_constraintStart_toEndOf="@+id/btn_down"
-                app:layout_constraintTop_toBottomOf="@+id/btn_read" />
 
             <Button
                 android:id="@+id/btn_read"
