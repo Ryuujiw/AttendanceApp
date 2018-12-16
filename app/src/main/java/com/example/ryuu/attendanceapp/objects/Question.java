@@ -2,6 +2,7 @@ package com.example.ryuu.attendanceapp.objects;
 
 import com.google.firebase.database.Exclude;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,14 +14,15 @@ public class Question {
     private String description;
     private int upvote;
     private int downvote;
-    private ArrayList<Answer> answers;
+    private HashMap<String, Answer> answers = new HashMap<String, Answer>();
     private String username;
     private String tags;
 
     public Question() {
     }
 
-    public Question(String title, String description, String tags, String username) {
+    public Question(String id, String title, String description, String tags, String username) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.tags = tags;
@@ -83,12 +85,12 @@ public class Question {
         this.downvote = downvote;
     }
 
-    public ArrayList<Answer> getAnswers() {
+    public HashMap<String, Answer> getAnswers() {
         return answers;
     }
 
-    public void addAnswer(Answer answer) {
-        answers.add(answer);
+    public void setAnswers(HashMap<String, Answer> answers) {
+        this.answers = answers;
     }
 
     @Exclude

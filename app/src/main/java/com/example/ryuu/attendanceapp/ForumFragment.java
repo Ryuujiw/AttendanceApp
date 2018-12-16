@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
@@ -159,11 +157,11 @@ public class ForumFragment extends Fragment {
 
     private void writeNewQuestion(String title, String description, String tags, String username){
 
-        final Question newQuestion = new Question(title, description, tags, username);
 
         database = FirebaseDatabase.getInstance().getReference("/questions/");
 
         String key = database.child("networkw1").push().getKey();
+        final Question newQuestion = new Question(key, title, description, tags, username);
 
         Map<String, Object> questionValues = newQuestion.toMap();
         Map<String, Object> childUpdates = new HashMap<>();

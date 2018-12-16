@@ -1,5 +1,10 @@
 package com.example.ryuu.attendanceapp.objects;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Answer {
     private String id;
     private String answer;
@@ -9,6 +14,9 @@ public class Answer {
         this.id = id;
         this.answer = answer;
         this.username = username;
+    }
+
+    public Answer() {
     }
 
     public String getAnswer() {
@@ -25,5 +33,15 @@ public class Answer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> newAnswer = new HashMap<>();
+        newAnswer.put("id", id);
+        newAnswer.put("answer", answer);
+        newAnswer.put("username", username);
+
+        return newAnswer;
     }
 }
