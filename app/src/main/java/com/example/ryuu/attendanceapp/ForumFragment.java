@@ -37,10 +37,14 @@ public class ForumFragment extends Fragment {
     private DatabaseReference database;
     private String loginMode;
 
-    private Button addQuestion;
+    // FROM QUESTION CARDVIEW
+    private Button btn_read;
+    private Button btn_upvote, btn_downvote;
+
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     // FROM THE NEW QUESTION DIALOG
+    private Button addQuestion;
     private EditText questionTitle, questionDescription, questionTags;
 
     private static final String TAG = "Forum Fragments";
@@ -74,6 +78,9 @@ public class ForumFragment extends Fragment {
             loginMode = bundle.getString("LOGIN_MODE", "");
         }
 
+        btn_read = view.findViewById(R.id.btn_read);
+        btn_upvote = view.findViewById(R.id.btn_up);
+        btn_downvote = view.findViewById(R.id.btn_down);
 
         // alert dialog for posting a new question.
         addQuestion = view.findViewById(R.id.btn_add_question);
