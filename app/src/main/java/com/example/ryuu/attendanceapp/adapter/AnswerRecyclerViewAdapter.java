@@ -12,15 +12,16 @@ import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Answer;
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerRecyclerViewAdapter extends RecyclerView.Adapter<AnswerRecyclerViewAdapter.MyViewHolder> {
     private List<Answer> answerList;
+    private Context context;
     private DatabaseReference database;
 
-    public AnswerRecyclerViewAdapter(List<Answer> answerList) {
+    public AnswerRecyclerViewAdapter(Context context, List<Answer> answerList) {
         this.answerList = answerList;
+        this.context = context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -35,8 +36,7 @@ public class AnswerRecyclerViewAdapter extends RecyclerView.Adapter<AnswerRecycl
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_answers, parent, false);
-
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_answers, null);
         return new MyViewHolder(itemView);
     }
 

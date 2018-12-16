@@ -2,6 +2,7 @@ package com.example.ryuu.attendanceapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -31,24 +32,22 @@ public class AnswerActivity extends AppCompatActivity {
     private DatabaseReference database;
     private String questionId;
     private AnswerRecyclerViewAdapter answerRecyclerViewAdapter;
-    private RecyclerView recyclerView;
-    private List<Answer> answerList = new ArrayList<>();
+
+    LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
-        Answer a1 = new Answer("a1", "mom", "dad");
-        Answer a2 = new Answer("a2", "mom", "dad");
-        Answer a3 = new Answer("a3", "mom", "dad");
+        RecyclerView recyclerView = findViewById(R.id.recylcerview_answer);
 
-        answerList.add(a1);
-        answerList.add(a2);
-        answerList.add(a3);
+        linearLayoutManager = new LinearLayoutManager(AnswerActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        recyclerView = findViewById(R.id.recylcerview_answer);
-        answerRecyclerViewAdapter = new AnswerRecyclerViewAdapter(answerList);
+        List<Answer> answerList = getAllAnswers();
+
+        answerRecyclerViewAdapter = new AnswerRecyclerViewAdapter(AnswerActivity.this, answerList);
         recyclerView.setAdapter(answerRecyclerViewAdapter);
 
         questionId = getIntent().getStringExtra("QID");
@@ -88,5 +87,20 @@ public class AnswerActivity extends AppCompatActivity {
         database.updateChildren(childUpdates);
 ;
         Toast.makeText(getBaseContext(), "Your answer has been posted.", Toast.LENGTH_LONG).show();
+    }
+
+    private List<Answer> getAllAnswers(){
+        List<Answer> allAnswers = new ArrayList<Answer>();
+
+
+        Answer a1 = new Answer("a1", "mom", "dad");
+        Answer a2 = new Answer("a2", "mom", "dad");
+        Answer a3 = new Answer("a3", "mom", "dad");
+
+        allAnswers.add(a1);
+        allAnswers.add(a2);
+        allAnswers.add(a3);
+
+        return allAnswers;
     }
 }
