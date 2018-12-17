@@ -17,14 +17,20 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.object.Class;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
 
 public class Add_Class_Activity extends AppCompatDialogFragment {
 
-    EditText class_title, class_date, class_time;
+    EditText class_title, class_date, class_time, class_venue;
     addClassActivityListener addClassListener;
     DatePickerDialog.OnDateSetListener mDateSetListener;
     TimePickerDialog.OnTimeSetListener mTimeSetListener;
+    DatabaseReference databaseReference;
+    Class databaseClass;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,6 +43,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
         class_title = view.findViewById(R.id.edittext_title);
         class_date = view.findViewById(R.id.edittext_date);
         class_time = view.findViewById(R.id.et_time);
+        class_venue = view.findViewById(R.id.et_venue);
 
         builder.setView(view).setTitle("Create class here :");
 
@@ -53,7 +60,14 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 String title = class_title.getText().toString();
                 String date = class_date.getText().toString();
                 String time = class_time.getText().toString();
-                addClassListener.applyText(title, date, time);
+                String venue = class_venue.getText().toString();
+                String url = class_title.getText().toString()+"/"+class_date.getText().toString();
+                databaseClass = new Class(title, date, time, venue, url);
+                int id = databaseClass.getClassID();
+                databaseReference = FirebaseDatabase.getInstance().getReference("courses");
+                databaseReference.child("network").child("classes").child(String.valueOf(id)).setValue(databaseClass);
+                addClassListener.applyText(String.valueOf(databaseClass.getClassID()));
+
                 Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
 
             }
@@ -126,7 +140,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
     }
 
     public interface addClassActivityListener{
-        void applyText(String title, String date, String time);
+        void applyText(String id);
     }
 
 }

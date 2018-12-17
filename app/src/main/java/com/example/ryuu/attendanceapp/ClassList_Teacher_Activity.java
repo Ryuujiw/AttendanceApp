@@ -1,19 +1,24 @@
 package com.example.ryuu.attendanceapp;
 
-import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
+import com.example.ryuu.attendanceapp.object.Class;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +29,12 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
-    String classTitle="", classDate="", classTime="";
-    List<ClassList> allClassList;
+    CardView cardView;
+    List<Class> allClassList;
     Add_Class_Activity addClassActivity;
-    ClassList classData;
+    String classTitle, classDate, classTime;
+
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +47,35 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setDisplayHomeAsUpEnabled(false);
 
+        cardView = findViewById(R.id.cardview_classlist);
+
         linearLayoutManager = new LinearLayoutManager(ClassList_Teacher_Activity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView = findViewById(R.id.recycler_view_class_list);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(ClassList_Teacher_Activity.this, DividerItemDecoration.VERTICAL));
 
-        //show list
-        applyText(classTitle, classDate, classTime);
-        allClassList = getAllClassListInfo();
-        classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList);
-        classListAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(classListAdapter);
+        databaseReference = FirebaseDatabase.getInstance().getReference("courses");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child("network").child("classes").exists()){
+                    cardView.setVisibility(View.VISIBLE);
+                }
+                else{
+                    cardView.setVisibility(View.INVISIBLE);
+                    allClassList = getAllClassListInfo();
+                    classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList);
+                    classListAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(classListAdapter);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         floatingActionButton = findViewById(R.id.fabutton_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -69,23 +92,26 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         addClassActivity.show(getSupportFragmentManager(), "add class dialog");
     }
 
-    @Override
-    public void applyText(String title, String date, String time) { //process
-        //set data from dialog
-        classTitle = title;
-        classDate = date;
-        classTime = time;
-
-        if(allClassList==null){
-            allClassList = new ArrayList<>();
-        }
-
-        classData = new ClassList(classTitle, classDate, classTime);
-        allClassList.add(classData);
-
+    public List<Class> getAllClassListInfo(){
+        return allClassList;
     }
 
-    public List<ClassList> getAllClassListInfo(){ //getdatatweets
-        return allClassList;
+    @Override
+    public void applyText(final String id) {
+        allClassList = new ArrayList<Class>();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Class databaseClass = dataSnapshot.child("network").child("classes").child(id).getValue(Class.class);
+
+                allClassList.add(databaseClass);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import android.widget.Filter;
@@ -14,20 +13,19 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.ryuu.attendanceapp.ClassDetailsActivity;
-import com.example.ryuu.attendanceapp.ClassList;
-import com.example.ryuu.attendanceapp.ClassListDetails;
 import com.example.ryuu.attendanceapp.R;
+import com.example.ryuu.attendanceapp.object.Class;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ClassListViewHolder> implements Filterable {
 
-    private List<ClassList> classListData;
-    public List<ClassList> classListDataFull;
+    private List<Class> classListData;
+    public List<Class> classListDataFull;
     private Context context;
 
-    public ClassListAdapter(Context context, List<ClassList> classListData){
+    public ClassListAdapter(Context context, List<Class> classListData){
         this.context = context;
         this.classListData = classListData;
         classListDataFull = new ArrayList<>(classListData); // copy of class list for filter search
@@ -46,7 +44,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     @Override
     public void onBindViewHolder(@NonNull ClassListViewHolder holder, int position) {
 
-        holder.className.setText(classListData.get(position).getClassName());
+        holder.className.setText(classListData.get(position).getClassTitle());
         holder.classDate.setText(classListData.get(position).getClassDate());
         holder.classStartTime.setText(classListData.get(position).getClassStartTime());
 
@@ -67,7 +65,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
         @Override
         protected Filter.FilterResults performFiltering(CharSequence charSequence) {
 
-            List<ClassList> filter_classList = new ArrayList<>();
+            List<Class> filter_classList = new ArrayList<>();
 
             if(charSequence == null || charSequence.length()==0){
                 filter_classList.addAll(classListDataFull);
@@ -75,8 +73,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
             else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
-                for(ClassList class_list : classListDataFull){
-                    if(class_list.getClassName().toLowerCase().contains(filterPattern)){
+                for(Class class_list : classListDataFull){
+                    if(class_list.getClassTitle().toLowerCase().contains(filterPattern)){
                         filter_classList.add(class_list);
                     }
                 }
@@ -117,7 +115,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
-            intent.putExtra("className", classListData.get(getAdapterPosition()).getClassName());
+            intent.putExtra("className", classListData.get(getAdapterPosition()).getClassTitle());
             view.getContext().startActivity(intent);
         }
     }

@@ -12,7 +12,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ryuu.attendanceapp.Class;
 import com.example.ryuu.attendanceapp.ClassActivity;
 import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
