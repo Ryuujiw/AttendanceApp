@@ -1,34 +1,32 @@
-package com.example.ryuu.attendanceapp.object;
+package com.example.ryuu.attendanceapp.objects;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Lecturer{
+public class Student {
 
-    private String matric;
+
     private String name;
     private String email;
     private String role;
     private String gender;
-    private List<Class> listOfCourse;
+    private String major;
+    private String matric;
 
-    public Lecturer(String matric, String name, String email, String role, String gender) {
-        this.matric = matric;
+//    public Map<String, Boolean> course = new HashMap<>();
+
+    public Student(){
+        // Default constructor required for calls to DataSnapshot.getValue(Student.class)
+    }
+
+    public Student(String name, String email, String role,String gender, String major, String matric) {
         this.name = name;
         this.email = email;
         this.role = role;
         this.gender = gender;
-    }
-    public Lecturer() {
-        super();
-        // Default constructor required for calls to DataSnapshot.getValue(Student.class)
-    }
-    public List<Class> getListOfCourse() {
-        return listOfCourse;
+        this.major = major;
+        this.matric = matric;
 
-    }
-    public void addCourse(Class name) {
-
-        listOfCourse.add(name);
     }
 
     public String getMatric() {
@@ -70,4 +68,16 @@ public class Lecturer{
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    public String getMajor() {
+
+        return major;
+    }
+
+    public void setMajor(String major) {
+
+        this.major = major;
+    }
+
+
 }

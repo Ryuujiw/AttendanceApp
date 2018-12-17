@@ -16,8 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.object.Lecturer;
-import com.example.ryuu.attendanceapp.object.Student;
+import com.example.ryuu.attendanceapp.objects.Lecturer;
+import com.example.ryuu.attendanceapp.objects.Student;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
