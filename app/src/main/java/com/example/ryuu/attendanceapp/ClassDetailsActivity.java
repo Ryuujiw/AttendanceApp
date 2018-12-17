@@ -1,5 +1,7 @@
 package com.example.ryuu.attendanceapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +16,19 @@ public class ClassDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
+    Bitmap bitmap;
+    String qrURL;
 
+    //Check student or lecturer
+    String loginMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_details);
-        //Intent intent = getIntent();
+        Intent intent = getIntent();
+        loginMode = intent.getStringExtra("LoginMode");
+        bitmap = (Bitmap) intent.getParcelableExtra("qrImage");
+        qrURL = intent.getStringExtra("qrURL");
 
         toolbar = findViewById(R.id.toolbar_class);
         tabLayout = findViewById(R.id.tabs_class);
@@ -34,7 +43,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()){
                     case 0:
-                        Toast.makeText(ClassDetailsActivity.this,"Attendance is selected", Toast.LENGTH_SHORT).show();
+                        /**Toast.makeText(ClassDetailsActivity.this,"Attendance is selected", Toast.LENGTH_SHORT).show();**/
                         break;
                     case 1:
                         Toast.makeText(ClassDetailsActivity.this,"Forum is selected", Toast.LENGTH_SHORT).show();
