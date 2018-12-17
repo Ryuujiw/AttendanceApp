@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private String loginMode;
 
-    // FIREBASE
+
     private FirebaseAuth firebaseAuth;
 
     // HELPER FUNCTIONS

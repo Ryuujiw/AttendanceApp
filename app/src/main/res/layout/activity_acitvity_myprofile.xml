@@ -125,78 +125,84 @@
 
 
                 <TextView
-                    android:id="@+id/password"
+                    android:id="@+id/tv_course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:clickable="true"
-                    android:text="a161112"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toEndOf="@+id/tv_password"
-                    app:layout_constraintTop_toBottomOf="@+id/gender" />
-
-                <TextView
-                    android:id="@+id/tv_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:clickable="true"
-                    android:text="Password: "
+                    android:text="Course:"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_gender" />
 
                 <TextView
-                    android:id="@+id/tv_course"
+                    android:id="@+id/course"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Bachelor in Computer Science"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toEndOf="@+id/tv_course"
+                    app:layout_constraintTop_toBottomOf="@+id/gender" />
+
+                <TextView
+                    android:id="@+id/tv_role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
-                    android:text="Course:"
+                    android:text="Role:"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    tools:layout_editor_absoluteY="2dp" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
                     android:text="Gender:"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_course" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_role" />
 
                 <TextView
                     android:id="@+id/gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
                     android:text="Male"
                     android:textSize="20sp"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_gender"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_course" />
+                    app:layout_constraintStart_toEndOf="@+id/tv_gender"
+                    app:layout_constraintTop_toBottomOf="@+id/role" />
 
                 <TextView
-                    android:id="@+id/course"
+                    android:id="@+id/role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
-                    android:text="Bachelor in Computer Science"
+                    android:text="Student"
                     android:textSize="20sp"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_course"
+                    app:layout_constraintStart_toEndOf="@+id/tv_role"
                     app:layout_constraintTop_toTopOf="parent" /><![CDATA[
 
 

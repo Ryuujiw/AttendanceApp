@@ -147,8 +147,7 @@ public class ClassActivity extends AppCompatActivity {
         {
             case R.id.menu_myprofile:
                 Toast.makeText(ClassActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
-                intent = new Intent(ClassActivity.this, activity_myprofile.class);
-                startActivity(intent);
+                GoToMyProfile(loginMode);
                 break;
 
             case R.id.menu_logout:
@@ -157,5 +156,11 @@ public class ClassActivity extends AppCompatActivity {
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void GoToMyProfile(String loginMode){
+        Intent intent = new Intent(ClassActivity.this,activity_myprofile.class);
+        intent.putExtra("LOGIN_MODE", loginMode);
+        startActivity(intent);
     }
 }

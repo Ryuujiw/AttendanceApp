@@ -3,7 +3,6 @@ package com.example.ryuu.attendanceapp;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -73,5 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 }
