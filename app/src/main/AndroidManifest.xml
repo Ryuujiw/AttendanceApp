@@ -32,7 +32,11 @@
 
         <activity android:name=".QRScanner" />
         <activity android:name=".acitvity_myprofile" />
-        <activity android:name=".activity_edit_profile"></activity>
+        <activity android:name=".activity_edit_profile" />
+        <activity android:name=".AnswerActivity">
+            android:windowSoftInputMode="stateHidden|adjustPan"
+        </activity>
+
     </application>
 
 </manifest>
