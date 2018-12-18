@@ -17,6 +17,7 @@ import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ClassViewHolder> implements Filterable {
 
@@ -42,8 +43,11 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int position) {
+        String[] img = { "R.drawable.mobile", "R.drawable.web", "R.drawable.network","R.drawable.numerical" };
+        Random rand = new Random();
+        int value = rand.nextInt(5);
         classViewHolder.tvClassName.setText(classList.get(position).getName());
-        classViewHolder.imgViewClassImage.setImageResource(classList.get(position).getImage());
+        classViewHolder.imgViewClassImage.setImageResource(Integer.parseInt(img[value]));
     }
 
     @Override

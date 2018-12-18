@@ -124,14 +124,14 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                 //creating an Student Object
                 Student user = new Student(name,email.toLowerCase(),gender,"null");
                 //matric is used as unique id for reference
-                databaseUsers.child(matric);
+//                databaseUsers.child(matric);
                 dataMap.put(matric, user.toMap());
             }else if(role.equals("lecturer")) {
                 //Saving the teacher
                 //creating an Lecturer Object
                 Lecturer user = new Lecturer(name,email.toLowerCase(),gender);
                 //matric is used as unique id for reference
-                databaseUsers.child(matric);
+//                databaseUsers.child(matric);
                 dataMap.put(matric, user.toMap());
             }
             databaseUsers.updateChildren(dataMap);

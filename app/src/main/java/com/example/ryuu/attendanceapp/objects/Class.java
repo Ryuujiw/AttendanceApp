@@ -5,28 +5,33 @@ import java.util.HashMap;
 import java.util.Map;
 //this is course
 public class Class {
-    String coursecode;
-    String name;
+    String course_code;
+    String course_name;
     String description;
-    int image;
+    String date_created;
+    private HashMap<String,Boolean> roster = new HashMap<String, Boolean>();
 
     public Class(){
 
     }
 
-    public Class(String coursecode, String name, String description, int image) {
-        this.coursecode = coursecode;
-        this.name = name;
+    public Class(String coursecode, String name, String description, String date_created, HashMap<String, Boolean> roster) {
+        this.course_code = coursecode;
+        this.course_name = name;
         this.description = description;
-        this.image = image;
+        this.date_created = date_created;
+        this.roster = roster;
     }
 
-    public String getCoursecode() {
-        return coursecode;
+    public Class(String coursecode, String name, String description, String date_created) {
+        this.course_code = coursecode;
+        this.course_name = name;
+        this.description = description;
+        this.date_created = date_created;
     }
 
-    public void setCoursecode(String coursecode) {
-        this.coursecode = coursecode;
+    public HashMap<String, Boolean> getRoster() {
+        return roster;
     }
 
     public String getDescription() {
@@ -37,37 +42,41 @@ public class Class {
         this.description = description;
     }
 
-    public String getClasscode() {
-        return coursecode;
+    public String getCoursecode() {
+        return course_code;
     }
 
-    public void setClasscode(String classcode) {
-        this.coursecode = classcode;
+    public void setCoursecode(String coursecode) {
+        this.course_code = coursecode;
+    }
+
+    public String getDate_created() {
+        return date_created;
+    }
+
+    public void setDate_created(String date_created) {
+        this.date_created = date_created;
+    }
+
+    public void setRoster(HashMap<String, Boolean> roster) {
+        this.roster = roster;
     }
 
     public String getName() {
-        return name;
+        return course_name;
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
+        this.course_name = name;
     }
 
     @Exclude
     public Map<String, Object> toMap(){
         HashMap<String, Object> course = new HashMap<>();
-        course.put("classcode", coursecode);
-        course.put("name", name);
+        course.put("course_code", course_code);
+        course.put("course_name", course_name);
         course.put("description", description);
-        course.put("image", image);
+        course.put("date_created", date_created);
 
         return course;
     }
