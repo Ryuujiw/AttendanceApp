@@ -308,7 +308,9 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        zXingScannerView.stopCamera();
+        if(zXingScannerView != null){
+            zXingScannerView.stopCamera();
+        }
     }
 
     @Override
