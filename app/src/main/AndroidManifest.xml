@@ -37,8 +37,7 @@
         <activity android:name=".AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
-
-
+        <activity android:name=".Reset_Password_Activity" />
     </application>
 
 </manifest>
