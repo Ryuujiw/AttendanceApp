@@ -30,13 +30,14 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".QRScanner" />
         <activity android:name=".acitvity_myprofile" />
         <activity android:name=".activity_edit_profile" />
+        <activity android:name=".ClassList_Teacher_Activity" />
+        <activity android:name=".ClassListDetails" />
         <activity android:name=".AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
-        <activity android:name=".Reset_Password_Activity"></activity>
+        <activity android:name=".Reset_Password_Activity" />
     </application>
 
 </manifest>

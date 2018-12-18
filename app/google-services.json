@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "14488706482-ssf2rtq9iei3aep0vh8qr19174phheho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryuu.attendanceapp",
+            "certificate_hash": "84b89754dd68095c252ed0dbb12d6e7df9b77b46"
+          }
+        },
+        {
+          "client_id": "14488706482-8784l7eolt1afcotl6ilkblmpaugnmks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryuu.attendanceapp",
+            "certificate_hash": "9e239b2abd90c7cc08be1e2bcd5edecbaf9ead26"
+          }
+        },
+        {
           "client_id": "14488706482-leg0l2e9u8m1s07c5uc7lreof9f9a9m6.apps.googleusercontent.com",
           "client_type": 3
         }
