@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,9 +19,20 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.objects.Classes;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +44,9 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
     DatePickerDialog.OnDateSetListener mDateSetListener;
     TimePickerDialog.OnTimeSetListener mTimeSetListener;
     DatabaseReference mDataRef;
+    StorageReference mStorageRef;
     String key;
+    Bitmap bitmap;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -74,6 +88,23 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 Map<String, Object> dataMap = new HashMap<String, Object>();
                 dataMap.put(key, classes);
                 mDataRef.updateChildren(dataMap);
+
+                //generate bitmap from key
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                try {
+                    BitMatrix bitMatrix = multiFormatWriter.encode(key, BarcodeFormat.QR_CODE,200,200);
+                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                }catch (WriterException e) {
+                    e.printStackTrace();
+                }
+                //upload QR image into StorageDatabase
+                mStorageRef = FirebaseStorage.getInstance().getReference("/classes/network/qrImage/");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+                UploadTask uploadTask = mStorageRef.child(key).putBytes(data);
+
 
             }
 
@@ -124,7 +155,8 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
         mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                String time = hour +":"+minute;
+                DecimalFormat df = new DecimalFormat("00");
+                String time = df.format(hour) +":"+ df.format(minute);
                 class_time.setText(time);
 
             }
