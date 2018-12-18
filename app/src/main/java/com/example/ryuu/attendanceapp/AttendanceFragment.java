@@ -91,16 +91,7 @@ public class AttendanceFragment extends Fragment {
         previousClassName = intent.getStringExtra("className");
         Toast.makeText(getActivity(),loginMode, Toast.LENGTH_SHORT);
         if (loginMode.equals("teacher")) {
-            floatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
-            tv_Hint = view.findViewById(R.id.tv_hint);
-            tv_Hint.setText("Add class you wish to start>>");
-            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Intent intent = new Intent(getActivity(), CreateClass.class);
-//                    startActivity(intent);
-                }
-            });
+            floatingActionButton.setVisibility(View.INVISIBLE);
             String reference = "/classes/networkw1/"+previousCLassID+"/";
             mDataRef = FirebaseDatabase.getInstance().getReference(reference);
             mDataRef.addValueEventListener(new ValueEventListener() {
@@ -108,14 +99,12 @@ public class AttendanceFragment extends Fragment {
                 public void onDataChange(DataSnapshot classSnapshot) {
                     if (classSnapshot.exists()) {
                         classes = classSnapshot.getValue(Classes.class);
-
-                        String qr = classSnapshot.child("qrUrl").getValue(String.class);;
+                        String qr = classes.getQrUrl();
                         tv_qrurl.setText(qr);
                         if (classes.isStatus() == true) {
                             cardView_status.setBackgroundColor(Color.parseColor("#FF99CC00"));
                             tv_classStatus.setText("Ongoing");
-
-
+                            tv_no_attendant.setText(String.valueOf(classSnapshot.child("attend_list").getChildrenCount()));
                         } else if (classes.isStatus()  == false) {
                             cardView_status.setBackgroundColor(Color.parseColor("#FFCC0000"));//Red
                             tv_classStatus.setText("Press Here to Start/End Class");

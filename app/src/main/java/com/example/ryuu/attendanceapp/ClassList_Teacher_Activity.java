@@ -93,13 +93,12 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
 
             }
         });
-
-
-
-
-
-
         floatingActionButton = findViewById(R.id.fabutton_add);
+        if(loginMode.equals("student")){
+            floatingActionButton.setVisibility(View.INVISIBLE);
+        }else{
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -110,6 +110,8 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             intent.putExtra("LoginMode", loginMode);
             view.getContext().startActivity(intent);
         }
+
+
     }
 }
 
