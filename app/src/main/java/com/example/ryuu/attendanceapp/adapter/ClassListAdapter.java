@@ -20,7 +20,7 @@ import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//classlist adapter
 public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ClassListViewHolder> implements Filterable {
 
     private List<ClassList> classListData;

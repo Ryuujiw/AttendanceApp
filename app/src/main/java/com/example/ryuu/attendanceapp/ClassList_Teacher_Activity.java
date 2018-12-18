@@ -72,9 +72,9 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     @Override
     public void applyText(String title, String date, String time) { //process
         //set data from dialog
-        classTitle = title;
-        classDate = date;
-        classTime = time;
+        this.classTitle = title;
+        this.classDate = date;
+        this.classTime = time;
 
         if(allClassList==null){
             allClassList = new ArrayList<>();

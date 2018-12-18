@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 public class Add_Class_Activity extends AppCompatDialogFragment {
 
-    EditText class_title, class_date, class_time;
+    EditText class_title, class_date, class_time, class_url;
     addClassActivityListener addClassListener;
     DatePickerDialog.OnDateSetListener mDateSetListener;
     TimePickerDialog.OnTimeSetListener mTimeSetListener;
