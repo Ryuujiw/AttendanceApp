@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +17,22 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.objects.Classes;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Add_Class_Activity extends AppCompatDialogFragment {
 
-    EditText class_title, class_date, class_time, class_url;
+    EditText class_title, class_date, class_time, class_venue;
     addClassActivityListener addClassListener;
     DatePickerDialog.OnDateSetListener mDateSetListener;
     TimePickerDialog.OnTimeSetListener mTimeSetListener;
+    DatabaseReference mDataRef;
+    String key;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,6 +45,8 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
         class_title = view.findViewById(R.id.edittext_title);
         class_date = view.findViewById(R.id.edittext_date);
         class_time = view.findViewById(R.id.et_time);
+        class_venue = view.findViewById(R.id.et_venue);
+
 
         builder.setView(view).setTitle("Create class here :");
 
@@ -54,8 +63,17 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 String title = class_title.getText().toString();
                 String date = class_date.getText().toString();
                 String time = class_time.getText().toString();
+                String venue = class_venue.getText().toString();
                 addClassListener.applyText(title, date, time);
+
                 Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
+                mDataRef = FirebaseDatabase.getInstance().getReference("/classes/networkw1/");
+                key = mDataRef.push().getKey();
+                Classes classes = new Classes(key, title,date, time, venue);
+
+                Map<String, Object> dataMap = new HashMap<String, Object>();
+                dataMap.put(key, classes);
+                mDataRef.updateChildren(dataMap);
 
             }
 

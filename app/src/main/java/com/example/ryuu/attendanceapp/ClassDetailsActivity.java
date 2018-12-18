@@ -17,7 +17,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     Bitmap bitmap;
-    String qrURL;
+    String qrURL, classID;
 
     //Check student or lecturer
     String loginMode;
@@ -29,6 +29,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
         loginMode = intent.getStringExtra("LoginMode");
         bitmap = (Bitmap) intent.getParcelableExtra("qrImage");
         qrURL = intent.getStringExtra("qrURL");
+        classID = intent.getStringExtra("classID");
 
         toolbar = findViewById(R.id.toolbar_class);
         tabLayout = findViewById(R.id.tabs_class);

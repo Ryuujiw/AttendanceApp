@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +49,6 @@ public class AttendanceFragment extends Fragment {
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
     String date, location, startTime, classname;
-    int noAttendance;
     ImageView iv_QRcode;
     String loginMode;//Mode
     String getResult;
@@ -56,12 +56,13 @@ public class AttendanceFragment extends Fragment {
     StorageReference mStorageRef;
     boolean status;
     ZXingScannerView zXingScannerView;
+    String previousClassName, previousCLassID;
+    Classes classes;
+
 
     public AttendanceFragment() {
         // Required empty public constructor
     }
-
-    int colorMode = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +71,7 @@ public class AttendanceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         // GET LOGIN MODE
         loginMode = getActivity().getIntent().getStringExtra("LoginMode");
+        previousCLassID = getActivity().getIntent().getStringExtra("classID");
         floatingActionButton = view.findViewById(R.id.fab_QRScanner);
         tv_qrurl = view.findViewById(R.id.tv_qrURL);
         iv_QRcode = view.findViewById(R.id.iv_generated_qrcode);
@@ -85,8 +87,9 @@ public class AttendanceFragment extends Fragment {
         tv_startTime = view.findViewById(R.id.tv_startTime);
         tv_endTime = view.findViewById(R.id.tv_endTime);
         tv_className = view.findViewById(R.id.tv_className);
-        //Toast.makeText(getContext(),loginMode,Toast.LENGTH_SHORT).show();
-        final Activity activity = getActivity();
+        Intent intent = getActivity().getIntent();
+        previousClassName = intent.getStringExtra("className");
+        Toast.makeText(getActivity(),loginMode, Toast.LENGTH_SHORT);
         if (loginMode.equals("teacher")) {
             floatingActionButton.setImageResource(R.drawable.ic_add_black_24dp);
             tv_Hint = view.findViewById(R.id.tv_hint);
@@ -94,53 +97,52 @@ public class AttendanceFragment extends Fragment {
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), CreateClass.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), CreateClass.class);
+//                    startActivity(intent);
                 }
             });
-            mDataRef = FirebaseDatabase.getInstance().getReference("classes_uploads");
+            String reference = "/classes/networkw1/"+previousCLassID+"/";
+            mDataRef = FirebaseDatabase.getInstance().getReference(reference);
             mDataRef.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(DataSnapshot classSnapshot) {
+                    if (classSnapshot.exists()) {
+                        classes = classSnapshot.getValue(Classes.class);
 
-                    if (dataSnapshot.exists()) {
-
-                        String qr = dataSnapshot.child("qrUrl").getValue(String.class);
+                        String qr = classSnapshot.child("qrUrl").getValue(String.class);;
                         tv_qrurl.setText(qr);
-                        if (dataSnapshot.child("status").getValue(boolean.class) == true) {
+                        if (classes.isStatus() == true) {
                             cardView_status.setBackgroundColor(Color.parseColor("#FF99CC00"));
                             tv_classStatus.setText("Ongoing");
 
 
-                        } else if (dataSnapshot.child("status").getValue(boolean.class) == false) {
+                        } else if (classes.isStatus()  == false) {
                             cardView_status.setBackgroundColor(Color.parseColor("#FFCC0000"));//Red
                             tv_classStatus.setText("Press Here to Start/End Class");
-
-
                         }
+                        mStorageRef = FirebaseStorage.getInstance().getReference();
+                        StorageReference islandRef = mStorageRef.child("qruploads/qrImage.bmp");
+                        final long ONE_MEGABYTE = 1024 * 1024;
+                        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                iv_QRcode.setImageBitmap(bmp);
+                                iv_QRcode.setVisibility(View.VISIBLE);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+
+                            }
+                        });
                     } else {
-                        Toast.makeText(getContext(), "no datasnapshot", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "the class has been deleted", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-            mStorageRef = FirebaseStorage.getInstance().getReference();
-            StorageReference islandRef = mStorageRef.child("qruploads/qrImage.bmp");
-            final long ONE_MEGABYTE = 1024 * 1024;
-            islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    iv_QRcode.setImageBitmap(bmp);
-                    iv_QRcode.setVisibility(View.VISIBLE);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
 
                 }
             });
@@ -151,11 +153,10 @@ public class AttendanceFragment extends Fragment {
                     mDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-
                             if (dataSnapshot.exists()) {
+
                                 date = dataSnapshot.child("date").getValue(String.class);
                                 location = dataSnapshot.child("location").getValue(String.class);
-                                noAttendance = dataSnapshot.child("attendanceNo").getValue(int.class);
                                 startTime = dataSnapshot.child("startTime").getValue(String.class);
                                 classname = dataSnapshot.child("className").getValue(String.class);
 
@@ -204,7 +205,6 @@ public class AttendanceFragment extends Fragment {
                                             iv_QRcode.setVisibility(View.INVISIBLE);
                                             tv_date.setText(date);
                                             tv_location.setText(location);
-                                            tv_noAttend.setText(String.valueOf(noAttendance));
                                             Calendar calendar = Calendar.getInstance();
                                             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                                             String endTime = format.format(calendar.getTime());

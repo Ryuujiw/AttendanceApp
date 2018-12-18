@@ -69,7 +69,7 @@ public class CreateClass extends AppCompatActivity {
                     SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                     String startTime = format.format(calendar.getTime());
                     //new classes created
-                    classes = new Classes(text.getText().toString(),text2Qr,et_location.getText().toString());
+                    classes = new Classes(text.getText().toString(),text2Qr,text2Qr,text2Qr,et_location.getText().toString());
                     classes.setStartTime(startTime);
                     //upload classes into firebase
                     mDataRef = FirebaseDatabase.getInstance().getReference("classes_uploads");

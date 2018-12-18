@@ -23,11 +23,13 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     private List<Class_list> classListData;
     public List<Class_list> classListDataFull;
     private Context context;
+    private String loginMode;
 
-    public ClassListAdapter(Context context, List<Class_list> classListData){
+    public ClassListAdapter(Context context, List<Class_list> classListData, String loginMode){
         this.context = context;
         this.classListData = classListData;
         classListDataFull = new ArrayList<>(classListData); // copy of class list for filter search
+        this.loginMode=loginMode;
     }
 
     @NonNull
@@ -115,6 +117,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
             intent.putExtra("className", classListData.get(getAdapterPosition()).getClassName());
+            intent.putExtra("LoginMode",loginMode);
+            intent.putExtra("classID",classListData.get(getAdapterPosition()).getClassID());
             view.getContext().startActivity(intent);
         }
     }
