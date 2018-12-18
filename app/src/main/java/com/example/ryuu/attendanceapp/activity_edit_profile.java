@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.objects.Lecturer;
@@ -31,8 +32,9 @@ import java.util.List;
 public class activity_edit_profile extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private DatabaseReference mDatabaseUser;
-    EditText et_name,et_email,et_course;
-    Spinner spinner;
+    TextView tv_major;
+    EditText et_name,et_email;
+    Spinner sp_gender,sp_major;
     String matric,login_mode;
     Intent intent;
 
@@ -44,34 +46,50 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
         Toolbar toolbar = findViewById(R.id.tb_editprofile);
         setSupportActionBar(toolbar);
 
-        spinner = findViewById(R.id.sp_gender);
-        spinner.setOnItemSelectedListener(this);
+        sp_gender = findViewById(R.id.sp_gender);
+        sp_gender.setOnItemSelectedListener(this);
+        sp_major = findViewById(R.id.sp_major);
+        sp_major.setOnItemSelectedListener(this);
 
-        // Spinner Drop down elements
+        // Gender Drop down elements
         List<String> gender = new ArrayList<String>();
         gender.add("Male");
         gender.add("Female");
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gender);
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gender);
         // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Major Drop down elements
+        List<String> major = new ArrayList<String>();
+        major.add("Computer Science");
+        major.add("SEIS");
+        major.add("SEMM");
+        major.add("Information Technology");
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, major);
+        // Drop down layout style - list view with radio button
+        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
+        sp_gender.setAdapter(dataAdapter1);
+        sp_major.setAdapter(dataAdapter2);
 
         et_name = findViewById(R.id.et_name_edit);
         et_email = findViewById(R.id.et_email);
-        et_course = findViewById(R.id.et_course);
+        tv_major = findViewById(R.id.tv_major);
 
         matric = getIntent().getStringExtra("matric");
         login_mode = getIntent().getStringExtra("LOGIN_MODE");
 
-        if(login_mode.equals("teacher")){
-            et_course.setVisibility(View.GONE);
+        if(login_mode.equals("lecturer")){
+            sp_major.setVisibility(View.GONE);
+            tv_major.setVisibility(View.GONE);
         }
 
         // [START initialize_database_ref]
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(matric);
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(login_mode
+        ).child(matric);
         // [END initialize_database_ref]
         //retrieve users data based on matric
         mDatabaseUser.addValueEventListener(new ValueEventListener() {
@@ -82,13 +100,13 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
                     Student profile = dataSnapshot.getValue(Student.class);
                     et_name.setText(profile.getName());
                     et_email.setText(profile.getEmail());
-                    et_course.setText(profile.getMajor());
-                    spinner.setSelection(getIndex(spinner, profile.getGender()));
-                }else if(login_mode.equals("teacher")){
+                    sp_major.setSelection(getIndex(sp_major, profile.getMajor()));
+                    sp_gender.setSelection(getIndex(sp_gender, profile.getGender()));
+                }else if(login_mode.equals("lecturer")){
                     Lecturer profile = dataSnapshot.getValue(Lecturer.class);
                     et_name.setText(profile.getName());
                     et_email.setText(profile.getEmail());
-                    spinner.setSelection(getIndex(spinner, profile.getGender()));
+                    sp_gender.setSelection(getIndex(sp_gender, profile.getGender()));
                 }
             }
 
@@ -113,7 +131,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
         switch(item.getItemId())
         {
             case R.id.menu_item_save:
-                if(et_name.getText()!=null && et_course.getText()!=null && et_email.getText()!=null) {
+                if(et_name.getText()!=null && et_email.getText()!=null) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                     alertDialogBuilder.setMessage("Save changes made?");
                     alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
@@ -124,9 +142,9 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
                             result.put("name",et_name.getText().toString().trim());
                             result.put("email",et_email.getText().toString().trim());
                             if(login_mode.equals("student")) {
-                                result.put("major", et_course.getText().toString().trim());
+                                result.put("major", sp_major.getSelectedItem().toString().toLowerCase());
                             }
-                            result.put("gender",spinner.getSelectedItem().toString().toLowerCase());
+                            result.put("gender",sp_gender.getSelectedItem().toString().toLowerCase());
                             mDatabaseUser.updateChildren(result);
                             Toast.makeText(activity_edit_profile.this,"Change saved",Toast.LENGTH_LONG).show();
                             back();

@@ -17,17 +17,16 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    protected Button btn_login;
+    protected Button btn_login, btn_back;
     protected TextInputEditText txt_login_username;
     protected TextInputEditText txt_login_password;
+
 
     private static String login_mode;
 
     private String email;
     private String password;
-
     private String loginMode;
-
 
     private FirebaseAuth firebaseAuth;
 
@@ -42,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         // Propose to add a ROLE column in DB for user table to store whether student or teacher
         // Temporary workaround is to parse the username and see if the regex matches student id or not
 
-        return email.contains("@siswa.ukm.edu.my") ? "student" : "teacher";
+        return email.contains("@siswa.ukm.edu.my") ? "student" : "lecturer";
     }
 
     @Override
@@ -51,10 +50,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         btn_login = findViewById(R.id.btn_login);
+        btn_back = findViewById(R.id.btn_back);
         txt_login_username = findViewById(R.id.txt_login_username);
         txt_login_password = findViewById(R.id.txt_login_password);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
 

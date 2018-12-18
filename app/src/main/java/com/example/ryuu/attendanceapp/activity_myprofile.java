@@ -40,9 +40,9 @@ public class activity_myprofile extends AppCompatActivity {
         tv_role = findViewById(R.id.role);
         tv_gender = findViewById(R.id.gender);
         tv_course = findViewById(R.id.course);
-        course = findViewById(R.id.tv_course);
+        course = findViewById(R.id.tv_major);
 
-        if(login_mode.equals("teacher")){
+        if(login_mode.equals("lecturer")){
             tv_course.setVisibility(View.GONE);
             course.setVisibility(View.GONE);
         }
@@ -51,7 +51,7 @@ public class activity_myprofile extends AppCompatActivity {
         User=FirebaseAuth.getInstance().getCurrentUser();
         //get student
         // [START initialize_database_ref]
-        mDatabaseUser= FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabaseUser= FirebaseDatabase.getInstance().getReference().child("users").child(login_mode);
         mDatabase = mDatabaseUser.orderByChild("email").equalTo(User.getEmail());
         // [END initialize_database_ref]
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -64,15 +64,16 @@ public class activity_myprofile extends AppCompatActivity {
                         Student profile = childSnapshot.getValue(Student.class);
                         tv_name.setText(profile.getName());
                         tv_email.setText(profile.getEmail());
-                        tv_role.setText(profile.getRole());
+                        tv_role.setText(login_mode);
                         tv_gender.setText(profile.getGender());
                         tv_course.setText(profile.getMajor());
                         tv_matric.setText(matric);
-                    }else if(login_mode.equals("teacher")){
+                    }else if(login_mode.equals("lecturer")){
+
                         Lecturer profile = childSnapshot.getValue(Lecturer.class);
                         tv_name.setText(profile.getName());
                         tv_email.setText(profile.getEmail());
-                        tv_role.setText(profile.getRole());
+                        tv_role.setText(login_mode);
                         tv_gender.setText(profile.getGender());
                         tv_matric.setText(matric);
                     }

@@ -94,7 +94,7 @@ public class ClassActivity extends AppCompatActivity {
                     });
 
                     builder.show();
-                } else if (loginMode.equals("teacher")){
+                } else if (loginMode.equals("lecturer")){
                     Intent intent = new Intent(ClassActivity.this,CreateCourseActivity.class);
                     startActivity(intent);
                 }
@@ -132,10 +132,10 @@ public class ClassActivity extends AppCompatActivity {
 
         List<Class> allClass = new ArrayList<Class>();
 
-        allClass.add(new Class("Mobile Programming",R.drawable.mobile));
-        allClass.add(new Class("Web Programming",R.drawable.web));
-        allClass.add(new Class("Numerical Analysis",R.drawable.numerical));
-        allClass.add(new Class("Network Programming",R.drawable.network));
+        allClass.add(new Class("TTTK2323 ","Mobile Programming","",R.drawable.mobile));
+        allClass.add(new Class("TTTP2543","Web Programming","",R.drawable.web));
+        allClass.add(new Class("TTTR2013","Numerical Analysis","",R.drawable.numerical));
+        allClass.add(new Class("TTTN3223","Network Programming","",R.drawable.network));
 
         return allClass;
     }

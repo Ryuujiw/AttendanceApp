@@ -1,40 +1,28 @@
 package com.example.ryuu.attendanceapp.objects;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.HashMap;
 import java.util.Map;
-
+@IgnoreExtraProperties
 public class Student {
-
 
     private String name;
     private String email;
-    private String role;
     private String gender;
     private String major;
-    private String matric;
-
-//    public Map<String, Boolean> course = new HashMap<>();
+    private HashMap<String,Boolean> courses = new HashMap<String, Boolean>();
 
     public Student(){
         // Default constructor required for calls to DataSnapshot.getValue(Student.class)
     }
 
-    public Student(String name, String email, String role,String gender, String major, String matric) {
+    public Student(String name, String email,String gender, String major) {
         this.name = name;
         this.email = email;
-        this.role = role;
         this.gender = gender;
         this.major = major;
-        this.matric = matric;
-
-    }
-
-    public String getMatric() {
-        return matric;
-    }
-
-    public void setMatric(String matric) {
-        this.matric = matric;
     }
 
     public String getName() {
@@ -53,14 +41,6 @@ public class Student {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -69,14 +49,28 @@ public class Student {
         this.gender = gender;
     }
 
-    public String getMajor() {
+    public String getMajor() { return major; }
 
-        return major;
+    public void setMajor(String major) { this.major = major; }
+
+    public HashMap<String, Boolean> getCourses() {
+        return courses;
     }
 
-    public void setMajor(String major) {
+    public void setCourses(HashMap<String, Boolean> classes) {
+        this.courses = classes;
+    }
 
-        this.major = major;
+    @Exclude
+    public Map<String, Object> toMap() {
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("email", email);
+        result.put("gender", gender);
+        result.put("major", major);
+
+        return result;
     }
 
 
