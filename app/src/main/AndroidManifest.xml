@@ -34,9 +34,7 @@
         <activity android:name=".acitvity_myprofile" />
         <activity android:name=".activity_edit_profile" />
         <activity android:name=".CreateClass" />
-        <activity android:name=".Class_list" />
         <activity android:name=".ClassList_Teacher_Activity" />
-        <activity android:name=".Add_Class_Activity" />
         <activity android:name=".ClassListDetails" />
         <activity android:name=".AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
