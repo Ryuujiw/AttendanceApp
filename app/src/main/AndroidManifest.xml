@@ -37,7 +37,12 @@
         <activity android:name=".Class_list" />
         <activity android:name=".ClassList_Teacher_Activity" />
         <activity android:name=".Add_Class_Activity" />
-        <activity android:name=".ClassListDetails"></activity>
+        <activity android:name=".ClassListDetails" />
+        <activity android:name=".AnswerActivity">
+            android:windowSoftInputMode="stateHidden|adjustPan"
+        </activity>
+
+
     </application>
 
 </manifest>

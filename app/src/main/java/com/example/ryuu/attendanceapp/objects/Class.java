@@ -1,5 +1,7 @@
 package com.example.ryuu.attendanceapp.objects;
+
 //This is the object for Course
+
 public class Class {
     String name;
     int image;

@@ -18,6 +18,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
     ViewPager viewPager;
     Bitmap bitmap;
     String qrURL, classID;
+    ForumFragment forumFragment;
 
     //Check student or lecturer
     String loginMode;
@@ -30,6 +31,15 @@ public class ClassDetailsActivity extends AppCompatActivity {
         bitmap = (Bitmap) intent.getParcelableExtra("qrImage");
         qrURL = intent.getStringExtra("qrURL");
         classID = intent.getStringExtra("classID");
+
+        forumFragment = new ForumFragment();
+
+        // LOGIN MODE
+        loginMode = getIntent().getStringExtra("LOGIN_MODE");
+        Toast.makeText(ClassDetailsActivity.this, loginMode, Toast.LENGTH_LONG).show();
+        Bundle bundle = new Bundle();
+        bundle.putString("LOGIN_MODE", loginMode);
+        forumFragment.setArguments(bundle);
 
         toolbar = findViewById(R.id.toolbar_class);
         tabLayout = findViewById(R.id.tabs_class);
@@ -59,13 +69,12 @@ public class ClassDetailsActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) { }
 
         });
-
     }
 
     private void setupViewPager(){
         ClassFragmentPagerAdapter adapter = new ClassFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new AttendanceFragment(),"Attendance");
-        adapter.addFrag(new ForumFragment(),"Forum");
+        adapter.addFrag(forumFragment,"Forum");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
