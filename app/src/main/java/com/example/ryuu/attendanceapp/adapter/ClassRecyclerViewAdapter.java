@@ -12,7 +12,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ryuu.attendanceapp.Class;
+import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
+import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
@@ -104,8 +105,8 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
-            intent.putExtra("className", classList.get(getAdapterPosition()).getName());
+            Intent intent = new Intent(view.getContext(), ClassList_Teacher_Activity.class);
+            intent.putExtra("courseName", classList.get(getAdapterPosition()).getName());
             intent.putExtra("LoginMode", loginMode);
             view.getContext().startActivity(intent);
         }

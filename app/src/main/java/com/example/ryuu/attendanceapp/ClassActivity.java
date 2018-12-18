@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
+import com.example.ryuu.attendanceapp.objects.Class;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
