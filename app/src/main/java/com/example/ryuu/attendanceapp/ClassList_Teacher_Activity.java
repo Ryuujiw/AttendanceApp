@@ -72,7 +72,15 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
                         classDate = dataSnapshot.child("date").getValue(String.class);
                         classTime = dataSnapshot.child("startTime").getValue(String.class);
                         classID = dataSnapshot.child("classID").getValue(String.class);
-                        applyText(classTitle, classDate, classTime);
+                        boolean booo= dataSnapshot.child("open").getValue(boolean.class);
+                        if(loginMode.equals("student")){
+                            if(booo==true){
+                                applyText(classTitle, classDate, classTime);
+                            }
+                        }else if (loginMode.equals("teacher")){
+                            applyText(classTitle, classDate, classTime);
+                        }
+
                     }
                     allClassList = getAllClassListInfo();
                     classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList, loginMode);
