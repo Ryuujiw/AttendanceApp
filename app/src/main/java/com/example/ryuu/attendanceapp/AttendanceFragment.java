@@ -34,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +49,7 @@ public class AttendanceFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
-    String date, location, startTime, classname;
+    String date, location, startTime,endTime, classname;
     ImageView iv_QRcode;
     String loginMode;//Mode
     String getResult;
@@ -58,6 +59,7 @@ public class AttendanceFragment extends Fragment {
     ZXingScannerView zXingScannerView;
     String previousClassName, previousCLassID;
     Classes classes;
+    String reference;
 
 
     public AttendanceFragment() {
@@ -68,7 +70,7 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_attendance, container, false);
+        final View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         // GET LOGIN MODE
         loginMode = getActivity().getIntent().getStringExtra("LoginMode");
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
@@ -87,12 +89,13 @@ public class AttendanceFragment extends Fragment {
         tv_startTime = view.findViewById(R.id.tv_startTime);
         tv_endTime = view.findViewById(R.id.tv_endTime);
         tv_className = view.findViewById(R.id.tv_className);
+        tv_Hint = view.findViewById(R.id.tv_hint);
         Intent intent = getActivity().getIntent();
         previousClassName = intent.getStringExtra("className");
         Toast.makeText(getActivity(),loginMode, Toast.LENGTH_SHORT);
+        reference = "/classes/networkw1/"+previousCLassID+"/";
         if (loginMode.equals("teacher")) {
             floatingActionButton.setVisibility(View.INVISIBLE);
-            String reference = "/classes/networkw1/"+previousCLassID+"/";
             mDataRef = FirebaseDatabase.getInstance().getReference(reference);
             mDataRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -101,6 +104,7 @@ public class AttendanceFragment extends Fragment {
                         classes = classSnapshot.getValue(Classes.class);
                         String qr = classes.getQrUrl();
                         tv_qrurl.setText(qr);
+                        // retrieve the classes status
                         if (classes.isStatus() == true) {
                             cardView_status.setBackgroundColor(Color.parseColor("#FF99CC00"));
                             tv_classStatus.setText("Ongoing");
@@ -109,10 +113,11 @@ public class AttendanceFragment extends Fragment {
                             cardView_status.setBackgroundColor(Color.parseColor("#FFCC0000"));//Red
                             tv_classStatus.setText("Press Here to Start/End Class");
                         }
+                        // retrieve the QR bitmap from FirebaseStorage
                         mStorageRef = FirebaseStorage.getInstance().getReference();
-                        StorageReference islandRef = mStorageRef.child("qruploads/qrImage.bmp");
+                        StorageReference islandRef = mStorageRef.child("/classes/network/qrImage/");
                         final long ONE_MEGABYTE = 1024 * 1024;
-                        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        islandRef.child(previousCLassID).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
                                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -154,22 +159,22 @@ public class AttendanceFragment extends Fragment {
                                 if (status == false) {
                                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                                     alertDialogBuilder.setTitle("Start Class");
-                                    alertDialogBuilder.setMessage("Are you sure you want to START the class?");
+                                    alertDialogBuilder.setMessage("Are you sure you want to START the class? This class will be visible to students");
                                     alertDialogBuilder.setPositiveButton("No", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-
                                             mDataRef.child("status").setValue(false);
                                             status = false;
                                         }
                                     });
                                     alertDialogBuilder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                        public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to end
                                             cardView_status.setBackgroundColor(Color.parseColor("#FF99CC00"));//green color
                                             tv_classStatus.setText("Ongoing");
                                             cardView_classSummary.setVisibility(View.INVISIBLE);
                                             mDataRef.child("status").setValue(true);
+                                            mDataRef.child("open").setValue(true);
                                             status = true;
                                         }
                                     }).show();
@@ -188,7 +193,7 @@ public class AttendanceFragment extends Fragment {
                                     });
                                     alertDialogBuilder2.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                        public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to start class
                                             cardView_status.setBackgroundColor(Color.parseColor("#FFCC0000"));//Red
                                             tv_classStatus.setText("Ended");
                                             iv_QRcode.setVisibility(View.INVISIBLE);
@@ -196,13 +201,11 @@ public class AttendanceFragment extends Fragment {
                                             tv_location.setText(location);
                                             Calendar calendar = Calendar.getInstance();
                                             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                                            String endTime = format.format(calendar.getTime());
+                                            endTime = format.format(calendar.getTime());
                                             tv_startTime.setText(startTime);
                                             tv_endTime.setText(endTime);
                                             tv_className.setText(classname);
                                             mDataRef.child("endTime").setValue(endTime);
-
-
                                             cardView_classSummary.setVisibility(View.VISIBLE);
                                             Toast.makeText(getContext(), "Class summary is generated", Toast.LENGTH_SHORT).show();
                                             mDataRef.child("status").setValue(false);
@@ -225,20 +228,34 @@ public class AttendanceFragment extends Fragment {
                 }
             });
         }else if (loginMode.equals("student")) {
-            mDataRef = FirebaseDatabase.getInstance().getReference("classes_uploads");
+            mDataRef = FirebaseDatabase.getInstance().getReference(reference);
             mDataRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child("status").getValue(boolean.class) == true) {
+                    boolean status =dataSnapshot.child("status").getValue(boolean.class);
+                    boolean open = dataSnapshot.child("open").getValue(boolean.class);
+                    if (status == true) {
                         cardView_status.setBackgroundColor(Color.parseColor("#FF99CC00"));
                         tv_classStatus.setText("Ongoing");
-                        tv_no_attendant.setText(String.valueOf(dataSnapshot.child("attendanceNo").getValue(int.class)));
+                        tv_no_attendant.setText(String.valueOf(dataSnapshot.child("attend_list").getChildrenCount()));
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                        cardView_classSummary.setVisibility(View.INVISIBLE);
+                        tv_Hint.setText("Please Scan to take Attendance");
 
 
-                    } else if (dataSnapshot.child("status").getValue(boolean.class) == false) {
+                    } else if (status == false) {
                         cardView_status.setBackgroundColor(Color.parseColor("#FFCC0000"));//Red
-                        tv_classStatus.setText("Press Here to Start/End Class");
-
+                        tv_classStatus.setText("Not Open");
+                        if(open == true && status == false){
+                            floatingActionButton.setVisibility(View.INVISIBLE);
+                            tv_Hint.setText("Class has ended, No more QR code");
+                        }
+                        tv_startTime.setText(dataSnapshot.child("startTime").getValue(String.class));
+                        tv_endTime.setText(dataSnapshot.child("endTime").getValue(String.class));
+                        tv_className.setText(dataSnapshot.child("className").getValue(String.class));
+                        tv_date.setText(dataSnapshot.child("date").getValue(String.class));
+                        tv_location.setText(dataSnapshot.child("location").getValue(String.class));
+                        cardView_classSummary.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -252,26 +269,24 @@ public class AttendanceFragment extends Fragment {
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(getActivity(),QRScanner.class);
-//                    startActivity(intent);
                     zXingScannerView = new ZXingScannerView(view.getContext());
                     getActivity().setContentView(zXingScannerView);
                     zXingScannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
                         @Override
                         public void handleResult(Result rawResult) {
                             Toast.makeText(getContext(),rawResult.getText(),Toast.LENGTH_SHORT).show();
-                            zXingScannerView.resumeCameraPreview(this);
+
                             getResult = rawResult.getText();
-                            mDataRef = FirebaseDatabase.getInstance().getReference("classes_uploads");
+                            mDataRef = FirebaseDatabase.getInstance().getReference(reference);
                             mDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String qrCode = dataSnapshot.child("qrUrl").getValue(String.class);
-                                    int classno = dataSnapshot.child("attendanceNo").getValue(int.class);
-                                    if(qrCode.equals(getResult)){
-                                        classno = classno +1;
-                                        mDataRef.child("attendanceNo").setValue(classno);
+                                    if(getResult.equals(qrCode)){
+                                        mDataRef.child("attend_list").child("A160979").setValue(true);
+                                        zXingScannerView.stopCamera();
                                     }
+
                                 }
 
                                 @Override
