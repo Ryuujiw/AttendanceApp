@@ -89,14 +89,12 @@ public class LoginActivity extends AppCompatActivity {
                             if(task.isSuccessful() && user.isEmailVerified()){
                                 GoToMainActivity(loginMode);
                             }
-                            else {
-                                if (!user.isEmailVerified()) {
-                                    Toast.makeText(LoginActivity.this, "Login Unsuccessful. Please verify your email.", Toast.LENGTH_LONG).show();
-                                    user.sendEmailVerification();
-                                }
-                                else {
-                                    Toast.makeText(LoginActivity.this, "Login Unsuccessful. Please check your credentials.", Toast.LENGTH_LONG).show();
-                                }
+                            else if(task.isSuccessful() && !user.isEmailVerified()) {
+                                Toast.makeText(LoginActivity.this, "Login Unsuccessful. Please verify your email.", Toast.LENGTH_LONG).show();
+                                user.sendEmailVerification();
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Login Unsuccessful. Please check your credentials.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
