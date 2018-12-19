@@ -41,7 +41,7 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".acitvity_myprofile" />
+        <activity android:name=".activity_myprofile" />
         <activity android:name=".activity_edit_profile" />
         <activity android:name=".ClassList_Teacher_Activity" />
         <activity android:name=".ClassListDetails" />
@@ -49,6 +49,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
         <activity android:name=".Reset_Password_Activity" />
+>>>>>>> master
     </application>
 
 </manifest>

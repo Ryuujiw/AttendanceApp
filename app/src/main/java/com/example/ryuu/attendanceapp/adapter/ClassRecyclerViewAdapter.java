@@ -13,11 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
 import com.example.ryuu.attendanceapp.objects.Class;
-import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ClassViewHolder> implements Filterable {
 
@@ -31,7 +31,8 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         this.loginMode = mode;
         this.context = context;
         this.classList = classList;
-        classListFull = new ArrayList<>(classList); //copy of courselist to be used in filter search
+        classListFull = new ArrayList<>();
+        classListFull = classList;//copy of courselist to be used in filter search
     }
 
     @NonNull
@@ -45,8 +46,18 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int position) {
+        String[] img = { "R.drawable.mobile", "R.drawable.web", "R.drawable.network","R.drawable.numerical" };
+        Random rand = new Random();
+        int value = rand.nextInt(5);
         classViewHolder.tvClassName.setText(classList.get(position).getName());
-        classViewHolder.imgViewClassImage.setImageResource(classList.get(position).getImage());
+//        HashMap<Integer, Integer> images = new HashMap<Integer, Integer>();
+//        images.put( 1, Integer.valueOf( R.drawable.mobile) );
+//        images.put( 2, Integer.valueOf( R.drawable.web ) );
+//        images.put( 3, Integer.valueOf( R.drawable.network ) );
+//        images.put( 4, Integer.valueOf( R.drawable.numerical ) );
+//        classViewHolder.imgViewClassImage.setImageResource( images.get( value ).intValue() );
+        classViewHolder.imgViewClassImage.setImageResource(R.drawable.network);
+
     }
 
     @Override
