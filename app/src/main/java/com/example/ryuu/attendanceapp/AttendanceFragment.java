@@ -32,9 +32,7 @@ import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -88,6 +86,9 @@ public class AttendanceFragment extends Fragment {
     private static final int STORAGE_CODE = 1000;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
+    String mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
+    String mFilePath = Environment.getExternalStorageDirectory() + "/" + mFileName + ".pdf";
+    File fileAttached = new File(mFilePath, mFileName);
 
     public AttendanceFragment() {
         // Required empty public constructor
@@ -393,8 +394,7 @@ public class AttendanceFragment extends Fragment {
                 Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
                 Font TextFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
                 Document mDoc = new Document();
-                String mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
-                String mFilePath = Environment.getExternalStorageDirectory() + "/" + mFileName + ".pdf";
+
 
                 try {
                     PdfWriter.getInstance(mDoc, new FileOutputStream(mFilePath));
@@ -463,15 +463,17 @@ public class AttendanceFragment extends Fragment {
             firebaseAuth = FirebaseAuth.getInstance();
             user = firebaseAuth.getCurrentUser();
             email = user.getEmail();
+
+
+
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:"));
             intent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
             intent.putExtra(Intent.EXTRA_SUBJECT, "Attendance report for "+ date);
-            intent.putExtra(Intent.EXTRA_TEXT, "body text");
-
-           if(intent.resolveActivity(getActivity().getPackageManager())!= null) {
-                startActivity(intent);
-           }
+            intent.putExtra(Intent.EXTRA_TEXT, "A attendance report has been attached. ");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileAttached));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
         }
 
