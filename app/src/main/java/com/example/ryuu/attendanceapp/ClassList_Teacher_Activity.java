@@ -34,11 +34,17 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     DatabaseReference mDataRef;
     TextView noClassView;
     String loginMode;
+    String courseCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_list__teacher_);
+
+        Bundle extras = getIntent().getExtras();
+
+        courseCode = extras.getString("courseCode");
+        loginMode = extras.getString("LoginMode");
 
         Toolbar toolbar = findViewById(R.id.toolbar_classlist);
         setSupportActionBar(toolbar);

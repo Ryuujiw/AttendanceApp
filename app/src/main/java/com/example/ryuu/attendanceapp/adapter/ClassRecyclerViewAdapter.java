@@ -2,6 +2,7 @@ package com.example.ryuu.attendanceapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -116,8 +117,17 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassList_Teacher_Activity.class);
-            intent.putExtra("courseName", classList.get(getAdapterPosition()).getCourse_name());
-            intent.putExtra("LoginMode", loginMode);
+            Bundle bundle = new Bundle();
+
+            bundle.putString("courseName", classList.get(getAdapterPosition()).getCourse_name());
+            bundle.putString("courseCode", classList.get(getAdapterPosition()).getCourse_code());
+            bundle.putString("LoginMode", loginMode);
+
+//            intent.putExtra("courseName", classList.get(getAdapterPosition()).getCourse_name());
+//            intent.putExtra("courseCode", classList.get(getAdapterPosition()).getCourse_code());
+//            intent.putExtra("LoginMode", loginMode);
+
+            intent.putExtras(bundle);
             view.getContext().startActivity(intent);
         }
 

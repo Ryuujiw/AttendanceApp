@@ -47,11 +47,16 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
     StorageReference mStorageRef;
     String key;
     Bitmap bitmap;
+    String courseCode;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        Bundle extras = getActivity().getIntent().getExtras();
+
+        courseCode = extras.getString("courseCode");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_add__class_, null);
@@ -81,7 +86,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 addClassListener.applyText(title, date, time);
 
                 Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
-                mDataRef = FirebaseDatabase.getInstance().getReference("/classes/networkw1/");
+                mDataRef = FirebaseDatabase.getInstance().getReference("classes/").child(courseCode);
                 key = mDataRef.push().getKey();
                 Classes classes = new Classes(key, title,date, time, venue);
 
@@ -99,7 +104,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                     e.printStackTrace();
                 }
                 //upload QR image into StorageDatabase
-                mStorageRef = FirebaseStorage.getInstance().getReference("/classes/network/qrImage/");
+                mStorageRef = FirebaseStorage.getInstance().getReference("classes/"+courseCode+"/qrImage/");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
