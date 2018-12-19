@@ -91,10 +91,9 @@ public class ClassActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(loginMode.equals("student")) {
-                   matric=dataSnapshot.child("matric").getValue(String.class);
-
+                    matric = dataSnapshot.child("matric").getValue(String.class);;
                 }else if(loginMode.equals("lecturer")){
-                    matric=dataSnapshot.child("matric").getValue(String.class);
+                    matric = dataSnapshot.child("matric").getValue(String.class);;
                 }
             }
 
