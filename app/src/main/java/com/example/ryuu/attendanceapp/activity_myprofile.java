@@ -29,7 +29,7 @@ public class activity_myprofile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acitvity_myprofile);
+        setContentView(R.layout.activity_myprofile);
 
         //get user matric from firebase
         firebaseAuth = firebaseAuth.getInstance();

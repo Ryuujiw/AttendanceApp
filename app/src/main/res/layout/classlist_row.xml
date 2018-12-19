@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txt_class_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Lecture Week 11"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_class_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="2018-12-26"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/txt_class_name"
+        app:layout_constraintTop_toBottomOf="@+id/txt_class_name" />
+
+    <TextView
+        android:id="@+id/txt_class_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="9.00 a.m."
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_class_date"
+        app:layout_constraintStart_toEndOf="@+id/txt_class_date"
+        app:layout_constraintTop_toTopOf="@+id/txt_class_date" />
+</android.support.constraint.ConstraintLayout>

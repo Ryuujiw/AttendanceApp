@@ -120,7 +120,7 @@ public class ClassActivity extends AppCompatActivity {
                         txt_no_result.setText("No registered courses");
                         allClass = new ArrayList<>();
                     }else {
-                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
+                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass, loginMode);
                         classRecyclerViewAdapter.notifyDataSetChanged();
                         recyclerView.setAdapter(classRecyclerViewAdapter);
                     }

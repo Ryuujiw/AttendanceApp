@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,9 +40,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseUsers;
-    private FirebaseUser User;
+    private FirebaseUser user;
 
     String password, email,role;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +95,20 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+
                                 //get user matric from firebase
                                 firebaseAuth = firebaseAuth.getInstance();
                                 //get current user logged in
-                                User = firebaseAuth.getCurrentUser();
-                                String uid = User.getUid();
+                                user = firebaseAuth.getCurrentUser();
+                                String uid = user.getUid();
                                 CreateUsers(uid);
 
                                 Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
+
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                user.sendEmailVerification();
+                                Toast.makeText(SignUpActivity.this, "An email has been sent to you for verification. Please verify your email before logging in.", Toast.LENGTH_LONG).show();
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(SignUpActivity.this, "Error. Could not Sign Up", Toast.LENGTH_LONG).show();
