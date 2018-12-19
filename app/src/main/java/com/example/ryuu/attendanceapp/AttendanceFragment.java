@@ -32,6 +32,11 @@ import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Message;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +55,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.journeyapps.barcodescanner.BarcodeResult;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,7 +73,7 @@ public class AttendanceFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
-    String date, location, startTime,endTime, classname, students="", attCount;
+    String date, location, startTime,endTime, classname, students="", attCount, email;
     ImageView iv_QRcode;
     String loginMode;//Mode
     String getResult;
@@ -80,6 +86,8 @@ public class AttendanceFragment extends Fragment {
     Bitmap bmp;
     boolean open;
     private static final int STORAGE_CODE = 1000;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
     public AttendanceFragment() {
         // Required empty public constructor
@@ -247,10 +255,12 @@ public class AttendanceFragment extends Fragment {
                                                 }else{
                                                     //permission granted
                                                     savePdf();
+                                                    sentMail();
                                                 }
                                             }else{
                                                 //system less than marshmallow no need to check
                                                 savePdf();
+                                                sentMail();
                                             }
 
                                         }
@@ -364,6 +374,7 @@ public class AttendanceFragment extends Fragment {
 
             }
         } else {
+
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -434,11 +445,41 @@ public class AttendanceFragment extends Fragment {
                 if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted from popup, call savePdf() method
                     savePdf();
+                    sentMail();
                 }else {
                     //permission was denied from popup, show error message
                     Toast.makeText(getContext(), "Permission denied !!", Toast.LENGTH_SHORT).show();
                 }
             }
         }
+    }
+
+    public void sentMail(){
+    mDataRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            date = dataSnapshot.child("date").getValue(String.class);
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            user = firebaseAuth.getCurrentUser();
+            email = user.getEmail();
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Attendance report for "+ date);
+            intent.putExtra(Intent.EXTRA_TEXT, "body text");
+
+           if(intent.resolveActivity(getActivity().getPackageManager())!= null) {
+                startActivity(intent);
+           }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    });
+
     }
 }

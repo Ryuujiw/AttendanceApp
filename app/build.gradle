@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'me.dm7.barcodescanner:zxing:1.9'
     implementation 'com.itextpdf:itextg:5.5.10'
+
 }
