@@ -23,7 +23,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
     private List<Question> questionList;
     private DatabaseReference database;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txt_question, txt_user, txt_description;
         public Button btn_read;
         public MyViewHolder(View itemView) {
@@ -33,6 +33,19 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
             txt_description = itemView.findViewById(R.id.txt_new_question_description);
 
             btn_read = itemView.findViewById(R.id.btn_read);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            database = FirebaseDatabase.getInstance().getReference();
+
+            Intent intent = new Intent(view.getContext(), AnswerActivity.class);
+
+            intent.putExtra("QID", questionList.get(getAdapterPosition()).getId());
+
+            view.getContext().startActivity(intent);
         }
     }
 
@@ -55,20 +68,6 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.txt_user.setText(question.getUsername());
         holder.txt_description.setText(question.getDescription());
         int votes = question.getUpvote() + question.getDownvote();
-
-        holder.btn_read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                database = FirebaseDatabase.getInstance().getReference();
-
-                Intent intent = new Intent(view.getContext(), AnswerActivity.class);
-
-                intent.putExtra("QID", questionList.get(position).getId());
-
-                view.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override
