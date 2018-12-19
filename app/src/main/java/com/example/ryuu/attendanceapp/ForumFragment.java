@@ -3,6 +3,7 @@ package com.example.ryuu.attendanceapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,8 +38,8 @@ public class ForumFragment extends Fragment {
     private DatabaseReference database;
     private String loginMode;
     private static final String TAG = "Forum Fragments";
-    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     String previousClassName, previousCLassID;
+    FirebaseUser currentUser;
 
     // FROM QUESTION CARDVIEW
     private Button btn_read;
@@ -73,11 +74,13 @@ public class ForumFragment extends Fragment {
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
         previousClassName = getActivity().getIntent().getStringExtra("className");
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
         // GET LOGIN MODE
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            loginMode = bundle.getString("LOGIN_MODE", "");
-        }
+
+        loginMode = getActivity().getIntent().getStringExtra("LOGIN_MODE");
 
         // alert dialog for posting a new question.
         addQuestion = view.findViewById(R.id.btn_add_question);
@@ -108,8 +111,8 @@ public class ForumFragment extends Fragment {
                         String qTitle = questionTitle.getText().toString();
                         String qDesc = questionDescription.getText().toString();
                         String qTags = questionTags.getText().toString();
-                        String qUser = "Anonymous";
-                        if (loginMode == "student"){
+                        String qUser = "";
+                        if (loginMode.equals("student")){
                             qUser = currentUser.getEmail().substring(0,7);
                         }
 
@@ -120,7 +123,7 @@ public class ForumFragment extends Fragment {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/").child(previousCLassID);
 
         //populate questionList
         final ValueEventListener questionListener = new ValueEventListener() {
@@ -137,7 +140,7 @@ public class ForumFragment extends Fragment {
                     questionList.add(questionBuffer.pop());
                 }
 
-                questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+                questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList, previousCLassID);
                 recyclerView.setAdapter(questionRecyclerViewAdapter);
             }
 
@@ -148,7 +151,7 @@ public class ForumFragment extends Fragment {
 
         database.addValueEventListener(questionListener);
 
-        questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+        questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList, previousCLassID);
 
         recyclerView.setAdapter(questionRecyclerViewAdapter);
 
@@ -162,20 +165,14 @@ public class ForumFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance().getReference("/questions/");
 
-        String key = database.child("networkw1").push().getKey();
+        String key = database.child(previousCLassID).push().getKey();
         final Question newQuestion = new Question(key, title, description, tags, username);
 
         Map<String, Object> questionValues = newQuestion.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/networkw1/" + key, questionValues);
+        childUpdates.put("/"+ previousCLassID + "/" + key, questionValues);
         database.updateChildren(childUpdates);
 
-        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/"+previousCLassID+"/");
-
-        Map<String, Object> classChildUpdates = new HashMap<>();
-        classChildUpdates.put(key, true);
-
-        database.updateChildren(classChildUpdates);
         Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();
     }
 }

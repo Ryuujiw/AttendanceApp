@@ -37,6 +37,7 @@ public class AnswerActivity extends AppCompatActivity {
     private Button btn_readq_answer;
     private DatabaseReference database;
     private String questionId;
+    private String classId;
     private AnswerRecyclerViewAdapter answerRecyclerViewAdapter;
 
     LinearLayoutManager linearLayoutManager;
@@ -47,6 +48,8 @@ public class AnswerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_answer);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        classId = getIntent().getStringExtra("CLASS");
 
         lbl_readq_title = findViewById(R.id.lbl_readq_title);
         lbl_readq_description = findViewById(R.id.lbl_readq_description);
@@ -62,7 +65,7 @@ public class AnswerActivity extends AppCompatActivity {
             questionId = extras.getString("QID");
         }
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/").child(classId);
 
         final ValueEventListener questionListener = new ValueEventListener() {
             @Override
@@ -96,7 +99,7 @@ public class AnswerActivity extends AppCompatActivity {
         answerRecyclerViewAdapter = new AnswerRecyclerViewAdapter(AnswerActivity.this, answerList);
         recyclerView.setAdapter(answerRecyclerViewAdapter);
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/" + questionId + "/answers/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/" + classId + "/" + questionId + "/answers/");
 
         // populate answers
         final ValueEventListener answerListener = new ValueEventListener() {
@@ -136,7 +139,7 @@ public class AnswerActivity extends AppCompatActivity {
 
     private void submitAnswer(String questionId, String answer, String username) {
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/" + questionId + "/answers/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/" + classId + "/" + questionId + "/answers/");
 
         String key = database.push().getKey();
 
