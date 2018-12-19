@@ -119,7 +119,7 @@ public class ClassActivity extends AppCompatActivity {
                             Boolean value = childsnapshot.child(loginMode).hasChild(matric);
                             if (value.equals(true)) {
                                 Class courses = childsnapshot.getValue(Class.class);
-                                addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
+                                addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDate_created(), courses.getDescription());
                             }
                         }
                     allClass = allClassgetInfo();
@@ -128,7 +128,7 @@ public class ClassActivity extends AppCompatActivity {
                         txt_no_result.setText("No registered courses");
                         allClass = new ArrayList<>();
                     }else {
-                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
+                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass,loginMode);
                         classRecyclerViewAdapter.notifyDataSetChanged();
                         recyclerView.setAdapter(classRecyclerViewAdapter);
                     }
@@ -269,7 +269,6 @@ public class ClassActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent;
         switch(item.getItemId())
         {
             case R.id.menu_myprofile:
@@ -278,9 +277,20 @@ public class ClassActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_logout:
-                firebaseAuth.signOut();
-                intent = new Intent(ClassActivity.this, LoginActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                builder.setMessage("Are you sure you want to logout?").setTitle("Logout")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firebaseAuth.signOut();
+                        Intent intent = new Intent(ClassActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("No",null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
         }
         return super.onOptionsItemSelected(item);
     }
