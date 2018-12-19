@@ -25,15 +25,11 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txt_question, txt_user, txt_description;
-        public Button btn_read;
         public MyViewHolder(View itemView) {
             super(itemView);
             txt_question = itemView.findViewById(R.id.txt_question);
             txt_user = itemView.findViewById(R.id.txt_user);
             txt_description = itemView.findViewById(R.id.txt_new_question_description);
-
-            btn_read = itemView.findViewById(R.id.btn_read);
-
             itemView.setOnClickListener(this);
         }
 
@@ -67,7 +63,6 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.txt_question.setText(question.getTitle());
         holder.txt_user.setText(question.getUsername());
         holder.txt_description.setText(question.getDescription());
-        int votes = question.getUpvote() + question.getDownvote();
     }
 
     @Override
