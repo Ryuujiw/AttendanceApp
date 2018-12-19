@@ -1,5 +1,6 @@
 package com.example.ryuu.attendanceapp;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -51,12 +52,18 @@ public class ClassActivity extends AppCompatActivity {
     List<Class> allClass;
     private String classCode = "";
     String matric=" ",loginMode,uid;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
 
+        progress = new ProgressDialog(this);
+        progress.setTitle("Retreiving Courses..");
+        progress.setMessage("Please wait for a moment");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
         // GET LOGIN MODE
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
         txt_no_result = findViewById(R.id.textView3);
@@ -79,6 +86,7 @@ public class ClassActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // [START initialize_database_ref]
+
         mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+uid+"/");
         mDatabaseUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,7 +139,7 @@ public class ClassActivity extends AppCompatActivity {
                     Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
+        progress.dismiss();
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
 
             @Override
