@@ -38,6 +38,7 @@ public class ForumFragment extends Fragment {
     private String loginMode;
     private static final String TAG = "Forum Fragments";
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    String previousClassName, previousCLassID;
 
     // FROM QUESTION CARDVIEW
     private Button btn_read;
@@ -69,6 +70,8 @@ public class ForumFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_forum, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        previousCLassID = getActivity().getIntent().getStringExtra("classID");
+        previousClassName = getActivity().getIntent().getStringExtra("className");
 
         // GET LOGIN MODE
         Bundle bundle = this.getArguments();
@@ -117,7 +120,7 @@ public class ForumFragment extends Fragment {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1");
+        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/");
 
         //populate questionList
         final ValueEventListener questionListener = new ValueEventListener() {
@@ -167,7 +170,7 @@ public class ForumFragment extends Fragment {
         childUpdates.put("/networkw1/" + key, questionValues);
         database.updateChildren(childUpdates);
 
-        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/");
+        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/"+previousCLassID+"/");
 
         Map<String, Object> classChildUpdates = new HashMap<>();
         classChildUpdates.put(key, true);
