@@ -1,17 +1,17 @@
 package com.example.ryuu.attendanceapp;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.objects.Class;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,9 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 public class CourseDetails extends AppCompatActivity {
 
     Button btn_done;
-    String matric,login_mode,course_code;
+    String uid,login_mode,course_code;
     TextView txt_course_name, txt_course_code, txt_course_lecturer, txt_course_date_created;
     private DatabaseReference mDatabaseRef;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser User;
 
 
     @Override
@@ -36,8 +38,12 @@ public class CourseDetails extends AppCompatActivity {
         txt_course_date_created = findViewById(R.id.txt_date);
         txt_course_name = findViewById(R.id.txt_coursename);
 
+        //get user matric from firebase
+        firebaseAuth = firebaseAuth.getInstance();
+        //get current user logged in
+        User = firebaseAuth.getCurrentUser();
+        uid=User.getUid();
         login_mode = getIntent().getStringExtra("LOGIN_MODE");
-        matric = getIntent().getStringExtra("matric");
         course_code = getIntent().getStringExtra("course_code");
 
         // [START initialize_database_ref]
@@ -66,7 +72,6 @@ public class CourseDetails extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(CourseDetails.this , ClassActivity.class);
-                intent.putExtra("matric",matric );
                 intent.putExtra("LOGIN_MODE", login_mode);
                 startActivity(intent);
             }
@@ -75,7 +80,7 @@ public class CourseDetails extends AppCompatActivity {
 
     public void getLecturerName(){
         // [START initialize_database_ref]
-        mDatabaseRef= FirebaseDatabase.getInstance().getReference("/users/lecturer/"+matric+"/");
+        mDatabaseRef= FirebaseDatabase.getInstance().getReference("/users/lecturer/"+uid+"/");
         // [END initialize_database_ref]
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override

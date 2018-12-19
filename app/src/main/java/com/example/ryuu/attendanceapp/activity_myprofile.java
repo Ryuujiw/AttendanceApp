@@ -21,8 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 public class activity_myprofile extends AppCompatActivity {
 
     private FirebaseUser User;
+    private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabaseUser;
-    String matric,login_mode;
+    String uid,login_mode;
     TextView tv_name,tv_email,tv_matric,tv_role,tv_gender,tv_course,course;
 
     @Override
@@ -30,8 +31,13 @@ public class activity_myprofile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acitvity_myprofile);
 
+        //get user matric from firebase
+        firebaseAuth = firebaseAuth.getInstance();
+        //get current user logged in
+        User = firebaseAuth.getCurrentUser();
+
         login_mode=getIntent().getStringExtra("LOGIN_MODE");
-        matric = getIntent().getStringExtra("matric");
+        uid = User.getUid();
 
         tv_name = findViewById(R.id.tv_name);
         tv_email = findViewById(R.id.tv_email);
@@ -50,7 +56,7 @@ public class activity_myprofile extends AppCompatActivity {
         User=FirebaseAuth.getInstance().getCurrentUser();
         //get student
         // [START initialize_database_ref]
-        mDatabaseUser= FirebaseDatabase.getInstance().getReference().child("users").child(login_mode).child(matric);
+        mDatabaseUser= FirebaseDatabase.getInstance().getReference().child("users").child(login_mode).child(uid);
         // [END initialize_database_ref]
         mDatabaseUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,7 +69,7 @@ public class activity_myprofile extends AppCompatActivity {
                     tv_role.setText(login_mode);
                     tv_gender.setText(profile.getGender());
                     tv_course.setText(profile.getMajor());
-                    tv_matric.setText(matric);
+                    tv_matric.setText(profile.getMatric());
                 }else if(login_mode.equals("lecturer")){
 
                     Lecturer profile = dataSnapshot.getValue(Lecturer.class);
@@ -71,7 +77,7 @@ public class activity_myprofile extends AppCompatActivity {
                     tv_email.setText(profile.getEmail());
                     tv_role.setText(login_mode);
                     tv_gender.setText(profile.getGender());
-                    tv_matric.setText(matric);
+                    tv_matric.setText(profile.getMatric());
                 }
             }
 
@@ -86,7 +92,7 @@ public class activity_myprofile extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               gotoeditprofile(login_mode,matric);
+               gotoeditprofile(login_mode);
             }
         });
 
@@ -100,9 +106,8 @@ public class activity_myprofile extends AppCompatActivity {
         });
     }
 
-    private void gotoeditprofile(String loginMode,String matric){
+    private void gotoeditprofile(String loginMode){
         Intent intent = new Intent(activity_myprofile.this,activity_edit_profile.class);
-        intent.putExtra("matric",matric );
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
     }
@@ -110,7 +115,6 @@ public class activity_myprofile extends AppCompatActivity {
     private void back(String loginMode){
         Intent intent = new Intent(activity_myprofile.this,ClassActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
-        intent.putExtra("matric",matric );
         startActivity(intent);
     }
 }

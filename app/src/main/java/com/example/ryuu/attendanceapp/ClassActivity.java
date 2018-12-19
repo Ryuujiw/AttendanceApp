@@ -41,7 +41,6 @@ public class ClassActivity extends AppCompatActivity {
 
     private FirebaseUser User;
     private DatabaseReference mDatabaseUser, mDatabaseUser1;
-    private Query mDatabase;
     private FirebaseAuth firebaseAuth;
 
     LinearLayoutManager linearLayoutManager;
@@ -52,7 +51,7 @@ public class ClassActivity extends AppCompatActivity {
     List<Class> allClass = new ArrayList<>();
     private String classCode = "";
 
-    String matric = "", loginMode = "";
+    String matric, loginMode,uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +74,25 @@ public class ClassActivity extends AppCompatActivity {
         firebaseAuth = firebaseAuth.getInstance();
         //get current user logged in
         User = firebaseAuth.getCurrentUser();
+        uid = User.getUid();
+
         // [START initialize_database_ref]
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(loginMode);
-        mDatabase = mDatabaseUser.orderByChild("email").equalTo(User.getEmail().toLowerCase());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+uid+"/");
+        mDatabaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    //get user matric id
-                    matric = childSnapshot.getKey();
+                if(loginMode.equals("student")) {
+                    Student profile = dataSnapshot.getValue(Student.class);
+                    matric = profile.getMatric();
+                }else if(loginMode.equals("lecturer")){
+                    Lecturer profile = dataSnapshot.getValue(Lecturer.class);
+                    matric = profile.getMatric();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -127,6 +130,7 @@ public class ClassActivity extends AppCompatActivity {
         classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
         if(allClass == null){
             recyclerView.setVisibility(View.GONE);
         }else{
@@ -152,11 +156,16 @@ public class ClassActivity extends AppCompatActivity {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            classCode = input.getText().toString();
-                            //add user matric into course child
-                            registerCourse(classCode);
-                            //add course code into user child
-                            addCourseintoUserProfile(classCode,matric);
+                            classCode = input.getText().toString().toLowerCase().trim();
+                            if(!classCode.equals(null)) {
+                                //add user matric into course child
+                                registerCourse(classCode);
+                            }else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                                builder.setMessage("Please enter course.").setTitle("Error").setPositiveButton("OK", null);
+                                AlertDialog dialog2 = builder.create();
+                                dialog2.show();
+                            }
 //                            Toast.makeText(ClassActivity.this, "Class Added", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -172,7 +181,6 @@ public class ClassActivity extends AppCompatActivity {
                 } else if (loginMode.equals("lecturer")) {
                     Intent intent = new Intent(ClassActivity.this, CreateCourseActivity.class);
                     intent.putExtra("LOGIN_MODE", loginMode);
-                    intent.putExtra("matric", matric);
                     startActivity(intent);
                 }
             }
@@ -214,43 +222,46 @@ public class ClassActivity extends AppCompatActivity {
 
     public void registerCourse(final String coursecode){
         mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
-        mDatabaseUser1.orderByKey().equalTo(coursecode).addValueEventListener(new ValueEventListener() {
+        mDatabaseUser1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot==null || dataSnapshot.getChildren()==null) {
-                    //Course does not exist
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
-                    builder.setMessage("Please enter valid course code.").setTitle("Invalid Course Code.").setPositiveButton("OK", null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else {
+                if(dataSnapshot.hasChild(coursecode)){
                     //Course exists
-                    boolean registered = dataSnapshot.child(coursecode).child(loginMode).hasChild(matric);
-                    if(registered==true){
+                    //check if user registered in the course
+                    boolean registered = dataSnapshot.child("/"+coursecode+"/"+loginMode+"/").hasChild(matric);
+                    if(registered == true){
+
                         AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
                         builder.setMessage("Courses exists").setTitle("You have registered under this course.").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }else {
+
                         mDatabaseUser1.child(coursecode).child(loginMode).child(matric).setValue(true);
                         AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                        addCourseintoUserProfile(coursecode,uid);
                         builder.setMessage("Courses Registered Successfully").setTitle("Course registered successfully").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
+                }else{
+                    //Course does not exist
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                    builder.setMessage("Please enter valid course code.").setTitle("Invalid Course Code.").setPositiveButton("OK", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-    public void addCourseintoUserProfile(String coursecode, String matric){
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+matric+"/");
-
+    public void addCourseintoUserProfile(String coursecode, String uid){
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+uid+"/");
         mDatabaseUser.child("courses").child(coursecode).setValue(true);
     }
 
@@ -274,7 +285,6 @@ public class ClassActivity extends AppCompatActivity {
 
     private void GoToMyProfile(String loginMode){
         Intent intent = new Intent(ClassActivity.this,activity_myprofile.class);
-        intent.putExtra("matric",matric);
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
     }

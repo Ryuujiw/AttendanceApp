@@ -20,8 +20,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseUsers;
+    private FirebaseUser User;
 
     String password, email,role;
 
@@ -92,7 +95,13 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                CreateUsers();
+                                //get user matric from firebase
+                                firebaseAuth = firebaseAuth.getInstance();
+                                //get current user logged in
+                                User = firebaseAuth.getCurrentUser();
+                                String uid = User.getUid();
+                                CreateUsers(uid);
+
                                 Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -109,30 +118,28 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     }
 
-    private void CreateUsers() {
+    private void CreateUsers(String uid) {
         //getting the values to save
         String name = txt_sign_up_username.getText().toString().trim();
         String matric = txt_sign_up_matrix_no.getText().toString().toLowerCase().trim();
         String gender = spinner.getSelectedItem().toString().trim().toLowerCase();
         role = getRole(email);
-        databaseUsers = FirebaseDatabase.getInstance().getReference().child("users").child(role);
+        databaseUsers = FirebaseDatabase.getInstance().getReference("/users/"+role+"/");
         //checking if the value is provided
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(matric)) {
             Map<String, Object> dataMap = new HashMap<String, Object>();
             if(role.equals("student")) {
                 //Saving the student
                 //creating an Student Object
-                Student user = new Student(name,email.toLowerCase(),gender,"null");
+                Student user = new Student(name,email.toLowerCase(),matric,gender,"null");
                 //matric is used as unique id for reference
-//                databaseUsers.child(matric);
-                dataMap.put(matric, user.toMap());
+                dataMap.put(uid, user.toMap());
             }else if(role.equals("lecturer")) {
                 //Saving the teacher
                 //creating an Lecturer Object
-                Lecturer user = new Lecturer(name,email.toLowerCase(),gender);
+                Lecturer user = new Lecturer(name,email.toLowerCase(),matric.toLowerCase(),gender);
                 //matric is used as unique id for reference
-//                databaseUsers.child(matric);
-                dataMap.put(matric, user.toMap());
+                dataMap.put(uid, user.toMap());
             }
             databaseUsers.updateChildren(dataMap);
             //displaying a success message

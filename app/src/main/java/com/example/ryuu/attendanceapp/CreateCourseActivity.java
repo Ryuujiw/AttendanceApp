@@ -8,10 +8,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.objects.Lecturer;
+import com.example.ryuu.attendanceapp.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,17 +29,34 @@ import java.util.Map;
 public class CreateCourseActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser User;
     private DatabaseReference databaseUsers;
     Button btn_create;
     EditText et_name, et_description, et_coursecode;
-    String matric,course_code,course_name,course_description,course_date_created;
+    String uid,matric,course_code,course_name,course_description,course_date_created;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_course);
 
-        matric = getIntent().getStringExtra("matric");
+        //get user matric from firebase
+        firebaseAuth = firebaseAuth.getInstance();
+        //get current user logged in
+        User = firebaseAuth.getCurrentUser();
+        uid=User.getUid();
 
+        databaseUsers = FirebaseDatabase.getInstance().getReference("/users/lecturer/"+uid+"/");
+        databaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    Lecturer profile = dataSnapshot.getValue(Lecturer.class);
+                    matric = profile.getMatric();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(CreateCourseActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btn_create = findViewById(R.id.btn_create);
         et_name = findViewById(R.id.edittxt_course_name);
@@ -44,12 +68,11 @@ public class CreateCourseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(et_name != null && et_coursecode != null && et_description != null){
 
-                     course_code = et_coursecode.getText().toString().trim().toLowerCase();
+                     course_code = et_coursecode.getText().toString().trim().toLowerCase().trim();
                      course_name = et_name.getText().toString().trim();
                      course_description = et_description.getText().toString().trim();
                      course_date_created = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     //save course detail
-
                     addCourse(course_code,course_name,course_description,course_date_created);
                     addLecturer(course_code);
                     add_Lecturer_courses(course_code);
@@ -83,13 +106,12 @@ public class CreateCourseActivity extends AppCompatActivity {
     }
 
     public void add_Lecturer_courses(String course_code){
-        databaseUsers = FirebaseDatabase.getInstance().getReference("/users/lecturer/"+matric+"/");
+        databaseUsers = FirebaseDatabase.getInstance().getReference("/users/lecturer/"+uid+"/");
         databaseUsers.child("courses").child(course_code).setValue(true);
     }
 
     public void gotoCourseDetails(){
         Intent intent = new Intent(CreateCourseActivity.this, CourseDetails.class);
-        intent.putExtra("matric",matric );
         intent.putExtra("LOGIN_MODE", "lecturer");
         intent.putExtra("course_code",course_code);
         startActivity(intent);
