@@ -108,18 +108,18 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(login_mode.equals("student")) {
-                    Student profile = dataSnapshot.getValue(Student.class);
-                    et_name.setText(profile.getName());
-                    et_email.setText(profile.getEmail());
-                    et_matric.setText(profile.getMatric());
-                    sp_major.setSelection(getIndex(sp_major, profile.getMajor()));
-                    sp_gender.setSelection(getIndex(sp_gender, profile.getGender()));
+
+                    et_name.setText(dataSnapshot.child("name").getValue(String.class));
+                    et_email.setText(dataSnapshot.child("email").getValue(String.class));
+                    et_matric.setText(dataSnapshot.child("matric").getValue(String.class));
+                    sp_major.setSelection(getIndex(sp_major,dataSnapshot.child("major").getValue(String.class)));
+                    sp_gender.setSelection(getIndex(sp_gender, dataSnapshot.child("gender").getValue(String.class)));
                 }else if(login_mode.equals("lecturer")){
-                    Lecturer profile = dataSnapshot.getValue(Lecturer.class);
-                    et_name.setText(profile.getName());
-                    et_email.setText(profile.getEmail());
-                    et_matric.setText(profile.getMatric());
-                    sp_gender.setSelection(getIndex(sp_gender, profile.getGender()));
+
+                    et_name.setText(dataSnapshot.child("name").getValue(String.class));
+                    et_email.setText(dataSnapshot.child("email").getValue(String.class));
+                    et_matric.setText(dataSnapshot.child("matric").getValue(String.class));
+                    sp_gender.setSelection(getIndex(sp_gender, dataSnapshot.child("gender").getValue(String.class)));
                 }
             }
 
@@ -237,5 +237,6 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
         intent = new Intent(activity_edit_profile.this, activity_myprofile.class);
         intent.putExtra("LOGIN_MODE", login_mode);
         startActivity(intent);
+        finish();
     }
 }

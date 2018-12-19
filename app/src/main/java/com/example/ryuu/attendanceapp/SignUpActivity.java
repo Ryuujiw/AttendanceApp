@@ -110,6 +110,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                                 user.sendEmailVerification();
                                 Toast.makeText(SignUpActivity.this, "An email has been sent to you for verification. Please verify your email before logging in.", Toast.LENGTH_LONG).show();
                                 startActivity(intent);
+                                finish();
                             } else {
                                 Toast.makeText(SignUpActivity.this, "Error. Could not Sign Up", Toast.LENGTH_LONG).show();
                             }
