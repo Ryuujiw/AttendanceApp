@@ -84,10 +84,14 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
                         }
 
                     }
+
                     allClassList = getAllClassListInfo();
+                    if(allClassList.isEmpty()){
+                        recyclerView.setVisibility(View.GONE);
+                        noClassView.setVisibility(View.VISIBLE);
+                    }
                     classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList, loginMode, courseCode);
                     classListAdapter.notifyDataSetChanged();
-
                     recyclerView.setAdapter(classListAdapter);
 
 

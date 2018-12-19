@@ -1,5 +1,6 @@
 package com.example.ryuu.attendanceapp;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class ClassActivity extends AppCompatActivity {
     TextView txt_no_result;
     List<Class> classList = new ArrayList<>();
     private String classCode = "";
+    ProgressDialog progress;
     String matric=" ",loginMode,uid;
 
     @Override
@@ -66,10 +69,13 @@ public class ClassActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
+        progress = new ProgressDialog(ClassActivity.this);
+        progress.setTitle("Loading..");
+        progress.setMessage("Please wait for a moment");
 
         Toolbar toolbar = findViewById(R.id.tb_class);
         setSupportActionBar(toolbar);
-
+        progress.show();
         //get user matric from firebase
         firebaseAuth = firebaseAuth.getInstance();
         //get current user logged in
@@ -85,11 +91,10 @@ public class ClassActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(loginMode.equals("student")) {
-                   Student profile = dataSnapshot.getValue(Student.class);
-                    matric = profile.getMatric();
+                   matric=dataSnapshot.child("matric").getValue(String.class);
+
                 }else if(loginMode.equals("lecturer")){
-                    Lecturer profile = dataSnapshot.getValue(Lecturer.class);
-                    matric = profile.getMatric();
+                    matric=dataSnapshot.child("matric").getValue(String.class);
                 }
             }
 
@@ -104,6 +109,7 @@ public class ClassActivity extends AppCompatActivity {
             mDatabaseUser1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    progress.dismiss();
                     classList.clear();
                     for(DataSnapshot courseSnapshot : dataSnapshot.getChildren()){
                         Boolean isPresent = courseSnapshot.child(loginMode).hasChild(matric);
@@ -142,12 +148,12 @@ public class ClassActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             classCode = input.getText().toString().toLowerCase().trim();
-                            if(!classCode.equals(null)) {
+                            if(!classCode.isEmpty()) {
                                 //add user matric into course child
                                 registerCourse(classCode);
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
-                                builder.setMessage("Please enter course.").setTitle("Error").setPositiveButton("OK", null);
+                                builder.setMessage("Please enter course code.").setTitle("Error").setPositiveButton("OK", null);
                                 AlertDialog dialog2 = builder.create();
                                 dialog2.show();
                             }
@@ -224,6 +230,7 @@ public class ClassActivity extends AppCompatActivity {
                         builder.setMessage("Courses Registered Successfully").setTitle("Course registered successfully").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
+
                     }
                 }else{
                     //Course does not exist
@@ -260,6 +267,7 @@ public class ClassActivity extends AppCompatActivity {
                 firebaseAuth.signOut();
                 intent = new Intent(ClassActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -63,21 +63,20 @@ public class activity_myprofile extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(login_mode.equals("student")) {
 
-                    Student profile = dataSnapshot.getValue(Student.class);
-                    tv_name.setText(profile.getName());
-                    tv_email.setText(profile.getEmail());
+                    tv_name.setText(dataSnapshot.child("name").getValue(String.class));
+                    tv_email.setText(dataSnapshot.child("email").getValue(String.class));
+                    tv_gender.setText(dataSnapshot.child("gender").getValue(String.class));
+                    tv_course.setText(dataSnapshot.child("major").getValue(String.class));
+                    tv_matric.setText(dataSnapshot.child("matric").getValue(String.class));
                     tv_role.setText(login_mode);
-                    tv_gender.setText(profile.getGender());
-                    tv_course.setText(profile.getMajor());
-                    tv_matric.setText(profile.getMatric());
+
                 }else if(login_mode.equals("lecturer")){
 
-                    Lecturer profile = dataSnapshot.getValue(Lecturer.class);
-                    tv_name.setText(profile.getName());
-                    tv_email.setText(profile.getEmail());
+                    tv_name.setText(dataSnapshot.child("name").getValue(String.class));
+                    tv_email.setText(dataSnapshot.child("email").getValue(String.class));
+                    tv_gender.setText(dataSnapshot.child("gender").getValue(String.class));
+                    tv_matric.setText(dataSnapshot.child("matric").getValue(String.class));
                     tv_role.setText(login_mode);
-                    tv_gender.setText(profile.getGender());
-                    tv_matric.setText(profile.getMatric());
                 }
             }
 
@@ -110,12 +109,14 @@ public class activity_myprofile extends AppCompatActivity {
         Intent intent = new Intent(activity_myprofile.this,activity_edit_profile.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
+        finish();
     }
 
     private void back(String loginMode){
         Intent intent = new Intent(activity_myprofile.this,ClassActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
+        finish();
     }
 }
 
