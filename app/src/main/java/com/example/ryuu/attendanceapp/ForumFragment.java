@@ -170,12 +170,6 @@ public class ForumFragment extends Fragment {
         childUpdates.put("/networkw1/" + key, questionValues);
         database.updateChildren(childUpdates);
 
-        database = FirebaseDatabase.getInstance().getReference("/classes/networkw1/forum/"+previousCLassID+"/");
-
-        Map<String, Object> classChildUpdates = new HashMap<>();
-        classChildUpdates.put(key, true);
-
-        database.updateChildren(classChildUpdates);
         Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();
     }
 }
