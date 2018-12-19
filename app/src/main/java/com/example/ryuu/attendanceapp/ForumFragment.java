@@ -3,6 +3,7 @@ package com.example.ryuu.attendanceapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,9 +76,8 @@ public class ForumFragment extends Fragment {
 
         // GET LOGIN MODE
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            loginMode = bundle.getString("LOGIN_MODE", "");
-        }
+
+        loginMode = getActivity().getIntent().getStringExtra("LOGIN_MODE");
 
         // alert dialog for posting a new question.
         addQuestion = view.findViewById(R.id.btn_add_question);
@@ -108,7 +108,7 @@ public class ForumFragment extends Fragment {
                         String qTitle = questionTitle.getText().toString();
                         String qDesc = questionDescription.getText().toString();
                         String qTags = questionTags.getText().toString();
-                        String qUser = "Anonymous";
+                        String qUser = "";
                         if (loginMode == "student"){
                             qUser = currentUser.getEmail().substring(0,7);
                         }
@@ -120,7 +120,7 @@ public class ForumFragment extends Fragment {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("/questions/networkw1/");
+        database = FirebaseDatabase.getInstance().getReference("/questions/").child(previousCLassID);
 
         //populate questionList
         final ValueEventListener questionListener = new ValueEventListener() {
@@ -137,7 +137,7 @@ public class ForumFragment extends Fragment {
                     questionList.add(questionBuffer.pop());
                 }
 
-                questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+                questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList, previousCLassID);
                 recyclerView.setAdapter(questionRecyclerViewAdapter);
             }
 
@@ -148,7 +148,7 @@ public class ForumFragment extends Fragment {
 
         database.addValueEventListener(questionListener);
 
-        questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList);
+        questionRecyclerViewAdapter = new QuestionRecyclerViewAdapter(questionList, previousCLassID);
 
         recyclerView.setAdapter(questionRecyclerViewAdapter);
 
@@ -162,12 +162,12 @@ public class ForumFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance().getReference("/questions/");
 
-        String key = database.child("networkw1").push().getKey();
+        String key = database.child(previousCLassID).push().getKey();
         final Question newQuestion = new Question(key, title, description, tags, username);
 
         Map<String, Object> questionValues = newQuestion.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/networkw1/" + key, questionValues);
+        childUpdates.put("/"+ previousCLassID + "/" + key, questionValues);
         database.updateChildren(childUpdates);
 
         Toast.makeText(getActivity(), "Your question has been posted.", Toast.LENGTH_SHORT).show();

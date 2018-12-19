@@ -22,6 +22,7 @@ import java.util.List;
 public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder> {
     private List<Question> questionList;
     private DatabaseReference database;
+    private String className;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txt_question, txt_user, txt_description;
@@ -40,13 +41,15 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
             Intent intent = new Intent(view.getContext(), AnswerActivity.class);
 
             intent.putExtra("QID", questionList.get(getAdapterPosition()).getId());
+            intent.putExtra("CLASS", className);
 
             view.getContext().startActivity(intent);
         }
     }
 
-    public QuestionRecyclerViewAdapter(List<Question> questionList) {
+    public QuestionRecyclerViewAdapter(List<Question> questionList, String className) {
         this.questionList = questionList;
+        this.className = className;
     }
 
     @NonNull
