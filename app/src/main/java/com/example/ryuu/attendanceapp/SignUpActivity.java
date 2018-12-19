@@ -68,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 user = firebaseAuth.getCurrentUser();
                                 user.sendEmailVerification();
+                                Toast.makeText(SignUpActivity.this, "An email has been sent to you for verification. Please verify your email before logging in.", Toast.LENGTH_LONG).show();
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(SignUpActivity.this, "Error. Could not Sign Up", Toast.LENGTH_LONG).show();
