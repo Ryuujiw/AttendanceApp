@@ -32,6 +32,8 @@ import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,22 +65,28 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * A simple {@link Fragment} subclass.
  */
 public class AttendanceFragment extends Fragment {
+    private FirebaseUser User;
+    private FirebaseAuth firebaseAuth;
+    private String currentEmail, uid;
     CardView cardView_status, cardView_classSummary;
     FloatingActionButton floatingActionButton;
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
-    String date, location, startTime,endTime, classname, students="", attCount;
+    String date, location, startTime,endTime, classname, matric;
+
     ImageView iv_QRcode;
     String loginMode;//Mode
     String getResult;
     DatabaseReference mDataRef;
     StorageReference mStorageRef;
+    String URL;
     boolean status;
     ZXingScannerView zXingScannerView;
     String previousClassName, previousCLassID,attendNumber="0",courseCode;
     String reference;
     Bitmap bmp;
     boolean open;
+    Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
 
     public AttendanceFragment() {
@@ -91,6 +99,14 @@ public class AttendanceFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         // GET LOGIN MODE
+
+        //get user matric from firebase
+        firebaseAuth = firebaseAuth.getInstance();
+        //get current user logged in
+        User = firebaseAuth.getCurrentUser();
+        currentEmail = User.getEmail();
+        uid = User.getUid();
+
         loginMode = getActivity().getIntent().getStringExtra("LOGIN_MODE");
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
         courseCode = getActivity().getIntent().getStringExtra("courseCode");
@@ -193,15 +209,22 @@ public class AttendanceFragment extends Fragment {
 
                                             //send QR Code to lecturer's email
                                             if(attendNumber.equals("0")){
-                                                Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+                                                emailIntent = new Intent(android.content.Intent.ACTION_SEND);
                                                 emailIntent.setType("img/png");
-                                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"tzesheng@hotmail.com"});
+
+                                                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {currentEmail});
                                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "QR Image for "+previousClassName);
-                                                emailIntent.putExtra(Intent.EXTRA_TEXT, "Please display this QR Image for student to scan");
-//                                                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bmp,"Title", null);
-//                                                Uri screenshotUri = Uri.parse(path);
-//                                                emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://drawable/qr_code.jpg"));
-                                                getActivity().startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+
+                                                StorageReference mStoreRef = FirebaseStorage.getInstance().getReference("/classes/"+courseCode+"/").child(previousCLassID);
+                                                mStoreRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        URL = uri.toString();
+                                                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Please display this QR Image for student to scan "+URL);
+                                                        getActivity().startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+                                                    }
+                                                });
                                             }
                                         }
                                     }).show();
@@ -316,15 +339,29 @@ public class AttendanceFragment extends Fragment {
                         @Override
                         public void handleResult(Result rawResult) {
                             Toast.makeText(getContext(),rawResult.getText(),Toast.LENGTH_SHORT).show();
-
                             getResult = rawResult.getText();
+
+                            DatabaseReference sDataRef = FirebaseDatabase.getInstance().getReference("/users/student/"+uid+"/");
+                            sDataRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    matric = dataSnapshot.child("matric").getValue(String.class);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                             mDataRef = FirebaseDatabase.getInstance().getReference(reference);
                             mDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String qrCode = dataSnapshot.child("qrUrl").getValue(String.class);
                                     if(getResult.equals(qrCode)){
-                                        mDataRef.child("attend_list").child("A160979").setValue(true);
+
+                                        mDataRef.child("attend_list").child(matric).setValue(true);
                                         zXingScannerView.stopCamera();
                                     }
                                 }
