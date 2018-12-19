@@ -1,5 +1,6 @@
 package com.example.ryuu.attendanceapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -8,11 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     protected Button btn_login;
     protected TextInputEditText txt_login_username;
     protected TextInputEditText txt_login_password;
+    protected ProgressDialog progressDialog;
     private TextView txt_forgotPassword;
 
     private static String login_mode;
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
     private String loginMode;
+
 
     // FIREBASE
     private FirebaseAuth firebaseAuth;
@@ -61,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         txt_login_password = findViewById(R.id.txt_login_password);
         txt_forgotPassword = findViewById(R.id.txt_forgotPassword);
 
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Please wait for awhile");
         firebaseAuth = FirebaseAuth.getInstance();
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +86,12 @@ public class LoginActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 } else {
-
+                    progressDialog.show();
                     firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             user = firebaseAuth.getCurrentUser();
+                            progressDialog.dismiss();
                             if(task.isSuccessful() && user.isEmailVerified()){
                                 GoToMainActivity(loginMode);
                             }
