@@ -1,18 +1,22 @@
 package com.example.ryuu.attendanceapp;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +44,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.journeyapps.barcodescanner.BarcodeResult;
 
 import java.io.File;
@@ -47,6 +57,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -62,6 +73,7 @@ public class AttendanceFragment extends Fragment {
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
     String date, location, startTime,endTime, classname, matric;
+
     ImageView iv_QRcode;
     String loginMode;//Mode
     String getResult;
@@ -75,6 +87,8 @@ public class AttendanceFragment extends Fragment {
     Bitmap bmp;
     boolean open;
     Intent emailIntent;
+    private static final int STORAGE_CODE = 1000;
+
     public AttendanceFragment() {
         // Required empty public constructor
     }
@@ -85,13 +99,13 @@ public class AttendanceFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         // GET LOGIN MODE
+
         //get user matric from firebase
         firebaseAuth = firebaseAuth.getInstance();
         //get current user logged in
         User = firebaseAuth.getCurrentUser();
         currentEmail = User.getEmail();
         uid = User.getUid();
-
 
         loginMode = getActivity().getIntent().getStringExtra("LOGIN_MODE");
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
@@ -248,6 +262,19 @@ public class AttendanceFragment extends Fragment {
                                             mDataRef.child("status").setValue(false);
                                             status = false;
 
+                                            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                                                if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                                                        PackageManager.PERMISSION_DENIED) {
+                                                    String[] permission = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                                                    requestPermissions(permission,STORAGE_CODE);
+                                                }else{
+                                                    //permission granted
+                                                    savePdf();
+                                                }
+                                            }else{
+                                                //system less than marshmallow no need to check
+                                                savePdf();
+                                            }
 
                                         }
                                     }).show();
@@ -375,6 +402,80 @@ public class AttendanceFragment extends Fragment {
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void savePdf() {
+        mDataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                date = dataSnapshot.child("date").getValue(String.class);
+                location = dataSnapshot.child("location").getValue(String.class);
+                startTime = dataSnapshot.child("startTime").getValue(String.class);
+                classname = dataSnapshot.child("className").getValue(String.class);
+                attCount=String.valueOf(dataSnapshot.child("attend_list").getChildrenCount());
+
+                Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+                Font TextFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
+                Document mDoc = new Document();
+                String mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
+                String mFilePath = Environment.getExternalStorageDirectory() + "/" + mFileName + ".pdf";
+
+                try {
+                    PdfWriter.getInstance(mDoc, new FileOutputStream(mFilePath));
+                    mDoc.open();
+
+                    Paragraph title = new Paragraph();
+                    title.add("-UKM ATTENDANCE REPORT-");
+                    title.setFont(titleFont);
+                    title.setAlignment(Element.ALIGN_CENTER);
+
+                    mDoc.add(title);
+                    mDoc.add(new Paragraph("Date: " + date, TextFont));
+                    mDoc.add(new Paragraph("Start Time: " + startTime , TextFont));
+                    mDoc.add(new Paragraph("End Time: " + endTime , TextFont));
+                    mDoc.add(new Paragraph("Class Name: " + classname , TextFont));
+                    mDoc.add(new Paragraph("Location: " + location, TextFont));
+                    mDoc.add(new Paragraph("Attendance: " + attCount , TextFont));
+                    mDoc.add(new Paragraph("Students: ", TextFont));
+                    mDoc.add(new Paragraph("\n"));
+
+                    PdfPTable pdfPTable = new PdfPTable(1);
+                    pdfPTable.addCell("Matric Number");
+                    pdfPTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+                    for(DataSnapshot studentSnapshot: dataSnapshot.child("attend_list").getChildren()){
+                        pdfPTable.addCell("\n-"+studentSnapshot.getKey());
+                    }
+
+                    mDoc.add(pdfPTable);
+                    mDoc.close();
+                    Toast.makeText(getContext(), mFileName + ".pdf\nis saved to\n" + mFilePath, Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case STORAGE_CODE: {
+                if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission granted from popup, call savePdf() method
+                    savePdf();
+                }else {
+                    //permission was denied from popup, show error message
+                    Toast.makeText(getContext(), "Permission denied !!", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
