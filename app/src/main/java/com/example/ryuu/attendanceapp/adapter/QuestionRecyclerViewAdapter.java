@@ -41,6 +41,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
             Intent intent = new Intent(view.getContext(), AnswerActivity.class);
 
             intent.putExtra("QID", questionList.get(getAdapterPosition()).getId());
+
             intent.putExtra("CLASS", className);
 
             view.getContext().startActivity(intent);
