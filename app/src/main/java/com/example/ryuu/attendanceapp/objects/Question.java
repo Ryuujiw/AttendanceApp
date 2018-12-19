@@ -12,8 +12,6 @@ public class Question {
     private String id;
     private String title;
     private String description;
-    private int upvote;
-    private int downvote;
     private HashMap<String, Answer> answers = new HashMap<String, Answer>();
     private String username;
     private String tags;
@@ -67,22 +65,6 @@ public class Question {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getUpvote() {
-        return upvote;
-    }
-
-    public void setUpvote(int upvote) {
-        this.upvote = upvote;
-    }
-
-    public int getDownvote() {
-        return downvote;
-    }
-
-    public void setDownvote(int downvote) {
-        this.downvote = downvote;
     }
 
     public HashMap<String, Answer> getAnswers() {
