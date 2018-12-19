@@ -184,27 +184,27 @@ public class ClassActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
 
-        MenuItem item = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) item.getActionView();
-
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                classRecyclerViewAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-//        return true;
+//        MenuItem item = menu.findItem(R.id.menu_search);
+//        SearchView searchView = (SearchView) item.getActionView();
+//
+//        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                classRecyclerViewAdapter.getFilter().filter(newText);
+//                return false;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     public void registerCourse(final String coursecode){
@@ -255,7 +255,6 @@ public class ClassActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent;
         switch(item.getItemId())
         {
             case R.id.menu_myprofile:
@@ -264,10 +263,26 @@ public class ClassActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_logout:
-                firebaseAuth.signOut();
-                intent = new Intent(ClassActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                builder.setTitle("Logout");
+                builder.setMessage("Are you sure you want to logout?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(ClassActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.show();
+                
         }
         return super.onOptionsItemSelected(item);
     }
