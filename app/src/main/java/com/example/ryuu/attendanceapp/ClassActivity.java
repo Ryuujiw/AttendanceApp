@@ -70,6 +70,29 @@ public class ClassActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.tb_class);
         setSupportActionBar(toolbar);
+
+        //get user matric from firebase
+        firebaseAuth = firebaseAuth.getInstance();
+        //get current user logged in
+        User = firebaseAuth.getCurrentUser();
+        // [START initialize_database_ref]
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(loginMode);
+        mDatabase = mDatabaseUser.orderByChild("email").equalTo(User.getEmail().toLowerCase());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    //get user matric id
+                    matric = childSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         //so far only done lecturer create course, this part is retrieving data from firebase. Will remove the login mode if statement later after i done student add courses
         if(loginMode.equals("lecturer")) {
             mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
@@ -111,27 +134,6 @@ public class ClassActivity extends AppCompatActivity {
             recyclerView.setAdapter(classRecyclerViewAdapter);
         }
 
-        //get user matric from firebase
-        firebaseAuth = firebaseAuth.getInstance();
-        //get current user logged in
-        User = firebaseAuth.getCurrentUser();
-        // [START initialize_database_ref]
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users").child(loginMode);
-        mDatabase = mDatabaseUser.orderByChild("email").equalTo(User.getEmail().toLowerCase());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    //get user matric id
-                    matric = childSnapshot.getKey();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -151,7 +153,11 @@ public class ClassActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             classCode = input.getText().toString();
-                            Toast.makeText(ClassActivity.this, "Class Added", Toast.LENGTH_SHORT).show();
+                            //add user matric into course child
+                            registerCourse(classCode);
+                            //add course code into user child
+                            addCourseintoUserProfile(classCode,matric);
+//                            Toast.makeText(ClassActivity.this, "Class Added", Toast.LENGTH_SHORT).show();
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -204,6 +210,48 @@ public class ClassActivity extends AppCompatActivity {
 
     public void addintoClassList(String classCode, String className, String description, String date_created) {
         allClass.add(new Class(classCode, className, description, date_created));
+    }
+
+    public void registerCourse(final String coursecode){
+        mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
+        mDatabaseUser1.orderByKey().equalTo(coursecode).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot==null || dataSnapshot.getChildren()==null) {
+                    //Course does not exist
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                    builder.setMessage("Please enter valid course code.").setTitle("Invalid Course Code.").setPositiveButton("OK", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    //Course exists
+                    boolean registered = dataSnapshot.child(coursecode).child(loginMode).hasChild(matric);
+                    if(registered==true){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                        builder.setMessage("Courses exists").setTitle("You have registered under this course.").setPositiveButton("OK", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }else {
+                        mDatabaseUser1.child(coursecode).child(loginMode).child(matric).setValue(true);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                        builder.setMessage("Courses Registered Successfully").setTitle("Course registered successfully").setPositiveButton("OK", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void addCourseintoUserProfile(String coursecode, String matric){
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+matric+"/");
+
+        mDatabaseUser.child("courses").child(coursecode).setValue(true);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
