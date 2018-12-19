@@ -28,13 +28,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.objects.Class;
-import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
