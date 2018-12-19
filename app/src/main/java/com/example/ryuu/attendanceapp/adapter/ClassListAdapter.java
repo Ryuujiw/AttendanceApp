@@ -30,12 +30,14 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     public List<Class_list> classListDataFull;
     private Context context;
     private String loginMode;
+    private String courseCode;
 
-    public ClassListAdapter(Context context, List<Class_list> classListData, String loginMode){
+    public ClassListAdapter(Context context, List<Class_list> classListData, String loginMode, String courseCode){
         this.context = context;
         this.classListData = classListData;
         classListDataFull = new ArrayList<>(classListData); // copy of class list for filter search
         this.loginMode=loginMode;
+        this.courseCode = courseCode;
     }
 
     @NonNull
@@ -123,8 +125,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
-            intent.putExtra("className", classListData.get(getAdapterPosition()).getClassName());
-            intent.putExtra("LoginMode",loginMode);
+            intent.putExtra("courseCode",courseCode);
+            intent.putExtra("LOGIN_MODE",loginMode);
             intent.putExtra("classID",classListData.get(getAdapterPosition()).getClassID());
             view.getContext().startActivity(intent);
         }
@@ -132,14 +134,14 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
 
         @Override
         public boolean onLongClick(final View view) {
-            if(loginMode.equals("teacher")){
+            if(loginMode.equals("lecturer")){
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Delete Class");
                 builder.setMessage("Are you sure you want to delete "+classListData.get(getAdapterPosition()).getClassName()+"?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("/classes/networkw1/").child(classListData.get(getAdapterPosition()).getClassID());
+                        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("/classes/"+courseCode+"/"+classListData.get(getAdapterPosition()).getClassID()+"/");
                         dR.removeValue();
                         Toast.makeText(view.getContext(), "Class Deleted", Toast.LENGTH_SHORT).show();
                     }

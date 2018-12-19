@@ -1,9 +1,11 @@
 package com.example.ryuu.attendanceapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,13 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
 import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +107,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         }
     };
 
-        public class ClassViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public class ClassViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         public TextView tvClassName;
         public ImageView imgViewClassImage;
@@ -112,6 +118,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             tvClassName = itemView.findViewById(R.id.tv_class_name);
             imgViewClassImage = itemView.findViewById(R.id.img_class);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -121,7 +128,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
             bundle.putString("courseName", classList.get(getAdapterPosition()).getCourse_name());
             bundle.putString("courseCode", classList.get(getAdapterPosition()).getCourse_code());
-            bundle.putString("LoginMode", loginMode);
+            bundle.putString("LOGIN_MODE", loginMode);
 
 //            intent.putExtra("courseName", classList.get(getAdapterPosition()).getCourse_name());
 //            intent.putExtra("courseCode", classList.get(getAdapterPosition()).getCourse_code());
@@ -130,7 +137,34 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             intent.putExtras(bundle);
             view.getContext().startActivity(intent);
         }
-
+            @Override
+            public boolean onLongClick(final View view) {
+                // Handle long click
+                // Return true to indicate the click was handled
+                if(loginMode.equals("lecturer")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Delete Class");
+                    builder.setMessage("Are you sure you want to delete "+classList.get(getAdapterPosition()).getCourse_name()+"?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DatabaseReference dR = FirebaseDatabase.getInstance().getReference("/courses/").child(classList.get(getAdapterPosition()).getCourse_code());
+                            dR.removeValue();
+                            Toast.makeText(view.getContext(), "Course Deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    builder.show();
+                }else{
+                    Toast.makeText(view.getContext(), "Sorry you have no rights to delete course", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
 
     }
 }

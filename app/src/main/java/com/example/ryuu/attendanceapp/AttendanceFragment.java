@@ -64,8 +64,7 @@ public class AttendanceFragment extends Fragment {
     StorageReference mStorageRef;
     boolean status;
     ZXingScannerView zXingScannerView;
-    String previousClassName, previousCLassID,attendNumber="0";
-    Classes classes;
+    String previousClassName, previousCLassID,attendNumber="0",courseCode;
     String reference;
     Bitmap bmp;
     boolean open;
@@ -80,8 +79,9 @@ public class AttendanceFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         // GET LOGIN MODE
-        loginMode = getActivity().getIntent().getStringExtra("LoginMode");
+        loginMode = getActivity().getIntent().getStringExtra("LOGIN_MODE");
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
+        courseCode = getActivity().getIntent().getStringExtra("courseCode");
         floatingActionButton = view.findViewById(R.id.fab_QRScanner);
         tv_qrurl = view.findViewById(R.id.tv_qrURL);
         iv_QRcode = view.findViewById(R.id.iv_generated_qrcode);
@@ -98,18 +98,16 @@ public class AttendanceFragment extends Fragment {
         tv_endTime = view.findViewById(R.id.tv_endTime);
         tv_className = view.findViewById(R.id.tv_className);
         tv_Hint = view.findViewById(R.id.tv_hint);
-        Intent intent = getActivity().getIntent();
-        previousClassName = intent.getStringExtra("className");
         Toast.makeText(getActivity(),loginMode, Toast.LENGTH_SHORT);
-        reference = "/classes/networkw1/"+previousCLassID+"/";
-        if (loginMode.equals("teacher")) {
+        reference = "/classes/"+courseCode+"/"+previousCLassID+"/";
+        if (loginMode.equals("lecturer")) {
             floatingActionButton.setVisibility(View.INVISIBLE);
             mDataRef = FirebaseDatabase.getInstance().getReference(reference);
             mDataRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot classSnapshot) {
-                    if (classSnapshot.exists()) {
                         String qr = classSnapshot.child("qrUrl").getValue(String.class);
+                        previousClassName = classSnapshot.child("className").getValue(String.class);
                         tv_qrurl.setText(qr);
                         // retrieve the classes status
                         if ( classSnapshot.child("status").getValue(boolean.class) == true) {
@@ -123,7 +121,7 @@ public class AttendanceFragment extends Fragment {
                         }
                         // retrieve the QR bitmap from FirebaseStorage
                         mStorageRef = FirebaseStorage.getInstance().getReference();
-                        StorageReference islandRef = mStorageRef.child("/classes/network/qrImage/");
+                        StorageReference islandRef = mStorageRef.child("/classes/"+courseCode+"/");
                         final long ONE_MEGABYTE = 1024 * 1024;
                         islandRef.child(previousCLassID).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
@@ -138,9 +136,6 @@ public class AttendanceFragment extends Fragment {
 
                             }
                         });
-                    } else {
-                        Toast.makeText(getContext(), "the class has been deleted", Toast.LENGTH_SHORT).show();
-                    }
                 }
 
                 @Override
@@ -155,7 +150,6 @@ public class AttendanceFragment extends Fragment {
                     mDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
 
                                 date = dataSnapshot.child("date").getValue(String.class);
                                 location = dataSnapshot.child("location").getValue(String.class);
@@ -238,9 +232,6 @@ public class AttendanceFragment extends Fragment {
                                     }).show();
 
                                 }
-                            } else {
-                                Toast.makeText(getContext(), "no datasnapshot", Toast.LENGTH_SHORT).show();
-                            }
                         }
 
                         @Override
@@ -274,6 +265,7 @@ public class AttendanceFragment extends Fragment {
                             floatingActionButton.setVisibility(View.INVISIBLE);
                             tv_Hint.setText("Class has ended, No more QR code");
                         }
+                        tv_noAttend.setText(String.valueOf(dataSnapshot.child("attend_list").getChildrenCount()));
                         tv_startTime.setText(dataSnapshot.child("startTime").getValue(String.class));
                         tv_endTime.setText(dataSnapshot.child("endTime").getValue(String.class));
                         tv_className.setText(dataSnapshot.child("className").getValue(String.class));
