@@ -109,7 +109,7 @@ public class ClassActivity extends AppCompatActivity {
                         allClass.clear();
                         for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
                             Boolean value = childsnapshot.child(loginMode).hasChild(matric);
-                            if (value.equals(true)) {
+                            if (value) {
                                 Class courses = childsnapshot.getValue(Class.class);
                                 addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
                             }
