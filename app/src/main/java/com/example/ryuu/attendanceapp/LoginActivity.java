@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, Reset_Password_Activity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -125,5 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this,ClassActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
+        finish();
     }
 }
