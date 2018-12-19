@@ -66,17 +66,16 @@ public class CreateCourseActivity extends AppCompatActivity {
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(et_name != null && et_coursecode != null && et_description != null){
-
-                     course_code = et_coursecode.getText().toString().trim().toLowerCase().trim();
-                     course_name = et_name.getText().toString().trim();
-                     course_description = et_description.getText().toString().trim();
-                     course_date_created = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                course_code = et_coursecode.getText().toString().trim().toLowerCase();
+                course_name = et_name.getText().toString().trim();
+                course_description = et_description.getText().toString().trim();
+                if(!course_code.isEmpty() && !course_name.isEmpty() && !course_description.isEmpty()){
+                    course_date_created = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     //save course detail
                     addCourse(course_code,course_name,course_description,course_date_created);
                     addLecturer(course_code);
                     add_Lecturer_courses(course_code);
-
+                    gotoCourseDetails();
                 }else{
                     //failed
                     AlertDialog.Builder builder = new AlertDialog.Builder(CreateCourseActivity.this);
@@ -84,7 +83,7 @@ public class CreateCourseActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                gotoCourseDetails();
+
             }
         });
 

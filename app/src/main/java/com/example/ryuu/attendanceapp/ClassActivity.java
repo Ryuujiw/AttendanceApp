@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,7 +32,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -50,8 +50,7 @@ public class ClassActivity extends AppCompatActivity {
     TextView txt_no_result;
     List<Class> allClass = new ArrayList<>();
     private String classCode = "";
-
-    String matric, loginMode,uid;
+    String matric=" ",loginMode,uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class ClassActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(loginMode.equals("student")) {
-                    Student profile = dataSnapshot.getValue(Student.class);
+                   Student profile = dataSnapshot.getValue(Student.class);
                     matric = profile.getMatric();
                 }else if(loginMode.equals("lecturer")){
                     Lecturer profile = dataSnapshot.getValue(Lecturer.class);
@@ -97,7 +96,6 @@ public class ClassActivity extends AppCompatActivity {
         });
 
         //so far only done lecturer create course, this part is retrieving data from firebase. Will remove the login mode if statement later after i done student add courses
-        if(loginMode.equals("lecturer")) {
             mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
             mDatabaseUser1.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -108,15 +106,15 @@ public class ClassActivity extends AppCompatActivity {
                     if (dataSnapshot != null) {
                         allClass.clear();
                         for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
-                            Boolean value = childsnapshot.child(loginMode).child(matric).getValue(Boolean.class);
-                            if (value == true) {
+                            Boolean value = childsnapshot.child(loginMode).hasChild(matric);
+                            if (value.equals(true)) {
                                 Class courses = childsnapshot.getValue(Class.class);
                                 addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
                             }
                         }
                     } else {
                         recyclerView.setVisibility(View.GONE);
-                        txt_no_result.setText("No available courses");
+                        txt_no_result.setText("No registered courses");
                     }
                 }
 
@@ -125,7 +123,6 @@ public class ClassActivity extends AppCompatActivity {
                     Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-        }
 
         classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
@@ -133,6 +130,7 @@ public class ClassActivity extends AppCompatActivity {
 
         if(allClass == null){
             recyclerView.setVisibility(View.GONE);
+            txt_no_result.setText("No registered courses");
         }else{
             classRecyclerViewAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(classRecyclerViewAdapter);

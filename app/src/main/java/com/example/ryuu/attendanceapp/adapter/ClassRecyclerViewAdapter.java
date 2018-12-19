@@ -16,7 +16,6 @@ import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +29,8 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
     public ClassRecyclerViewAdapter(Context context, List<Class> classList ) {
         this.context = context;
         this.classList = classList;
-        classListFull = new ArrayList<>(classList); //copy of courselist to be used in filter search
+        classListFull = new ArrayList<>();
+        classListFull = classList;//copy of courselist to be used in filter search
     }
 
     @NonNull
