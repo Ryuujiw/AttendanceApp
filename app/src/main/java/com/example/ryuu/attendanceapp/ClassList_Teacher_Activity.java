@@ -62,7 +62,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         noClassView = findViewById(R.id.empty_view);
 
         //show list
-        mDataRef = FirebaseDatabase.getInstance().getReference("/classes/networkw1");
+        mDataRef = FirebaseDatabase.getInstance().getReference("/classes/").child(courseCode);
         mDataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot classSnapshot) {
