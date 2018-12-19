@@ -2,6 +2,7 @@ package com.example.ryuu.attendanceapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +49,7 @@ public class ClassActivity extends AppCompatActivity {
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
     RecyclerView recyclerView;
     TextView txt_no_result;
-    List<Class> allClass;
+    List<Class> classList = new ArrayList<>();
     private String classCode = "";
     String matric=" ",loginMode,uid;
 
@@ -61,7 +62,7 @@ public class ClassActivity extends AppCompatActivity {
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
         txt_no_result = findViewById(R.id.textView3);
 
-        Toast.makeText(ClassActivity.this, loginMode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(ClassActivity.this, loginMode, Toast.LENGTH_LONG).show();
 
         recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
@@ -102,33 +103,23 @@ public class ClassActivity extends AppCompatActivity {
             mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
             mDatabaseUser1.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (allClass == null) {
-                        allClass = new ArrayList<>();
-                    }
-                        allClass.clear();
-                        for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
-                            Boolean value = childsnapshot.child(loginMode).hasChild(matric);
-                            if (value) {
-                                Class courses = childsnapshot.getValue(Class.class);
-                                addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
-                            }
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    classList.clear();
+                    for(DataSnapshot courseSnapshot : dataSnapshot.getChildren()){
+                        Boolean isPresent = courseSnapshot.child(loginMode).hasChild(matric);
+                        if(isPresent){
+                            Class course = courseSnapshot.getValue(Class.class);
+                            classList.add(course);
                         }
-                    allClass = allClassgetInfo();
-                    if(allClass == null){
-                        recyclerView.setVisibility(View.GONE);
-                        txt_no_result.setText("No registered courses");
-                        allClass = new ArrayList<>();
-                    }else {
-                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass, loginMode);
-                        classRecyclerViewAdapter.notifyDataSetChanged();
-                        recyclerView.setAdapter(classRecyclerViewAdapter);
                     }
+                    classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, classList, loginMode);
+                    classRecyclerViewAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(classRecyclerViewAdapter);
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
             });
 
@@ -210,10 +201,6 @@ public class ClassActivity extends AppCompatActivity {
 //        return true;
     }
 
-    public void addintoClassList(String classCode, String className, String description, String date_created) {
-        allClass.add(new Class(classCode, className, description, date_created));
-    }
-
     public void registerCourse(final String coursecode){
         mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
         mDatabaseUser1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -281,10 +268,6 @@ public class ClassActivity extends AppCompatActivity {
         Intent intent = new Intent(ClassActivity.this,activity_myprofile.class);
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
-    }
-
-    private List<Class> allClassgetInfo(){
-        return allClass;
     }
 
 }
