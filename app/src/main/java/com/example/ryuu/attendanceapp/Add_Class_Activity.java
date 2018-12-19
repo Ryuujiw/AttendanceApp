@@ -86,7 +86,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                 addClassListener.applyText(title, date, time);
 
                 Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
-                mDataRef = FirebaseDatabase.getInstance().getReference("classes/").child(courseCode);
+                mDataRef = FirebaseDatabase.getInstance().getReference("/classes/"+courseCode+"/");
                 key = mDataRef.push().getKey();
                 Classes classes = new Classes(key, title,date, time, venue);
 
@@ -104,7 +104,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
                     e.printStackTrace();
                 }
                 //upload QR image into StorageDatabase
-                mStorageRef = FirebaseStorage.getInstance().getReference("classes/"+courseCode+"/qrImage/");
+                mStorageRef = FirebaseStorage.getInstance().getReference("classes/"+courseCode+"/");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();

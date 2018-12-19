@@ -41,18 +41,14 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_list__teacher_);
 
-        Bundle extras = getIntent().getExtras();
-
-        courseCode = extras.getString("courseCode");
-        loginMode = extras.getString("LoginMode");
-
         Toolbar toolbar = findViewById(R.id.toolbar_classlist);
         setSupportActionBar(toolbar);
 
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setDisplayHomeAsUpEnabled(false);
 
-        loginMode = ClassList_Teacher_Activity.this.getIntent().getStringExtra("LoginMode");
+        loginMode = getIntent().getStringExtra("LOGIN_MODE");
+        courseCode = getIntent().getStringExtra("courseCode");
 
         linearLayoutManager = new LinearLayoutManager(ClassList_Teacher_Activity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView = findViewById(R.id.recycler_view_class_list);
@@ -62,7 +58,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         noClassView = findViewById(R.id.empty_view);
 
         //show list
-        mDataRef = FirebaseDatabase.getInstance().getReference("/classes/").child(courseCode);
+        mDataRef = FirebaseDatabase.getInstance().getReference("/classes/"+courseCode+"/");
         mDataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot classSnapshot) {
@@ -83,13 +79,13 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
                             if(booo==true){
                                 applyText(classTitle, classDate, classTime);
                             }
-                        }else if (loginMode.equals("teacher")){
+                        }else if (loginMode.equals("lecturer")){
                             applyText(classTitle, classDate, classTime);
                         }
 
                     }
                     allClassList = getAllClassListInfo();
-                    classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList, loginMode);
+                    classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList, loginMode, courseCode);
                     classListAdapter.notifyDataSetChanged();
 
                     recyclerView.setAdapter(classListAdapter);
