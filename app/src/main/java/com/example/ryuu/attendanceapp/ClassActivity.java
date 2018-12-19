@@ -48,7 +48,7 @@ public class ClassActivity extends AppCompatActivity {
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
     RecyclerView recyclerView;
     TextView txt_no_result;
-    List<Class> allClass = new ArrayList<>();
+    List<Class> allClass;
     private String classCode = "";
     String matric=" ",loginMode,uid;
 
@@ -74,6 +74,9 @@ public class ClassActivity extends AppCompatActivity {
         //get current user logged in
         User = firebaseAuth.getCurrentUser();
         uid = User.getUid();
+
+        linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         // [START initialize_database_ref]
         mDatabaseUser = FirebaseDatabase.getInstance().getReference("/users/"+loginMode+"/"+uid+"/");
@@ -103,7 +106,6 @@ public class ClassActivity extends AppCompatActivity {
                     if (allClass == null) {
                         allClass = new ArrayList<>();
                     }
-                    if (dataSnapshot != null) {
                         allClass.clear();
                         for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
                             Boolean value = childsnapshot.child(loginMode).hasChild(matric);
@@ -112,9 +114,15 @@ public class ClassActivity extends AppCompatActivity {
                                 addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
                             }
                         }
-                    } else {
+                    allClass = allClassgetInfo();
+                    if(allClass == null){
                         recyclerView.setVisibility(View.GONE);
                         txt_no_result.setText("No registered courses");
+                        allClass = new ArrayList<>();
+                    }else {
+                        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
+                        classRecyclerViewAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(classRecyclerViewAdapter);
                     }
                 }
 
@@ -123,18 +131,6 @@ public class ClassActivity extends AppCompatActivity {
                     Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
-        linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        if(allClass == null){
-            recyclerView.setVisibility(View.GONE);
-            txt_no_result.setText("No registered courses");
-        }else{
-            classRecyclerViewAdapter.notifyDataSetChanged();
-            recyclerView.setAdapter(classRecyclerViewAdapter);
-        }
 
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
 
@@ -285,6 +281,10 @@ public class ClassActivity extends AppCompatActivity {
         Intent intent = new Intent(ClassActivity.this,activity_myprofile.class);
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
+    }
+
+    private List<Class> allClassgetInfo(){
+        return allClass;
     }
 
 }
