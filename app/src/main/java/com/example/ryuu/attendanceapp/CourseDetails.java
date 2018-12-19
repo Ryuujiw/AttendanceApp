@@ -53,8 +53,8 @@ public class CourseDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Class course = dataSnapshot.getValue(Class.class);
-                txt_course_name.setText(course.getName());
-                txt_course_code.setText(course.getCoursecode());
+                txt_course_name.setText(course.getCourse_name());
+                txt_course_code.setText(course.getCourse_code());
                 txt_course_date_created.setText(course.getDate_created());
                 getLecturerName();
             }

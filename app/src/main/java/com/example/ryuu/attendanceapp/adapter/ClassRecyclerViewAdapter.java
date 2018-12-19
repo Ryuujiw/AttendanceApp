@@ -49,7 +49,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         String[] img = { "R.drawable.mobile", "R.drawable.web", "R.drawable.network","R.drawable.numerical" };
         Random rand = new Random();
         int value = rand.nextInt(5);
-        classViewHolder.tvClassName.setText(classList.get(position).getName());
+        classViewHolder.tvClassName.setText(classList.get(position).getCourse_name());
 //        HashMap<Integer, Integer> images = new HashMap<Integer, Integer>();
 //        images.put( 1, Integer.valueOf( R.drawable.mobile) );
 //        images.put( 2, Integer.valueOf( R.drawable.web ) );
@@ -81,7 +81,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
                 String filterPattern = constraints.toString().toLowerCase().trim();
 
                 for (Class course : classListFull) {
-                    if (course.getName().toLowerCase().contains(filterPattern)) {
+                    if (course.getCourse_name().toLowerCase().contains(filterPattern)) {
                         filteredList.add(course);
                     }
                 }
@@ -116,7 +116,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(view.getContext(), ClassList_Teacher_Activity.class);
-            intent.putExtra("courseName", classList.get(getAdapterPosition()).getName());
+            intent.putExtra("courseName", classList.get(getAdapterPosition()).getCourse_name());
             intent.putExtra("LoginMode", loginMode);
             view.getContext().startActivity(intent);
         }
