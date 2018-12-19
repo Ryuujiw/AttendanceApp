@@ -16,6 +16,7 @@ import com.example.ryuu.attendanceapp.ClassDetailsActivity;
 import com.example.ryuu.attendanceapp.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -47,7 +48,14 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
         Random rand = new Random();
         int value = rand.nextInt(5);
         classViewHolder.tvClassName.setText(classList.get(position).getName());
-        classViewHolder.imgViewClassImage.setImageResource(Integer.parseInt(img[value]));
+//        HashMap<Integer, Integer> images = new HashMap<Integer, Integer>();
+//        images.put( 1, Integer.valueOf( R.drawable.mobile) );
+//        images.put( 2, Integer.valueOf( R.drawable.web ) );
+//        images.put( 3, Integer.valueOf( R.drawable.network ) );
+//        images.put( 4, Integer.valueOf( R.drawable.numerical ) );
+//        classViewHolder.imgViewClassImage.setImageResource( images.get( value ).intValue() );
+        classViewHolder.imgViewClassImage.setImageResource(R.drawable.network);
+
     }
 
     @Override

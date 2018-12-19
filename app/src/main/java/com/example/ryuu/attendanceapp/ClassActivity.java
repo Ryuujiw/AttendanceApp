@@ -24,6 +24,7 @@ import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Lecturer;
 import com.example.ryuu.attendanceapp.objects.Student;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +40,7 @@ import java.util.List;
 public class ClassActivity extends AppCompatActivity {
 
     private FirebaseUser User;
-    private DatabaseReference mDatabaseUser;
+    private DatabaseReference mDatabaseUser, mDatabaseUser1;
     private Query mDatabase;
     private FirebaseAuth firebaseAuth;
 
@@ -48,7 +49,7 @@ public class ClassActivity extends AppCompatActivity {
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
     RecyclerView recyclerView;
     TextView txt_no_result;
-    List<Class> allClass;
+    List<Class> allClass = new ArrayList<>();
     private String classCode = "";
 
     String matric = "", loginMode = "";
@@ -64,47 +65,53 @@ public class ClassActivity extends AppCompatActivity {
 
         Toast.makeText(ClassActivity.this, loginMode, Toast.LENGTH_SHORT).show();
 
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference("/courses/");
-        mDatabaseUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    if (allClass == null) {
-                        allClass = new ArrayList<>();
-                    }
-                    allClass.clear();
-                    for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
-                        if(childsnapshot.child(loginMode).child(matric).getValue()){
-                        Class courses = childsnapshot.getValue(Class.class);
-                        allClass.add(courses);
-                    }
-                } else {
-                    recyclerView.setVisibility(View.GONE);
-                    txt_no_result.setText("No available courses");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
 
         Toolbar toolbar = findViewById(R.id.tb_class);
         setSupportActionBar(toolbar);
+        //so far only done lecturer create course, this part is retrieving data from firebase. Will remove the login mode if statement later after i done student add courses
+        if(loginMode.equals("lecturer")) {
+            mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
+            mDatabaseUser1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (allClass == null) {
+                        allClass = new ArrayList<>();
+                    }
+                    if (dataSnapshot != null) {
+                        allClass.clear();
+                        for (DataSnapshot childsnapshot : dataSnapshot.getChildren()) {
+                            Boolean value = childsnapshot.child(loginMode).child(matric).getValue(Boolean.class);
+                            if (value == true) {
+                                Class courses = childsnapshot.getValue(Class.class);
+                                addintoClassList(courses.getCoursecode(), courses.getName(), courses.getDescription(), courses.getDescription());
+                            }
+                        }
+                    } else {
+                        recyclerView.setVisibility(View.GONE);
+                        txt_no_result.setText("No available courses");
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
         linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        if(allClass == null){
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            classRecyclerViewAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(classRecyclerViewAdapter);
+        }
 
-//        List<Class> allClassInfor = getAllClassInfor();
-        classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, allClass);
-        classRecyclerViewAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(classRecyclerViewAdapter);
-
-
+        //get user matric from firebase
         firebaseAuth = firebaseAuth.getInstance();
         //get current user logged in
         User = firebaseAuth.getCurrentUser();
@@ -195,9 +202,9 @@ public class ClassActivity extends AppCompatActivity {
 //        return true;
     }
 
-//    public void addintoClassList(String classCode, String className, String description, String date_created) {
-//        allClass.add(new Class(classCode, className, description, date_created));
-//    }
+    public void addintoClassList(String classCode, String className, String description, String date_created) {
+        allClass.add(new Class(classCode, className, description, date_created));
+    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -223,4 +230,5 @@ public class ClassActivity extends AppCompatActivity {
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
     }
+
 }

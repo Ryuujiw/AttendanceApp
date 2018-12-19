@@ -70,7 +70,7 @@ public class CreateCourseActivity extends AppCompatActivity {
     public void addLecturer(String course_code){
         //add lecturer matric into course using boolean
         databaseUsers = FirebaseDatabase.getInstance().getReference("/courses/"+course_code);
-        databaseUsers.child("lecturers").child(matric).setValue(true);
+        databaseUsers.child("lecturer").child(matric).setValue(true);
     }
 
     public void addCourse(String course_code, String course_name, String course_description, String course_date_created){
