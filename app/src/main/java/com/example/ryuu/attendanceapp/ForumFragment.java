@@ -38,8 +38,8 @@ public class ForumFragment extends Fragment {
     private DatabaseReference database;
     private String loginMode;
     private static final String TAG = "Forum Fragments";
-    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     String previousClassName, previousCLassID;
+    FirebaseUser currentUser;
 
     // FROM QUESTION CARDVIEW
     private Button btn_read;
@@ -73,6 +73,9 @@ public class ForumFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         previousCLassID = getActivity().getIntent().getStringExtra("classID");
         previousClassName = getActivity().getIntent().getStringExtra("className");
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
 
         // GET LOGIN MODE
         Bundle bundle = this.getArguments();
@@ -109,7 +112,7 @@ public class ForumFragment extends Fragment {
                         String qDesc = questionDescription.getText().toString();
                         String qTags = questionTags.getText().toString();
                         String qUser = "";
-                        if (loginMode == "student"){
+                        if (loginMode.equals("student")){
                             qUser = currentUser.getEmail().substring(0,7);
                         }
 
