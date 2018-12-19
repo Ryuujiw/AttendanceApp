@@ -52,10 +52,10 @@ public class CourseDetails extends AppCompatActivity {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Class course = dataSnapshot.getValue(Class.class);
-                txt_course_name.setText(course.getCourse_name());
-                txt_course_code.setText(course.getCourse_code());
-                txt_course_date_created.setText(course.getDate_created());
+
+                txt_course_name.setText(dataSnapshot.child("course_name").getValue(String.class));
+                txt_course_code.setText(dataSnapshot.child("course_code").getValue(String.class));
+                txt_course_date_created.setText(dataSnapshot.child("date_created").getValue(String.class));
                 getLecturerName();
             }
 
