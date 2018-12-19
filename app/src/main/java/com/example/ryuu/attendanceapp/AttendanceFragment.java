@@ -85,6 +85,7 @@ public class AttendanceFragment extends Fragment {
     String previousClassName, previousCLassID,attendNumber="0",courseCode;
     String reference;
     Bitmap bmp;
+    int attCount;
     boolean open;
     Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
