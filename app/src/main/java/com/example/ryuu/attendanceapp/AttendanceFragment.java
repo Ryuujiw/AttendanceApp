@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -52,12 +55,16 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.journeyapps.barcodescanner.BarcodeResult;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -72,7 +79,8 @@ public class AttendanceFragment extends Fragment {
     FloatingActionButton floatingActionButton;
     TextView tv_classStatus, tv_Hint, tv_qrurl ,tv_no_attendant;
     TextView tv_date, tv_noAttend, tv_location, tv_startTime, tv_endTime, tv_className;
-    String date, location, startTime,endTime, classname, matric;
+
+    String date, location, startTime,endTime, classname, students="", attCount, email, URL="", matric;
 
     ImageView iv_QRcode;
     String loginMode;//Mode
@@ -89,6 +97,10 @@ public class AttendanceFragment extends Fragment {
     boolean open;
     Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    String mFileName, mFilePath;
+
 
     public AttendanceFragment() {
         // Required empty public constructor
@@ -149,8 +161,10 @@ public class AttendanceFragment extends Fragment {
                             tv_classStatus.setText("Press Here to Start/End Class");
                         }
                         // retrieve the QR bitmap from FirebaseStorage
+
                         mStorageRef = FirebaseStorage.getInstance().getReference();
                         StorageReference islandRef = mStorageRef.child("/classes/"+courseCode+"/");
+
                         final long ONE_MEGABYTE = 1024 * 1024;
                         islandRef.child(previousCLassID).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
@@ -271,10 +285,12 @@ public class AttendanceFragment extends Fragment {
                                                 }else{
                                                     //permission granted
                                                     savePdf();
+                                                    sentMail();
                                                 }
                                             }else{
                                                 //system less than marshmallow no need to check
                                                 savePdf();
+                                                sentMail();
                                             }
 
                                         }
@@ -402,6 +418,7 @@ public class AttendanceFragment extends Fragment {
 
             }
         } else {
+
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -411,17 +428,20 @@ public class AttendanceFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
+                mFilePath = Environment.getExternalStorageDirectory() + "/" + mFileName + ".pdf";
+
+
                 date = dataSnapshot.child("date").getValue(String.class);
                 location = dataSnapshot.child("location").getValue(String.class);
                 startTime = dataSnapshot.child("startTime").getValue(String.class);
                 classname = dataSnapshot.child("className").getValue(String.class);
-                attCount=String.valueOf(dataSnapshot.child("attend_list").getChildrenCount());
+                attCount = String.valueOf(dataSnapshot.child("attend_list").getChildrenCount());
 
                 Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
                 Font TextFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
                 Document mDoc = new Document();
-                String mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis());
-                String mFilePath = Environment.getExternalStorageDirectory() + "/" + mFileName + ".pdf";
+
 
                 try {
                     PdfWriter.getInstance(mDoc, new FileOutputStream(mFilePath));
@@ -444,6 +464,7 @@ public class AttendanceFragment extends Fragment {
 
                     PdfPTable pdfPTable = new PdfPTable(1);
                     pdfPTable.addCell("Matric Number");
+                    pdfPTable.setWidthPercentage(50);
                     pdfPTable.setHorizontalAlignment(Element.ALIGN_LEFT);
 
                     for(DataSnapshot studentSnapshot: dataSnapshot.child("attend_list").getChildren()){
@@ -452,6 +473,12 @@ public class AttendanceFragment extends Fragment {
 
                     mDoc.add(pdfPTable);
                     mDoc.close();
+
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("/classes/"+courseCode+"/"+mFileName+".pdf");
+                    Uri file = Uri.fromFile(new File(mFilePath));
+                    UploadTask uploadTask = storageRef.putFile(file);
+
+
                     Toast.makeText(getContext(), mFileName + ".pdf\nis saved to\n" + mFilePath, Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
@@ -472,11 +499,41 @@ public class AttendanceFragment extends Fragment {
                 if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted from popup, call savePdf() method
                     savePdf();
+                    sentMail();
                 }else {
                     //permission was denied from popup, show error message
                     Toast.makeText(getContext(), "Permission denied !!", Toast.LENGTH_SHORT).show();
                 }
             }
         }
+    }
+
+    public void sentMail(){
+        mDataRef.addValueEventListener(new ValueEventListener() {
+        @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            date = dataSnapshot.child("date").getValue(String.class);
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            user = firebaseAuth.getCurrentUser();
+            email = user.getEmail();
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("application/pdf");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Attendance report for " + date);
+
+            StorageReference mStoreRef = FirebaseStorage.getInstance().getReference().child("/classes/" + courseCode + "/" + mFileName + ".pdf");
+
+            URL = mStoreRef.getDownloadUrl().toString();
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Please follow this link to get the Class Summary Report" + URL);
+            startActivity(emailIntent);
+        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
