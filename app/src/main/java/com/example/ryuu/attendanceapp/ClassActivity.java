@@ -222,11 +222,12 @@ public class ClassActivity extends AppCompatActivity {
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }else {
-
+                        String course_name = dataSnapshot.child("/"+coursecode+"/course_name/").getValue(String.class);
                         mDatabaseUser1.child(coursecode).child(loginMode).child(matric).setValue(true);
+
                         AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
                         addCourseintoUserProfile(coursecode,uid);
-                        builder.setMessage("Courses Registered Successfully").setTitle("Course registered successfully").setPositiveButton("OK", null);
+                        builder.setMessage( "Successfully register "+course_name+".").setTitle("Courses register successfully").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
 
