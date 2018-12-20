@@ -22,22 +22,35 @@ import java.util.List;
 public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.MyViewHolder> {
     private List<Question> questionList;
     private DatabaseReference database;
+    private String className;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txt_question, txt_user, txt_description;
-        public Button btn_read;
         public MyViewHolder(View itemView) {
             super(itemView);
             txt_question = itemView.findViewById(R.id.txt_question);
             txt_user = itemView.findViewById(R.id.txt_user);
             txt_description = itemView.findViewById(R.id.txt_new_question_description);
+            itemView.setOnClickListener(this);
+        }
 
-            btn_read = itemView.findViewById(R.id.btn_read);
+        @Override
+        public void onClick(View view) {
+            database = FirebaseDatabase.getInstance().getReference();
+
+            Intent intent = new Intent(view.getContext(), AnswerActivity.class);
+
+            intent.putExtra("QID", questionList.get(getAdapterPosition()).getId());
+
+            intent.putExtra("CLASS", className);
+
+            view.getContext().startActivity(intent);
         }
     }
 
-    public QuestionRecyclerViewAdapter(List<Question> questionList) {
+    public QuestionRecyclerViewAdapter(List<Question> questionList, String className) {
         this.questionList = questionList;
+        this.className = className;
     }
 
     @NonNull
@@ -54,21 +67,6 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.txt_question.setText(question.getTitle());
         holder.txt_user.setText(question.getUsername());
         holder.txt_description.setText(question.getDescription());
-        int votes = question.getUpvote() + question.getDownvote();
-
-        holder.btn_read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                database = FirebaseDatabase.getInstance().getReference();
-
-                Intent intent = new Intent(view.getContext(), AnswerActivity.class);
-
-                intent.putExtra("QID", questionList.get(position).getId());
-
-                view.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override
