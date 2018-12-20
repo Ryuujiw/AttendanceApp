@@ -73,7 +73,6 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  */
 public class AttendanceFragment extends Fragment {
     private FirebaseUser User;
-    private FirebaseAuth firebaseAuth;
     private String currentEmail, uid;
     CardView cardView_status, cardView_classSummary;
     FloatingActionButton floatingActionButton;
@@ -87,18 +86,15 @@ public class AttendanceFragment extends Fragment {
     String getResult;
     DatabaseReference mDataRef;
     StorageReference mStorageRef;
-    String URL;
     boolean status;
     ZXingScannerView zXingScannerView;
     String previousClassName, previousCLassID,attendNumber="0",courseCode;
     String reference;
     Bitmap bmp;
-    String attCount;
     boolean open;
     Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
     String mFileName, mFilePath;
 
 
@@ -516,8 +512,8 @@ public class AttendanceFragment extends Fragment {
             date = dataSnapshot.child("date").getValue(String.class);
 
             firebaseAuth = FirebaseAuth.getInstance();
-            user = firebaseAuth.getCurrentUser();
-            email = user.getEmail();
+            User = firebaseAuth.getCurrentUser();
+            email = User.getEmail();
 
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("application/pdf");
