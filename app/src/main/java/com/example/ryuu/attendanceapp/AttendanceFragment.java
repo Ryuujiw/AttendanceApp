@@ -2,7 +2,6 @@ package com.example.ryuu.attendanceapp;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,12 +13,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -29,8 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.objects.Class;
-import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -53,14 +48,9 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.journeyapps.barcodescanner.BarcodeResult;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -87,17 +77,14 @@ public class AttendanceFragment extends Fragment {
     String getResult;
     DatabaseReference mDataRef;
     StorageReference mStorageRef;
-    String URL;
     boolean status;
     ZXingScannerView zXingScannerView;
     String previousClassName, previousCLassID,attendNumber="0",courseCode;
     String reference;
     Bitmap bmp;
-    String attCount;
     boolean open;
     Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
-    private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     String mFileName, mFilePath;
 
@@ -137,7 +124,7 @@ public class AttendanceFragment extends Fragment {
         tv_location = view.findViewById(R.id.tv_location);
         tv_startTime = view.findViewById(R.id.tv_startTime);
         tv_endTime = view.findViewById(R.id.tv_endTime);
-        tv_className = view.findViewById(R.id.tv_className);
+        tv_className = view.findViewById(R.id.tv_class_name);
         tv_Hint = view.findViewById(R.id.tv_hint);
         Toast.makeText(getActivity(),loginMode, Toast.LENGTH_SHORT);
         reference = "/classes/"+courseCode+"/"+previousCLassID+"/";

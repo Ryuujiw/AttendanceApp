@@ -137,7 +137,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
 
-                String date = year+"-"+month+"-"+day;
+                String date = day+"/"+month+"/"+year;
                 class_date.setText(date);
 
             }
