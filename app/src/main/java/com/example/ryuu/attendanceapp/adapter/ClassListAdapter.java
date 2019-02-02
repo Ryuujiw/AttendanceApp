@@ -14,8 +14,15 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.example.ryuu.attendanceapp.activities.course.CourseHomeActivity;
 import com.example.ryuu.attendanceapp.objects.Class_list;
+=======
+import com.example.ryuu.attendanceapp.ClassDetailsActivity;
+import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
+import com.example.ryuu.attendanceapp.Class_list;
+import com.example.ryuu.attendanceapp.Lect_StartClass;
+>>>>>>> redesign the lecturer generate QR code according to Yee Wei's UI added a new activity(Lect_StartClass)
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -123,7 +130,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), CourseHomeActivity.class);
+            Intent intent = new Intent(view.getContext(), Lect_StartClass.class);
             intent.putExtra("courseCode",courseCode);
             intent.putExtra("LOGIN_MODE",loginMode);
             intent.putExtra("classID",classListData.get(getAdapterPosition()).getClassID());
