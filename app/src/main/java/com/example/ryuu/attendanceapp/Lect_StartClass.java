@@ -1,15 +1,22 @@
 package com.example.ryuu.attendanceapp;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,20 +32,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 public class Lect_StartClass extends AppCompatActivity {
     private FirebaseUser User;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    private TextView tv_date, tv_className, tv_startTime, tv_endTime, tv_attendance;
+    private Switch sw_className_onOff;
+    private TextView tv_date, tv_startTime, tv_endTime, tv_attendance, tv_status;
     private Button btn_generateQR, btn_deactiveQR;
     private String currentEmail, uid, reference, previousCLassID, courseCode, previousClassName;
-    private String className, date, startTime, endTime,attendNumber;
-    private boolean status;
+    private String className, date, startTime, endTime,attendNumber, QR_URL, student_list;
     private Intent emailIntent;
+    private Bitmap bitmap;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +72,11 @@ public class Lect_StartClass extends AppCompatActivity {
         currentEmail = User.getEmail();
         uid = User.getUid();
 
-        tv_className = findViewById(R.id.tv_class_name);
+        sw_className_onOff = findViewById(R.id.sw_class_name);
         tv_date = findViewById(R.id.tv_class_date);
         tv_startTime = findViewById(R.id.tv_start_time);
         tv_endTime = findViewById(R.id.tv_end_time);
+        tv_status = findViewById(R.id.tv_class_status);
         tv_attendance = findViewById(R.id.tv_attendance);
 
         btn_generateQR = findViewById(R.id.btn_generate_QR);
@@ -76,124 +95,165 @@ public class Lect_StartClass extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot classSnapshot) {
-//                String qr = classSnapshot.child("qrUrl").getValue(String.class);
-                previousClassName = classSnapshot.child("className").getValue(String.class);
+                QR_URL = classSnapshot.child("qrUrl").getValue(String.class);
                 // retrieve the classes status
+                previousClassName = classSnapshot.child("className").getValue(String.class);
+                attendNumber = String.valueOf(classSnapshot.child("attend_list").getChildrenCount());
+                date = classSnapshot.child("date").getValue(String.class);
+                startTime = classSnapshot.child("startTime").getValue(String.class);
+                className = classSnapshot.child("className").getValue(String.class);
+                // apply into the textviews
+                sw_className_onOff.setText(className);
+                tv_date.setText(date);
+                tv_startTime.setText(startTime);
                 if ( classSnapshot.child("status").getValue(boolean.class) == true) {
-                    date = classSnapshot.child("date").getValue(String.class);
-                    startTime = classSnapshot.child("startTime").getValue(String.class);
-                    className = classSnapshot.child("className").getValue(String.class);
-                    tv_className.setText(className);
-                    tv_date.setText(date);
-                    tv_startTime.setText(startTime);
-                    attendNumber = String.valueOf(classSnapshot.child("attend_list").getChildrenCount());
+                    sw_className_onOff.setChecked(true);
                     tv_attendance.setText(attendNumber);
-                    btn_generateQR.setText("End Class");
+                    tv_status.setText("Ongoing");
+                    btn_generateQR.setEnabled(true);
+                    btn_deactiveQR.setEnabled(true);
 
                 } else if (classSnapshot.child("status").getValue(boolean.class)  == false) {
-                    date = classSnapshot.child("date").getValue(String.class);
-                    startTime = classSnapshot.child("startTime").getValue(String.class);
-                    className = classSnapshot.child("className").getValue(String.class);
-                    tv_className.setText(className);
-                    tv_date.setText(date);
-                    tv_startTime.setText(startTime);
-                    tv_attendance.setText("Class Ended/Press to view report");
+                    sw_className_onOff.setChecked(false);
+                    if(attendNumber.equals("0")){
+                        tv_status.setText("Created");
+                        btn_generateQR.setEnabled(false);
+                        btn_deactiveQR.setEnabled(false);
+                    }else{
+                        tv_status.setText("Ended");
+                        btn_generateQR.setEnabled(true);
+                        btn_deactiveQR.setEnabled(true);
+                    }
                 }
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {}});
 
+        sw_className_onOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = ((Switch) v).isChecked();
+                if(on==false){
+                    AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(Lect_StartClass.this);
+                    alertDialogBuilder2.setTitle("End Class");
+                    alertDialogBuilder2.setMessage("END the Class?");
+                    alertDialogBuilder2.setCancelable(false);
+                    alertDialogBuilder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to end class
+                            sw_className_onOff.setChecked(false);
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                            endTime = format.format(calendar.getTime());
+                            tv_startTime.setText(startTime);
+                            tv_endTime.setText(endTime);
+                            databaseReference.child("endTime").setValue(endTime);
+                            databaseReference.child("status").setValue(false);
+                        }
+                    });
+                    alertDialogBuilder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            databaseReference.child("status").setValue(true);
+                            sw_className_onOff.setChecked(true);
+                        }
+                    });
+                    Dialog dialog = alertDialogBuilder2.create();
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                }else if(on==true){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lect_StartClass.this);
+                    alertDialog.setTitle("Start Class");
+                    alertDialog.setMessage("Generate QR and start class? The QR will be send to "+currentEmail);
+                    alertDialog.setCancelable(true);
+                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to start
+                            sw_className_onOff.setChecked(true);
+                            databaseReference.child("status").setValue(true);
+                            databaseReference.child("open").setValue(true);
+
+                            //send QR Code link to lecturer's email
+                            emailIntent = new Intent(Intent.ACTION_SEND);
+                            emailIntent.setType("img/png");
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {currentEmail});
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "QR Image for "+previousClassName);
+
+                            StorageReference mStoreRef = FirebaseStorage.getInstance().getReference("/classes/"+courseCode+"/").child(QR_URL);
+                            mStoreRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String URL = uri.toString();
+                                    emailIntent.putExtra(Intent.EXTRA_TEXT, "Please display this QR Image for student to scan "+URL);
+                                    startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+                                }
+
+                            });
+                        }
+                    });
+                    alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {//pressed no
+                            databaseReference.child("status").setValue(false);
+                            sw_className_onOff.setChecked(false);
+                        }
+                    });
+                    Dialog dialog = alertDialog.create();
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                }
             }
         });
-        btn_generateQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                btn_generateQR.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot){
-
-                        status = dataSnapshot.child("status").getValue(boolean.class);
-                        if (status == false) {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lect_StartClass.this);
-                            alertDialog.setTitle("Start Class");
-                            alertDialog.setMessage("Generate QR and start class? The QR will be send to "+currentEmail);
-                            alertDialog.setPositiveButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {//pressed no
-                                    databaseReference.child("status").setValue(false);
+                    public void onClick(View view) {
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                                //delete the old QR Code on realtime database
+                                String newkey = getrandomString(10);
+                                databaseReference.child("qrUrl").setValue(newkey);
+                                StorageReference mStoreRef = FirebaseStorage.getInstance().getReference("/classes/"+courseCode+"/");
+                                //delete the old QR code image
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                StorageReference deleteRef = storageRef.child("/classes/"+courseCode+"/"+QR_URL);
+                                deleteRef.delete();
+                                //generate bitmap from new key
+                                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                                try {
+                                    BitMatrix bitMatrix = multiFormatWriter.encode(newkey, BarcodeFormat.QR_CODE,200,200);
+                                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                    bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                                }catch (WriterException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                            alertDialog.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to start
-                                    databaseReference.child("status").setValue(true);
-                                    databaseReference.child("open").setValue(true);
-                                    btn_generateQR.setText("End Class");
+                                //upload QR image into StorageDatabase
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] data = baos.toByteArray();
+                                mStoreRef.child(newkey).putBytes(data);
 
-                                    //send QR Code link to lecturer's email
-                                    emailIntent = new Intent(Intent.ACTION_SEND);
-                                    emailIntent.setType("img/png");
-                                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {currentEmail});
-                                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "QR Image for "+previousClassName);
+                                Toast.makeText(Lect_StartClass.this,"New QR Code is Generated",Toast.LENGTH_SHORT).show();
+                            }
 
-                                    StorageReference mStoreRef = FirebaseStorage.getInstance().getReference("/classes/"+courseCode+"/").child(previousCLassID);
-                                    mStoreRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String URL = uri.toString();
-                                            emailIntent.putExtra(Intent.EXTRA_TEXT, "Please display this QR Image for student to scan "+URL);
-                                            startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
-                                        }
-                                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                }
-                            }).show();
-                        }else{//class is running, status is true and pressed to stop
-                            AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(Lect_StartClass.this);
-                            alertDialogBuilder2.setTitle("End Class");
-                            alertDialogBuilder2.setMessage("END the Class?");
-                            alertDialogBuilder2.setPositiveButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    databaseReference.child("status").setValue(true);
-                                    status = true;
-                                }
-                            });
-                            alertDialogBuilder2.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {//pressed yes to end class
-                                    Calendar calendar = Calendar.getInstance();
-                                    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                                    endTime = format.format(calendar.getTime());
-                                    tv_startTime.setText(startTime);
-                                    tv_endTime.setText(endTime);
-                                    tv_className.setText(className);
-                                    databaseReference.child("endTime").setValue(endTime);
-                                    databaseReference.child("status").setValue(false);
-                                    status = false;
-                                    btn_generateQR.setText("Report Summary");
-                                }
-                            }).show();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            }
+                        });
                     }
                 });
-            }
-        });
         btn_deactiveQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Delete Class");
+                builder.setTitle("Remove QR Code");
                 builder.setMessage("Stop the scan?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                        StorageReference deleteRef = storageRef.child("/classes/"+courseCode+"/"+previousCLassID);
+                        StorageReference deleteRef = storageRef.child("/classes/"+courseCode+"/"+QR_URL);
                         deleteRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -217,5 +277,41 @@ public class Lect_StartClass extends AppCompatActivity {
                 builder.show();
             }
         });
+        tv_attendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Student List");
+//                student_list="";
+                databaseReference.child("attend_list").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        student_list="";
+                        for(DataSnapshot data:dataSnapshot.getChildren()){
+                            student_list += data.getKey()+"\n";
+                        }
+                        builder.setMessage(student_list);
+                        builder.setNeutralButton("OK",null);
+                        builder.show();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
     }
+
+    public String getrandomString(int size){
+        final String data = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random RANDOM = new Random();
+        StringBuilder sb = new StringBuilder(size);
+        for (int i = 0; i < size; i++) {
+            sb.append(data.charAt(RANDOM.nextInt(data.length())));
+        }
+
+        return sb.toString();
+    }
+
 }
