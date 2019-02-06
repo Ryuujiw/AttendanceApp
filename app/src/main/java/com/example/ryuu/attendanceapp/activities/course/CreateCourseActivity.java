@@ -116,4 +116,6 @@ public class CreateCourseActivity extends AppCompatActivity {
         intent.putExtra("course_code",course_code);
         startActivity(intent);
     }
+
+
 }
