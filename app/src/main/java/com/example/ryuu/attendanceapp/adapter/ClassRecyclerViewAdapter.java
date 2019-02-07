@@ -32,9 +32,10 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
     public List<Class> classListFull;
     public String loginMode;
     private Context context;
+    private int i=0;
 
 
-    public ClassRecyclerViewAdapter(Context context, List<Class> classList, String mode) {
+    public ClassRecyclerViewAdapter(Context context, List<Class> classList ,String mode) {
         this.loginMode = mode;
         this.context = context;
         this.classList = classList;
@@ -53,17 +54,19 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int position) {
-        String[] img = { "R.drawable.mobile", "R.drawable.web", "R.drawable.network","R.drawable.numerical" };
-        Random rand = new Random();
-        int value = rand.nextInt(5);
+        int[] img = { R.drawable.mobile, R.drawable.web, R.drawable.network,R.drawable.numerical };
         classViewHolder.tvClassName.setText(classList.get(position).getCourse_name());
-//        HashMap<Integer, Integer> images = new HashMap<Integer, Integer>();
-//        images.put( 1, Integer.valueOf( R.drawable.mobile) );
-//        images.put( 2, Integer.valueOf( R.drawable.web ) );
-//        images.put( 3, Integer.valueOf( R.drawable.network ) );
-//        images.put( 4, Integer.valueOf( R.drawable.numerical ) );
-//        classViewHolder.imgViewClassImage.setImageResource( images.get( value ).intValue() );
-        classViewHolder.imgViewClassImage.setImageResource(R.drawable.network);
+        if(loginMode.equals("lecturer")){
+            classViewHolder.tvClassCode.setText("Code: "+classList.get(position).getCourse_code());
+        }else
+            classViewHolder.tvClassCode.setText("Description: "+classList.get(position).getDescription());
+
+        classViewHolder.imgViewClassImage.setImageResource(img[i]);
+
+        if(i<3)
+            i++;
+        else
+            i=0;
 
     }
 
@@ -109,13 +112,14 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
         public class ClassViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-        public TextView tvClassName;
+        public TextView tvClassName,tvClassCode;
         public ImageView imgViewClassImage;
 
 
         public ClassViewHolder(View itemView) {
             super(itemView);
             tvClassName = itemView.findViewById(R.id.tv_class_name);
+            tvClassCode = itemView.findViewById(R.id.tv_course_code);
             imgViewClassImage = itemView.findViewById(R.id.img_class);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -129,10 +133,6 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             bundle.putString("courseName", classList.get(getAdapterPosition()).getCourse_name());
             bundle.putString("courseCode", classList.get(getAdapterPosition()).getCourse_code());
             bundle.putString("LOGIN_MODE", loginMode);
-
-//            intent.putExtra("courseName", classList.get(getAdapterPosition()).getCourse_name());
-//            intent.putExtra("courseCode", classList.get(getAdapterPosition()).getCourse_code());
-//            intent.putExtra("LoginMode", loginMode);
 
             intent.putExtras(bundle);
             view.getContext().startActivity(intent);
