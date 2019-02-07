@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.adapter.QuestionRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Question;
 import com.google.firebase.auth.FirebaseAuth;

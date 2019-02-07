@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ryuu.attendanceapp.objects.Class_list;
+import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.adapter.ClassListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

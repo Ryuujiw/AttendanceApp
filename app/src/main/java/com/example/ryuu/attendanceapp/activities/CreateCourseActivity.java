@@ -1,6 +1,8 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.activities;
 
 import android.content.Intent;
+
+import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Class;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.objects.Lecturer;
-import com.example.ryuu.attendanceapp.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

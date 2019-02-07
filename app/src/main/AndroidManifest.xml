@@ -22,31 +22,31 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".ClassActivity" />
-        <activity android:name=".ClassDetailsActivity" />
-        <activity android:name=".CreateCourseActivity" />
-        <activity android:name=".CourseDetails" />
+        <activity android:name=".activities.authentication.LoginActivity" />
+        <activity android:name=".activities.authentication.SignUpActivity" />
+        <activity android:name=".activities.ClassActivity" />
+        <activity android:name=".activities.ClassDetailsActivity" />
+        <activity android:name=".activities.CreateCourseActivity" />
+        <activity android:name=".activities.CourseDetails" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".activity_myprofile" />
-        <activity android:name=".activity_edit_profile" />
-        <activity android:name=".ClassList_Teacher_Activity" />
-        <activity android:name=".ClassListDetails" />
-        <activity android:name=".AnswerActivity">
+        <activity android:name=".activities.profile.activity_myprofile" />
+        <activity android:name=".activities.profile.activity_edit_profile" />
+        <activity android:name=".activities.ClassList_Teacher_Activity" />
+        <activity android:name=".activities.ClassListDetails" />
+        <activity android:name=".activities.AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
-        <activity android:name=".Reset_Password_Activity" />
+        <activity android:name=".activities.authentication.Reset_Password_Activity" />
     </application>
 
 </manifest>

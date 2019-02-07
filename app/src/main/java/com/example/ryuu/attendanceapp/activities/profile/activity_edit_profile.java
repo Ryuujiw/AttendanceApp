@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.activities.profile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,8 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.objects.Lecturer;
-import com.example.ryuu.attendanceapp.objects.Student;
+import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.activities.authentication;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.R;
+import com.example.ryuu.attendanceapp.activities.MainActivity;
 import com.example.ryuu.attendanceapp.objects.Lecturer;
 import com.example.ryuu.attendanceapp.objects.Student;
 import com.google.android.gms.tasks.OnCompleteListener;

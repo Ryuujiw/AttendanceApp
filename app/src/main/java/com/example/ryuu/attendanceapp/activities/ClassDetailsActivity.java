@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp;
+package com.example.ryuu.attendanceapp.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.fragments.AttendanceFragment;
+import com.example.ryuu.attendanceapp.fragments.ForumFragment;
+import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.adapter.ClassFragmentPagerAdapter;
 
 public class ClassDetailsActivity extends AppCompatActivity {

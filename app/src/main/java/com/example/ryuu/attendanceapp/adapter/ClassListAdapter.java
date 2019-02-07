@@ -14,9 +14,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.ClassDetailsActivity;
-import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
-import com.example.ryuu.attendanceapp.Class_list;
+import com.example.ryuu.attendanceapp.activities.ClassDetailsActivity;
+import com.example.ryuu.attendanceapp.objects.Class_list;
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
