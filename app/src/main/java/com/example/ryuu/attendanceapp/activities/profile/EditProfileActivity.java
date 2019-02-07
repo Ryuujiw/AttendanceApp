@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class activity_edit_profile extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FirebaseUser User;
     private FirebaseAuth firebaseAuth;
@@ -124,7 +124,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity_edit_profile.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -159,7 +159,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
                             }
                             result.put("gender",sp_gender.getSelectedItem().toString().toLowerCase());
                             mDatabaseUser.updateChildren(result);
-                            Toast.makeText(activity_edit_profile.this,"Change saved",Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProfileActivity.this,"Change saved",Toast.LENGTH_LONG).show();
                             back();
                         }
                     });
@@ -173,7 +173,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
                     alertDialog.show();
                     break;
                 }else{
-                    AlertDialog alertDialog = new AlertDialog.Builder(activity_edit_profile.this).create();
+                    AlertDialog alertDialog = new AlertDialog.Builder(EditProfileActivity.this).create();
                     alertDialog.setTitle("Alert");
                     alertDialog.setMessage("Please fill in required information.");
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -191,7 +191,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
                 alertDialogBuilder.setPositiveButton("yes",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        Toast.makeText(activity_edit_profile.this,"Change discarded",Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProfileActivity.this,"Change discarded",Toast.LENGTH_LONG).show();
                         back();
                     }
                 });
@@ -233,7 +233,7 @@ public class activity_edit_profile extends AppCompatActivity implements AdapterV
     }
 
     public void  back(){
-        intent = new Intent(activity_edit_profile.this, activity_myprofile.class);
+        intent = new Intent(EditProfileActivity.this, ViewProfileActivity.class);
         intent.putExtra("LOGIN_MODE", login_mode);
         startActivity(intent);
         finish();

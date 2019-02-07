@@ -22,7 +22,8 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.activities.authentication.LoginActivity;
-import com.example.ryuu.attendanceapp.activities.profile.activity_myprofile;
+import com.example.ryuu.attendanceapp.activities.course.CreateCourseActivity;
+import com.example.ryuu.attendanceapp.activities.profile.ViewProfileActivity;
 import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Class;
 
@@ -285,7 +286,7 @@ public class ClassActivity extends AppCompatActivity {
     }
 
     private void GoToMyProfile(String loginMode){
-        Intent intent = new Intent(ClassActivity.this,activity_myprofile.class);
+        Intent intent = new Intent(ClassActivity.this,ViewProfileActivity.class);
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
     }

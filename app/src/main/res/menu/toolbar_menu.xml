@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/menu_myprofile"
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/viewcourses_menu_button_profile_normal"
         android:title="My Profile"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_logout"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:icon="@drawable/viewcourses_menu_button_logout_normal"
         android:title="Logout"
         app:showAsAction="always" />
 </menu>

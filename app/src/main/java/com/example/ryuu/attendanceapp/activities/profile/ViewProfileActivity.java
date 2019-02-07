@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class activity_myprofile extends AppCompatActivity {
+public class ViewProfileActivity extends AppCompatActivity {
 
     private FirebaseUser User;
     private FirebaseAuth firebaseAuth;
@@ -29,7 +29,7 @@ public class activity_myprofile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myprofile);
+        setContentView(R.layout.activity_view_profile);
 
         //get user matric from firebase
         firebaseAuth = firebaseAuth.getInstance();
@@ -82,7 +82,7 @@ public class activity_myprofile extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(activity_myprofile.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewProfileActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -106,14 +106,14 @@ public class activity_myprofile extends AppCompatActivity {
     }
 
     private void gotoeditprofile(String loginMode){
-        Intent intent = new Intent(activity_myprofile.this,activity_edit_profile.class);
+        Intent intent = new Intent(ViewProfileActivity.this,EditProfileActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
         finish();
     }
 
     private void back(String loginMode){
-        Intent intent = new Intent(activity_myprofile.this,ClassActivity.class);
+        Intent intent = new Intent(ViewProfileActivity.this,ClassActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
         finish();

@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         txt_forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, Reset_Password_Activity.class);
+                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }

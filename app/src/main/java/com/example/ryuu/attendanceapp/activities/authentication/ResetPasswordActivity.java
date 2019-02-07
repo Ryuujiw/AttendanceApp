@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Reset_Password_Activity extends AppCompatActivity {
+public class ResetPasswordActivity extends AppCompatActivity {
 
     private Button btn_submit;
     private EditText et_retrieve_email;
@@ -39,7 +39,7 @@ public class Reset_Password_Activity extends AppCompatActivity {
                 String retrieve_email = et_retrieve_email.getText().toString().trim();
 
                 if (TextUtils.isEmpty(retrieve_email)) {
-                    Toast.makeText(Reset_Password_Activity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
 
                 }
                 else{
@@ -48,13 +48,13 @@ public class Reset_Password_Activity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(Reset_Password_Activity.this, "Reset password email has been sent successfully.", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(Reset_Password_Activity.this, LoginActivity.class);
+                                Toast.makeText(ResetPasswordActivity.this, "Reset password email has been sent successfully.", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
                             else{
                                 String message = task.getException().getMessage();
-                                Toast.makeText(Reset_Password_Activity.this, "Error occured: "+message+" Please try again.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ResetPasswordActivity.this, "Error occured: "+message+" Please try again.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

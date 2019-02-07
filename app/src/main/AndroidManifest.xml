@@ -32,21 +32,21 @@
         <activity android:name=".activities.authentication.SignUpActivity" />
         <activity android:name=".activities.ClassActivity" />
         <activity android:name=".activities.ClassDetailsActivity" />
-        <activity android:name=".activities.CreateCourseActivity" />
-        <activity android:name=".activities.CourseDetails" />
+        <activity android:name=".activities.course.CreateCourseActivity" />
+        <activity android:name=".activities.course.CreateCourseSuccessActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".activities.profile.activity_myprofile" />
-        <activity android:name=".activities.profile.activity_edit_profile" />
+        <activity android:name=".activities.profile.ViewProfileActivity" />
+        <activity android:name=".activities.profile.EditProfileActivity" />
         <activity android:name=".activities.ClassList_Teacher_Activity" />
         <activity android:name=".activities.ClassListDetails" />
         <activity android:name=".activities.AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
-        <activity android:name=".activities.authentication.Reset_Password_Activity" />
+        <activity android:name=".activities.authentication.ResetPasswordActivity" />
     </application>
 
 </manifest>

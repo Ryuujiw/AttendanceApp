@@ -27,7 +27,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_black_24dp"
+        app:srcCompat="@drawable/shared_button_add_normal"
         tools:ignore="VectorDrawableCompat" />
 
     <android.support.v7.widget.RecyclerView

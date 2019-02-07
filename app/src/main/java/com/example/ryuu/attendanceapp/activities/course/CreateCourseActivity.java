@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.course;
 
 import android.content.Intent;
 
@@ -111,7 +111,7 @@ public class CreateCourseActivity extends AppCompatActivity {
     }
 
     public void gotoCourseDetails(){
-        Intent intent = new Intent(CreateCourseActivity.this, CourseDetails.class);
+        Intent intent = new Intent(CreateCourseActivity.this, CreateCourseSuccessActivity.class);
         intent.putExtra("LOGIN_MODE", "lecturer");
         intent.putExtra("course_code",course_code);
         startActivity(intent);

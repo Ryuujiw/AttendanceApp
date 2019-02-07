@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CourseDetails">
+    tools:context=".activities.course.CreateCourseSuccessActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_check_circle_black_24dp" />
+        app:srcCompat="@drawable/createcoursesuccess_image_success_normal" />
 
     <TextView
         android:id="@+id/txt_success"

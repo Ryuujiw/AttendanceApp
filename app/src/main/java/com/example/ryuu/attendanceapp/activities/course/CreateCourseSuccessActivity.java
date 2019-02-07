@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.course;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
 
+import com.example.ryuu.attendanceapp.activities.ClassActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class CourseDetails extends AppCompatActivity {
+public class CreateCourseSuccessActivity extends AppCompatActivity {
 
     Button btn_done;
     String uid,login_mode,course_code;
@@ -71,7 +72,7 @@ public class CourseDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(CourseDetails.this , ClassActivity.class);
+                Intent intent = new Intent(CreateCourseSuccessActivity.this , ClassActivity.class);
                 intent.putExtra("LOGIN_MODE", login_mode);
                 startActivity(intent);
             }
@@ -91,7 +92,7 @@ public class CourseDetails extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(CourseDetails.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateCourseSuccessActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

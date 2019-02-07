@@ -9,8 +9,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout">
+            android:layout_height="match_parent">
 
 
             <ImageView
@@ -20,8 +19,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerCrop"
 
-                android:src="@drawable/header"
-                app:srcCompat="@drawable/header" />
+                android:src="@drawable/viewprofile_image_header_normal"
+                app:srcCompat="@drawable/viewprofile_image_header_normal" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,7 +38,7 @@
                 android:elevation="5dp"
                 android:padding="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/man" />
+                android:src="@drawable/profile_image_profilepic_normal" />
 
             <RelativeLayout
                 android:id="@+id/profile_layout"
@@ -229,7 +228,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="0dp"
                 android:background="@null"
-                app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+                app:srcCompat="@drawable/viewprofile_button_back_normal" />
 
         </RelativeLayout>
     </ScrollView>
