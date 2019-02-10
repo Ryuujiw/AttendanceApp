@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.klass;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -41,7 +41,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_list__teacher_);
+        setContentView(R.layout.activity_class_list_teacher);
 
         Toolbar toolbar = findViewById(R.id.toolbar_classlist);
         setSupportActionBar(toolbar);

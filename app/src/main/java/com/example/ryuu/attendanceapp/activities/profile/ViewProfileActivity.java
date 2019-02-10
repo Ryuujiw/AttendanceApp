@@ -9,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
-import com.example.ryuu.attendanceapp.activities.ClassActivity;
+import com.example.ryuu.attendanceapp.activities.course.ViewCourseActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -113,7 +113,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
     private void back(String loginMode){
-        Intent intent = new Intent(ViewProfileActivity.this,ClassActivity.class);
+        Intent intent = new Intent(ViewProfileActivity.this, ViewCourseActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
         finish();

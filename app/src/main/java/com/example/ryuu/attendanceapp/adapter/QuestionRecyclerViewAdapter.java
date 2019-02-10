@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ryuu.attendanceapp.activities.AnswerActivity;
+import com.example.ryuu.attendanceapp.activities.forum.AnswerActivity;
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Question;
 import com.google.firebase.database.DatabaseReference;

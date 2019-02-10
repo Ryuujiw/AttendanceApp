@@ -15,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
-import com.example.ryuu.attendanceapp.activities.MainActivity;
 import com.example.ryuu.attendanceapp.objects.Lecturer;
 import com.example.ryuu.attendanceapp.objects.Student;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -105,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                                 String uid = user.getUid();
                                 CreateUsers(uid);
 
-                                Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
+                                Intent intent = new Intent(SignUpActivity.this, AuthenticationActivity.class);
 
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

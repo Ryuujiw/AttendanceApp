@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.course;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +14,7 @@ import com.example.ryuu.attendanceapp.fragments.ForumFragment;
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.adapter.ClassFragmentPagerAdapter;
 
-public class ClassDetailsActivity extends AppCompatActivity {
+public class CourseHomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     TabLayout tabLayout;
@@ -28,7 +28,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_details);
+        setContentView(R.layout.activity_course_home);
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("LoginMode");
         bitmap = (Bitmap) intent.getParcelableExtra("qrImage");
@@ -39,7 +39,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
 
         // LOGIN MODE
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
-        Toast.makeText(ClassDetailsActivity.this, loginMode, Toast.LENGTH_LONG).show();
+        Toast.makeText(CourseHomeActivity.this, loginMode, Toast.LENGTH_LONG).show();
         Bundle bundle = new Bundle();
         bundle.putString("LOGIN_MODE", loginMode);
         forumFragment.setArguments(bundle);
@@ -57,10 +57,10 @@ public class ClassDetailsActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()){
                     case 0:
-                        /**Toast.makeText(ClassDetailsActivity.this,"Attendance is selected", Toast.LENGTH_SHORT).show();**/
+                        /**Toast.makeText(CourseHomeActivity.this,"Attendance is selected", Toast.LENGTH_SHORT).show();**/
                         break;
                     case 1:
-                        Toast.makeText(ClassDetailsActivity.this,"Forum is selected", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CourseHomeActivity.this,"Forum is selected", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

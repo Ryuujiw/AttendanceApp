@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.klass;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;

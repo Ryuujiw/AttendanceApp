@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
 
-import com.example.ryuu.attendanceapp.activities.ClassActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +31,7 @@ public class CreateCourseSuccessActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_details);
+        setContentView(R.layout.activity_course_created_details);
 
         txt_course_code = findViewById(R.id.txt_coursecode);
         txt_course_lecturer = findViewById(R.id.txt_creatorname);
@@ -72,7 +71,7 @@ public class CreateCourseSuccessActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(CreateCourseSuccessActivity.this , ClassActivity.class);
+                Intent intent = new Intent(CreateCourseSuccessActivity.this , ViewCourseActivity.class);
                 intent.putExtra("LOGIN_MODE", login_mode);
                 startActivity(intent);
             }

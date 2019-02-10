@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.forum;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

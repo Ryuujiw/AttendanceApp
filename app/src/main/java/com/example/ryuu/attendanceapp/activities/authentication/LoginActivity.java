@@ -14,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
-import com.example.ryuu.attendanceapp.activities.ClassActivity;
-import com.example.ryuu.attendanceapp.activities.MainActivity;
+import com.example.ryuu.attendanceapp.activities.course.ViewCourseActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -70,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, AuthenticationActivity.class);
                 startActivity(intent);
             }
         });
@@ -126,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void GoToMainActivity(String loginMode){
-        Intent intent = new Intent(LoginActivity.this,ClassActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ViewCourseActivity.class);
         intent.putExtra("LOGIN_MODE", loginMode);
         startActivity(intent);
         finish();

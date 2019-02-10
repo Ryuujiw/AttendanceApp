@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.course;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.activities.authentication.LoginActivity;
-import com.example.ryuu.attendanceapp.activities.course.CreateCourseActivity;
 import com.example.ryuu.attendanceapp.activities.profile.ViewProfileActivity;
 import com.example.ryuu.attendanceapp.adapter.ClassRecyclerViewAdapter;
 import com.example.ryuu.attendanceapp.objects.Class;
@@ -38,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassActivity extends AppCompatActivity {
+public class ViewCourseActivity extends AppCompatActivity {
 
     private FirebaseUser User;
     private DatabaseReference mDatabaseUser, mDatabaseUser1;
@@ -57,17 +56,17 @@ public class ClassActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class);
+        setContentView(R.layout.activity_view_course);
 
         // GET LOGIN MODE
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
         txt_no_result = findViewById(R.id.textView3);
 
-        Toast.makeText(ClassActivity.this, loginMode, Toast.LENGTH_LONG).show();
+        Toast.makeText(ViewCourseActivity.this, loginMode, Toast.LENGTH_LONG).show();
 
         recyclerView = findViewById(R.id.recycler_view);
         fabtn_add_class = findViewById(R.id.fabtn_add_class);
-        progress = new ProgressDialog(ClassActivity.this);
+        progress = new ProgressDialog(ViewCourseActivity.this);
         progress.setTitle("Loading..");
         progress.setMessage("Please wait for a moment");
 
@@ -80,7 +79,7 @@ public class ClassActivity extends AppCompatActivity {
         User = firebaseAuth.getCurrentUser();
         uid = User.getUid();
 
-        linearLayoutManager = new LinearLayoutManager(ClassActivity.this);
+        linearLayoutManager = new LinearLayoutManager(ViewCourseActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // [START initialize_database_ref]
@@ -97,7 +96,7 @@ public class ClassActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewCourseActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,7 +114,7 @@ public class ClassActivity extends AppCompatActivity {
                             classList.add(course);
                         }
                     }
-                    classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ClassActivity.this, classList, loginMode);
+                    classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ViewCourseActivity.this, classList, loginMode);
                     classRecyclerViewAdapter.notifyDataSetChanged();
                     recyclerView.setAdapter(classRecyclerViewAdapter);
                 }
@@ -131,11 +130,11 @@ public class ClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (loginMode.equals("student")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                     builder.setTitle("Enter your class code : ");
 
                     // Set up the input
-                    final EditText input = new EditText(ClassActivity.this);
+                    final EditText input = new EditText(ViewCourseActivity.this);
                     // Specify the type of input expected;
                     input.setInputType(InputType.TYPE_CLASS_TEXT);
                     builder.setView(input);
@@ -149,25 +148,25 @@ public class ClassActivity extends AppCompatActivity {
                                 //add user matric into course child
                                 registerCourse(classCode);
                             }else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                                 builder.setMessage("Please enter course code.").setTitle("Error").setPositiveButton("OK", null);
                                 AlertDialog dialog2 = builder.create();
                                 dialog2.show();
                             }
-//                            Toast.makeText(ClassActivity.this, "Class Added", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ViewCourseActivity.this, "Class Added", Toast.LENGTH_SHORT).show();
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(ClassActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ViewCourseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     });
 
                     builder.show();
                 } else if (loginMode.equals("lecturer")) {
-                    Intent intent = new Intent(ClassActivity.this, CreateCourseActivity.class);
+                    Intent intent = new Intent(ViewCourseActivity.this, CreateCourseActivity.class);
                     intent.putExtra("LOGIN_MODE", loginMode);
                     startActivity(intent);
                 }
@@ -215,7 +214,7 @@ public class ClassActivity extends AppCompatActivity {
                     boolean registered = dataSnapshot.child("/"+coursecode+"/"+loginMode+"/").hasChild(matric);
                     if(registered == true){
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                         builder.setMessage("Courses exists").setTitle("You have registered under this course.").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
@@ -223,7 +222,7 @@ public class ClassActivity extends AppCompatActivity {
                         String course_name = dataSnapshot.child("/"+coursecode+"/course_name/").getValue(String.class);
                         mDatabaseUser1.child(coursecode).child(loginMode).child(matric).setValue(true);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                         addCourseintoUserProfile(coursecode,uid);
                         builder.setMessage( "Successfully register "+course_name+".").setTitle("Courses register successfully").setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
@@ -232,7 +231,7 @@ public class ClassActivity extends AppCompatActivity {
                     }
                 }else{
                     //Course does not exist
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                     builder.setMessage("Please enter valid course code.").setTitle("Invalid Course Code.").setPositiveButton("OK", null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -241,7 +240,7 @@ public class ClassActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ClassActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewCourseActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -256,19 +255,19 @@ public class ClassActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.menu_myprofile:
-                Toast.makeText(ClassActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewCourseActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
                 GoToMyProfile(loginMode);
                 break;
 
             case R.id.menu_logout:
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewCourseActivity.this);
                 builder.setTitle("Logout");
                 builder.setMessage("Are you sure you want to logout?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(ClassActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(ViewCourseActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -286,7 +285,7 @@ public class ClassActivity extends AppCompatActivity {
     }
 
     private void GoToMyProfile(String loginMode){
-        Intent intent = new Intent(ClassActivity.this,ViewProfileActivity.class);
+        Intent intent = new Intent(ViewCourseActivity.this,ViewProfileActivity.class);
         intent.putExtra("LOGIN_MODE",loginMode);
         startActivity(intent);
     }

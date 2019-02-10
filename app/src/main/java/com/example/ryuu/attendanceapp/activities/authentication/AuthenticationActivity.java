@@ -1,4 +1,4 @@
-package com.example.ryuu.attendanceapp.activities;
+package com.example.ryuu.attendanceapp.activities.authentication;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.ryuu.attendanceapp.R;
-import com.example.ryuu.attendanceapp.activities.authentication.LoginActivity;
-import com.example.ryuu.attendanceapp.activities.authentication.SignUpActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class AuthenticationActivity extends AppCompatActivity {
 
     Button btn_main_login, btn_main_sign_up;
 
@@ -26,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(AuthenticationActivity.this, LoginActivity.class);
                 startActivity(intent);
 
             }
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                Intent intent = new Intent(AuthenticationActivity.this, SignUpActivity.class);
                 startActivity(intent);
 
             }

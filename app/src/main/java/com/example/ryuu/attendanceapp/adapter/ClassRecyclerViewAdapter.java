@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.activities.ClassList_Teacher_Activity;
+import com.example.ryuu.attendanceapp.activities.klass.ClassList_Teacher_Activity;
 import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
