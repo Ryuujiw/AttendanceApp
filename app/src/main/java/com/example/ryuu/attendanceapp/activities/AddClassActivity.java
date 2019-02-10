@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Classes;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,7 +37,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Add_Class_Activity extends AppCompatDialogFragment {
+public class AddClassActivity extends AppCompatDialogFragment {
 
     EditText class_title, class_date, class_time, class_venue;
     addClassActivityListener addClassListener;
@@ -60,7 +59,7 @@ public class Add_Class_Activity extends AppCompatDialogFragment {
         courseCode = extras.getString("courseCode");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_add__class_, null);
+        View view = inflater.inflate(R.layout.activity_add_class, null);
 
         class_title = view.findViewById(R.id.edittext_title);
         class_date = view.findViewById(R.id.edittext_date);

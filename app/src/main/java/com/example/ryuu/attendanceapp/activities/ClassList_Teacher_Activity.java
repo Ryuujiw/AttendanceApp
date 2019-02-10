@@ -24,14 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassList_Teacher_Activity extends AppCompatActivity implements Add_Class_Activity.addClassActivityListener{
+public class ClassList_Teacher_Activity extends AppCompatActivity implements AddClassActivity.addClassActivityListener{
     ClassListAdapter classListAdapter;
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
     String classTitle="", classDate="", classTime="", classID;
     List<Class_list> allClassList;
-    Add_Class_Activity addClassActivity;
+    AddClassActivity addClassActivity;
     Class_list classData;
     DatabaseReference mDataRef;
     TextView noClassView;
@@ -125,7 +125,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     }
 
     public void openDialog(){
-        addClassActivity = new Add_Class_Activity();
+        addClassActivity = new AddClassActivity();
         addClassActivity.show(getSupportFragmentManager(), "add class dialog");
     }
 
