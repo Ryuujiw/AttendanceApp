@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.example.ryuu.attendanceapp.R;
 
-public class ClassListDetails extends AppCompatActivity {
+public class ViewClassDetailsActivity extends AppCompatActivity {
 
 
     Toolbar toolbar;
@@ -18,7 +18,7 @@ public class ClassListDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_list_details);
+        setContentView(R.layout.activity_view_class_details);
 
         toolbar = findViewById(R.id.toolbar_classlist_details);
         setSupportActionBar(toolbar);

@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.activities.klass.ClassList_Teacher_Activity;
+import com.example.ryuu.attendanceapp.activities.klass.ViewClassesActivity;
 import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
@@ -126,7 +126,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ClassList_Teacher_Activity.class);
+            Intent intent = new Intent(view.getContext(), ViewClassesActivity.class);
             Bundle bundle = new Bundle();
 
             bundle.putString("courseName", classList.get(getAdapterPosition()).getCourse_name());

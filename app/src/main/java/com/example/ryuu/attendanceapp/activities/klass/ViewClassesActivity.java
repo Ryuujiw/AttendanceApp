@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassList_Teacher_Activity extends AppCompatActivity implements AddClassActivity.addClassActivityListener{
+public class ViewClassesActivity extends AppCompatActivity implements AddClassActivity.addClassActivityListener{
     ClassListAdapter classListAdapter;
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
@@ -41,7 +41,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_list_teacher);
+        setContentView(R.layout.activity_view_classes);
 
         Toolbar toolbar = findViewById(R.id.toolbar_classlist);
         setSupportActionBar(toolbar);
@@ -52,10 +52,10 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
         loginMode = getIntent().getStringExtra("LOGIN_MODE");
         courseCode = getIntent().getStringExtra("courseCode");
 
-        linearLayoutManager = new LinearLayoutManager(ClassList_Teacher_Activity.this, LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(ViewClassesActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView = findViewById(R.id.recycler_view_class_list);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(ClassList_Teacher_Activity.this, DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(ViewClassesActivity.this, DividerItemDecoration.VERTICAL));
 
         noClassView = findViewById(R.id.empty_view);
 
@@ -92,7 +92,7 @@ public class ClassList_Teacher_Activity extends AppCompatActivity implements Add
                         recyclerView.setVisibility(View.GONE);
                         noClassView.setVisibility(View.VISIBLE);
                     }
-                    classListAdapter = new ClassListAdapter(ClassList_Teacher_Activity.this, allClassList, loginMode, courseCode);
+                    classListAdapter = new ClassListAdapter(ViewClassesActivity.this, allClassList, loginMode, courseCode);
                     classListAdapter.notifyDataSetChanged();
                     recyclerView.setAdapter(classListAdapter);
 

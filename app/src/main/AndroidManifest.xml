@@ -41,8 +41,8 @@
 
         <activity android:name=".activities.profile.ViewProfileActivity" />
         <activity android:name=".activities.profile.EditProfileActivity" />
-        <activity android:name=".activities.klass.ClassList_Teacher_Activity" />
-        <activity android:name=".activities.klass.ClassListDetails" />
+        <activity android:name=".activities.klass.ViewClassesActivity" />
+        <activity android:name=".activities.klass.ViewClassDetailsActivity" />
         <activity android:name=".activities.forum.AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
