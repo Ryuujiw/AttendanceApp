@@ -6,25 +6,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ryuu.attendanceapp.barcodeEncoder.BarcodeEncoder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,20 +28,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Random;
 
-public class Lect_StartClass extends AppCompatActivity {
+public class LectStartClass extends AppCompatActivity {
     private FirebaseUser User;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -134,7 +128,7 @@ public class Lect_StartClass extends AppCompatActivity {
             public void onClick(View v) {
                 boolean on = ((Switch) v).isChecked();
                 if(on==false){
-                    AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(Lect_StartClass.this);
+                    AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(LectStartClass.this);
                     alertDialogBuilder2.setTitle("End Class");
                     alertDialogBuilder2.setMessage("END the Class?");
                     alertDialogBuilder2.setCancelable(false);
@@ -162,7 +156,7 @@ public class Lect_StartClass extends AppCompatActivity {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
                 }else if(on==true){
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Lect_StartClass.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(LectStartClass.this);
                     alertDialog.setTitle("Start Class");
                     alertDialog.setMessage("Generate QR and start class? The QR will be send to "+currentEmail);
                     alertDialog.setCancelable(true);
@@ -233,7 +227,7 @@ public class Lect_StartClass extends AppCompatActivity {
                                 byte[] data = baos.toByteArray();
                                 mStoreRef.child(newkey).putBytes(data);
 
-                                Toast.makeText(Lect_StartClass.this,"New QR Code is Generated",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LectStartClass.this,"New QR Code is Generated",Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -257,13 +251,13 @@ public class Lect_StartClass extends AppCompatActivity {
                         deleteRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(Lect_StartClass.this, "QR stopped", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LectStartClass.this, "QR stopped", Toast.LENGTH_SHORT).show();
                             }
 
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Lect_StartClass.this, "Already Stopped", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LectStartClass.this, "Already Stopped", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
