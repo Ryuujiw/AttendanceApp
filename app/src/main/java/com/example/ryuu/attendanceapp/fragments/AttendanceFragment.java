@@ -26,12 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-<<<<<<< HEAD:app/src/main/java/com/example/ryuu/attendanceapp/fragments/AttendanceFragment.java
 import com.example.ryuu.attendanceapp.R;
-import com.example.ryuu.attendanceapp.objects.Class;
-import com.example.ryuu.attendanceapp.objects.Classes;
-=======
->>>>>>> redesign the lecturer generate QR code according to Yee Wei's UI added a new activity(Lect_StartClass):app/src/main/java/com/example/ryuu/attendanceapp/AttendanceFragment.java
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -46,8 +41,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+//import com.google.zxing.integration.android.IntentIntegrator;
+//import com.google.zxing.integration.android.IntentResult;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -401,18 +396,18 @@ public class AttendanceFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(getContext(), "You cancelled the scanning", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(), result.getContents(), Toast.LENGTH_LONG).show();
-
-            }
-        } else {
-
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+//        if (result != null) {
+//            if (result.getContents() == null) {
+//                Toast.makeText(getContext(), "You cancelled the scanning", Toast.LENGTH_LONG).show();
+//            } else {
+//                Toast.makeText(getContext(), result.getContents(), Toast.LENGTH_LONG).show();
+//
+//            }
+//        } else {
+//
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
     }
 
     private void savePdf() {

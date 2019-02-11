@@ -48,7 +48,8 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
         <activity android:name=".activities.authentication.ResetPasswordActivity" />
-        <activity android:name=".Lect_StartClass"></activity>
+        <activity android:name=".LectStartClass" />
+        <activity android:name=".StudJoinClass"></activity>
     </application>
 
 </manifest>
