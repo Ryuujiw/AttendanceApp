@@ -85,7 +85,6 @@ public class AttendanceFragment extends Fragment {
     boolean open;
     Intent emailIntent;
     private static final int STORAGE_CODE = 1000;
-
     private FirebaseAuth firebaseAuth;
     String mFileName, mFilePath;
 
