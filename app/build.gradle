@@ -36,13 +36,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    implementation 'com.google.zxing:core:3.2.1'
-    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     implementation 'com.google.firebase:firebase-database:16.0.5'
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'me.dm7.barcodescanner:zxing:1.9'
+    implementation 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
     implementation 'com.itextpdf:itextg:5.5.10'
 
 }

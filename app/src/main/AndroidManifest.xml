@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +25,7 @@
         <activity android:name=".activities.authentication.AuthenticationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,6 +48,8 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
         <activity android:name=".activities.authentication.ResetPasswordActivity" />
+        <activity android:name=".LectStartClass" />
+        <activity android:name=".StudJoinClass"></activity>
     </application>
 
 </manifest>

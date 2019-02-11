@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
+import com.example.ryuu.attendanceapp.barcodeEncoder.BarcodeEncoder;
 import com.example.ryuu.attendanceapp.objects.Classes;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +30,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -137,7 +137,7 @@ public class AddClassActivity extends AppCompatDialogFragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
 
-                String date = year+"-"+month+"-"+day;
+                String date = day+"/"+month+"/"+year;
                 class_date.setText(date);
 
             }
