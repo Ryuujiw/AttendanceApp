@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".activities.authentication.LoginActivity">
 
     <TextView
         android:id="@+id/tv_hint"
@@ -45,7 +45,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:passwordToggleEnabled="true"
-        app:passwordToggleDrawable="@drawable/icon_selector"
+        app:passwordToggleDrawable="@drawable/authentication_button_passwordiconselector_normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">

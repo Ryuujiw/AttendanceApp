@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/mobile" />
+            app:srcCompat="@drawable/viewcourses_image_courseplaceholder1_normal" />
 
         <TextView
             android:id="@+id/tv_class_name"

@@ -22,31 +22,31 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.authentication.AuthenticationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".ClassActivity" />
-        <activity android:name=".ClassDetailsActivity" />
-        <activity android:name=".CreateCourseActivity" />
-        <activity android:name=".CourseDetails" />
+        <activity android:name=".activities.authentication.LoginActivity" />
+        <activity android:name=".activities.authentication.SignUpActivity" />
+        <activity android:name=".activities.course.ViewCourseActivity" />
+        <activity android:name=".activities.course.CourseHomeActivity" />
+        <activity android:name=".activities.course.CreateCourseActivity" />
+        <activity android:name=".activities.course.CreateCourseSuccessActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".activity_myprofile" />
-        <activity android:name=".activity_edit_profile" />
-        <activity android:name=".ClassList_Teacher_Activity" />
-        <activity android:name=".ClassListDetails" />
-        <activity android:name=".AnswerActivity">
+        <activity android:name=".activities.profile.ViewProfileActivity" />
+        <activity android:name=".activities.profile.EditProfileActivity" />
+        <activity android:name=".activities.klass.ViewClassesActivity" />
+        <activity android:name=".activities.klass.ViewClassDetailsActivity" />
+        <activity android:name=".activities.forum.AnswerActivity">
             android:windowSoftInputMode="stateHidden|adjustPan"
         </activity>
-        <activity android:name=".Reset_Password_Activity" />
+        <activity android:name=".activities.authentication.ResetPasswordActivity" />
     </application>
 
 </manifest>

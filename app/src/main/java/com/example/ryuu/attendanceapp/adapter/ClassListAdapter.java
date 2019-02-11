@@ -14,9 +14,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.ClassDetailsActivity;
-import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
-import com.example.ryuu.attendanceapp.Class_list;
+import com.example.ryuu.attendanceapp.activities.course.CourseHomeActivity;
+import com.example.ryuu.attendanceapp.objects.Class_list;
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -124,7 +123,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ClassDetailsActivity.class);
+            Intent intent = new Intent(view.getContext(), CourseHomeActivity.class);
             intent.putExtra("courseCode",courseCode);
             intent.putExtra("LOGIN_MODE",loginMode);
             intent.putExtra("classID",classListData.get(getAdapterPosition()).getClassID());

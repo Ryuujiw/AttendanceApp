@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.ClassList_Teacher_Activity;
+import com.example.ryuu.attendanceapp.activities.klass.ViewClassesActivity;
 import com.example.ryuu.attendanceapp.objects.Class;
 import com.example.ryuu.attendanceapp.R;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ClassViewHolder> implements Filterable {
 
@@ -54,7 +53,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int position) {
-        int[] img = { R.drawable.mobile, R.drawable.web, R.drawable.network,R.drawable.numerical };
+        int[] img = { R.drawable.viewcourses_image_courseplaceholder1_normal, R.drawable.viewcourses_image_courseplaceholder4_nornal, R.drawable.viewcourses_image_courseplaceholder2_normal,R.drawable.viewcourses_image_courseplaceholder3_normal};
         classViewHolder.tvClassName.setText(classList.get(position).getCourse_name());
         if(loginMode.equals("lecturer")){
             classViewHolder.tvClassCode.setText("Code: "+classList.get(position).getCourse_code());
@@ -127,7 +126,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), ClassList_Teacher_Activity.class);
+            Intent intent = new Intent(view.getContext(), ViewClassesActivity.class);
             Bundle bundle = new Bundle();
 
             bundle.putString("courseName", classList.get(getAdapterPosition()).getCourse_name());

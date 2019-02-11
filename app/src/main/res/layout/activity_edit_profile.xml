@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity_edit_profile"
+    tools:context=".activities.profile.EditProfileActivity"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,7 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:id="@+id/sv_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/tb_editprofile"
@@ -128,7 +127,7 @@
                 android:elevation="5dp"
                 android:padding="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/man"
+                android:src="@drawable/profile_image_profilepic_normal"
                 app:civ_border_color="#FFFFFFFF"
                 app:civ_border_width="3dp"
                 app:layout_constraintEnd_toEndOf="parent"

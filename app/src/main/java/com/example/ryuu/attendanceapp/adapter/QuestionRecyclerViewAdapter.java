@@ -6,12 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ryuu.attendanceapp.AnswerActivity;
+import com.example.ryuu.attendanceapp.activities.forum.AnswerActivity;
 import com.example.ryuu.attendanceapp.R;
 import com.example.ryuu.attendanceapp.objects.Question;
 import com.google.firebase.database.DatabaseReference;

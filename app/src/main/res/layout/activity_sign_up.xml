@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".activities.authentication.SignUpActivity">
 
     <Spinner
         android:id="@+id/sp_gender_sign_up"
@@ -95,7 +95,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:passwordToggleEnabled="true"
-        app:passwordToggleDrawable="@drawable/icon_selector"
+        app:passwordToggleDrawable="@drawable/authentication_button_passwordiconselector_normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
