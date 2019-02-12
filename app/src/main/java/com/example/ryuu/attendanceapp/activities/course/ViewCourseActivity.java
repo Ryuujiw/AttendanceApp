@@ -48,10 +48,10 @@ public class ViewCourseActivity extends AppCompatActivity {
     ClassRecyclerViewAdapter classRecyclerViewAdapter;
     RecyclerView recyclerView;
     TextView txt_no_result;
-    List<Class> classList = new ArrayList<>();
+
     private String classCode = "";
     ProgressDialog progress;
-    String matric=" ",loginMode,uid;
+    String matric="", loginMode, uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,9 @@ public class ViewCourseActivity extends AppCompatActivity {
                 }else if(loginMode.equals("lecturer")){
                     matric = dataSnapshot.child("matric").getValue(String.class);;
                 }
+
+                // parse logged in user's matric no. to get course view
+                getCourseView(matric);
             }
 
             @Override
@@ -99,31 +102,6 @@ public class ViewCourseActivity extends AppCompatActivity {
                 Toast.makeText(ViewCourseActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        //so far only done lecturer create course, this part is retrieving data from firebase. Will remove the login mode if statement later after i done student add courses
-            mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
-            mDatabaseUser1.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    progress.dismiss();
-                    classList.clear();
-                    for(DataSnapshot courseSnapshot : dataSnapshot.getChildren()){
-                        Boolean isPresent = courseSnapshot.child(loginMode).hasChild(matric);
-                        if(isPresent){
-                            Class course = courseSnapshot.getValue(Class.class);
-                            classList.add(course);
-                        }
-                    }
-                    classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ViewCourseActivity.this, classList, loginMode);
-                    classRecyclerViewAdapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(classRecyclerViewAdapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
 
         fabtn_add_class.setOnClickListener(new View.OnClickListener() {
 
@@ -170,6 +148,36 @@ public class ViewCourseActivity extends AppCompatActivity {
                     intent.putExtra("LOGIN_MODE", loginMode);
                     startActivity(intent);
                 }
+            }
+        });
+    }
+
+    private void getCourseView(String user_matric) {
+
+        final String login_matric = user_matric;
+        mDatabaseUser1 = FirebaseDatabase.getInstance().getReference("/courses/");
+        mDatabaseUser1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                //open an empty list
+                final List<Class> classList = new ArrayList<Class>();
+
+                //get course list
+                for(DataSnapshot courseSnapshot : dataSnapshot.getChildren()){
+                    if(courseSnapshot.child(loginMode).child(login_matric).exists()){
+                        classList.add(courseSnapshot.getValue(Class.class));
+                    }
+                }
+                progress.dismiss();
+                classRecyclerViewAdapter = new ClassRecyclerViewAdapter(ViewCourseActivity.this, classList, loginMode);
+                classRecyclerViewAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(classRecyclerViewAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
