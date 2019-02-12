@@ -53,9 +53,9 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     @Override
     public void onBindViewHolder(@NonNull ClassListViewHolder holder, int position) {
 
-        holder.className.setText(classListData.get(position).getClassName());
-        holder.classDate.setText(classListData.get(position).getClassDate());
-        holder.classStartTime.setText(classListData.get(position).getClassStartTime());
+        holder.tv_className.setText(classListData.get(position).getClassName());
+        holder.tv_classDate.setText(classListData.get(position).getClassDate());
+        holder.tv_classType.setText(classListData.get(position).getClassType());
 
     }
 
@@ -106,15 +106,15 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.Clas
     public class ClassListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
 
-        TextView className, classDate, classStartTime;
+        TextView tv_className, tv_classDate, tv_classType;
 
 
         public ClassListViewHolder(View itemView){
             super(itemView);
 
-            className = itemView.findViewById(R.id.txt_class_name);
-            classDate = itemView.findViewById(R.id.txt_class_date);
-            classStartTime = itemView.findViewById(R.id.txt_class_start_time);
+            this.tv_className = itemView.findViewById(R.id.txt_class_name);
+            this.tv_classDate = itemView.findViewById(R.id.txt_class_date);
+            this.tv_classType = itemView.findViewById(R.id.txt_class_type);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 

@@ -98,7 +98,7 @@
         app:layout_constraintTop_toTopOf="@+id/txt_beginTime" />
 
     <TextView
-        android:id="@+id/txt_classDate"
+        android:id="@+id/txt_class_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -115,8 +115,8 @@
         android:layout_marginLeft="24dp"
         android:text="2018-07-28"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_classDate"
-        app:layout_constraintStart_toEndOf="@+id/txt_classDate"
-        app:layout_constraintTop_toTopOf="@+id/txt_classDate" />
+        app:layout_constraintBottom_toBottomOf="@+id/txt_class_date"
+        app:layout_constraintStart_toEndOf="@+id/txt_class_date"
+        app:layout_constraintTop_toTopOf="@+id/txt_class_date" />
 
 </android.support.constraint.ConstraintLayout>

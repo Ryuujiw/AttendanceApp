@@ -29,7 +29,7 @@ public class ViewClassesActivity extends AppCompatActivity implements AddClassAc
     FloatingActionButton floatingActionButton;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
-    String classTitle="", classDate="", classTime="", classID;
+    String className="", classDate="", classTime="", classID, classType="";
     List<Class_list> allClassList;
     AddClassActivity addClassActivity;
     Class_list classData;
@@ -72,17 +72,18 @@ public class ViewClassesActivity extends AppCompatActivity implements AddClassAc
                     }
                     allClassList.clear();
                     for(DataSnapshot dataSnapshot: classSnapshot.getChildren()){
-                        classTitle = dataSnapshot.child("className").getValue(String.class);
+                        className = dataSnapshot.child("className").getValue(String.class);
                         classDate = dataSnapshot.child("date").getValue(String.class);
                         classTime = dataSnapshot.child("startTime").getValue(String.class);
                         classID = dataSnapshot.child("classID").getValue(String.class);
+                        classType = dataSnapshot.child("classType").getValue(String.class);
                         boolean booo= dataSnapshot.child("open").getValue(boolean.class);
                         if(loginMode.equals("student")){
                             if(booo==true){
-                                applyText(classTitle, classDate, classTime);
+                                applyText(className, classDate, classType);
                             }
                         }else if (loginMode.equals("lecturer")){
-                            applyText(classTitle, classDate, classTime);
+                            applyText(className, classDate, classType);
                         }
 
                     }
@@ -130,12 +131,12 @@ public class ViewClassesActivity extends AppCompatActivity implements AddClassAc
     }
 
     @Override
-    public void applyText(String title, String date, String time) { //process
+    public void applyText(String className, String classDate, String classType) { //process
         //set data from dialog
-        this.classTitle = title;
-        this.classDate = date;
-        this.classTime = time;
-        classData = new Class_list(classTitle, classDate, classTime);
+        this.className = className;
+        this.classDate = classDate;
+        this.classType = classType;
+        classData = new Class_list(className, classDate, classType);
         classData.setClassID(classID);
         allClassList.add(classData);
 

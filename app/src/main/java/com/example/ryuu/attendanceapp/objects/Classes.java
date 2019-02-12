@@ -9,10 +9,10 @@ public class Classes {
     private String qrUrl;
     private boolean status, open;
     private String date;
-    private String location;
+    private String classType;
     private String startTime,endTime;
 
-    public Classes(String classID,String className, String date,String startTime, String location) {
+    public Classes(String classID, String className, String date, String startTime, String classType) {
         this.classID = classID;
         this.className = className;
         this.attend_list = "";
@@ -20,9 +20,9 @@ public class Classes {
         this.status = false;
         this.open = false;
         this.date = date;
-        this.location = location;
         this.startTime = startTime;
         this.endTime = "";
+        this.classType = classType;
     }
     public Classes(){
 
@@ -84,12 +84,12 @@ public class Classes {
         this.date = date;
     }
 
-    public String getLocation() {
-        return location;
+    public String getClassType() {
+        return classType;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setClassType(String classType) {
+        this.classType = classType;
     }
 
     public String getStartTime() {
@@ -114,7 +114,7 @@ public class Classes {
 //        result.put("date", date);
 //        result.put("start_time", startTime);
 //        result.put("end_time", endTime);
-//        result.put("location", location);
+//        result.put("classType", classType);
 //        result.put("status", status);
 //        result.put("open", open);
 //        result.put("QR", qrUrl);
