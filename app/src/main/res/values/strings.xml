@@ -2,5 +2,13 @@
 <resources>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="class_type">
+        <item>Lecture</item>
+        <item>Tutorial</item>
+        <item>Practical/Lab</item>
+        <item>Seminar</item>
+        <item>Workshop</item>
+        <item>Discussion</item>
+    </string-array>
 
 </resources>

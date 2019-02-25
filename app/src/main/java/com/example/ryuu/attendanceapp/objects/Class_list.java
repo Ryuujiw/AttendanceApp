@@ -6,13 +6,14 @@ import android.os.Bundle;
 public class Class_list{
     String className;
     String classDate;
-    String classStartTime;
+    String classType;
     String classID;
 
-    public Class_list(String className, String classDate, String classStartTime) {
+
+    public Class_list(String className, String classDate, String classType) {
         this.className = className;
         this.classDate = classDate;
-        this.classStartTime = classStartTime;
+        this.classType = classType;
         this.classID="";
     }
 
@@ -28,6 +29,14 @@ public class Class_list{
         return className;
     }
 
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
     public void setClassName(String className) {
         this.className = className;
     }
@@ -40,11 +49,4 @@ public class Class_list{
         this.classDate = classDate;
     }
 
-    public String getClassStartTime() {
-        return classStartTime;
-    }
-
-    public void setClassStartTime(String classStartTime) {
-        this.classStartTime = classStartTime;
-    }
 }

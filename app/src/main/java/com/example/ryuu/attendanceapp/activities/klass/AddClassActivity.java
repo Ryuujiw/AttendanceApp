@@ -3,19 +3,21 @@ package com.example.ryuu.attendanceapp.activities.klass;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ryuu.attendanceapp.R;
@@ -32,22 +34,24 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.io.ByteArrayOutputStream;
-import java.text.DecimalFormat;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddClassActivity extends AppCompatDialogFragment {
 
-    EditText class_title, class_date, class_time, class_venue;
-    addClassActivityListener addClassListener;
-    DatePickerDialog.OnDateSetListener mDateSetListener;
-    TimePickerDialog.OnTimeSetListener mTimeSetListener;
-    DatabaseReference mDataRef;
-    StorageReference mStorageRef;
-    String key;
-    Bitmap bitmap;
-    String courseCode;
+    protected EditText et_className, et_classDate;
+    protected Spinner spinner_classType;
+    protected TextInputLayout til_classType, til_className, til_classDate;
+    protected addClassActivityListener addClassListener;
+    protected DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    protected DatabaseReference mDataRef;
+    protected StorageReference mStorageRef;
+    protected String key;
+    protected Bitmap bitmap;
+    protected String courseCode;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -61,11 +65,28 @@ public class AddClassActivity extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_add_class, null);
 
-        class_title = view.findViewById(R.id.edittext_title);
-        class_date = view.findViewById(R.id.edittext_date);
-        class_time = view.findViewById(R.id.et_time);
-        class_venue = view.findViewById(R.id.et_venue);
+        //declare variables
+        this.spinner_classType = view.findViewById(R.id.spinner_classType);
+        this.et_className = view.findViewById(R.id.et_className);
+        this.et_classDate = view.findViewById(R.id.et_classDate);
+        this.til_classType = view.findViewById(R.id.til_classType);
+        this.til_className = view.findViewById(R.id.til_className);
+        this.til_classDate = view.findViewById(R.id.til_classDate);
 
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getContext(), R.array.class_type, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_classType.setAdapter(arrayAdapter);
+        spinner_classType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         builder.setView(view).setTitle("Create class here :");
 
@@ -79,16 +100,16 @@ public class AddClassActivity extends AppCompatDialogFragment {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String title = class_title.getText().toString();
-                String date = class_date.getText().toString();
-                String time = class_time.getText().toString();
-                String venue = class_venue.getText().toString();
-                addClassListener.applyText(title, date, time);
+
+                String classType = spinner_classType.getSelectedItem().toString();
+                String className = et_className.getText().toString();
+                String classDate = et_classDate.getText().toString();
+                addClassListener.applyText(className, classDate, classType);
 
                 Toast.makeText(getActivity(), "Class added", Toast.LENGTH_SHORT).show();
                 mDataRef = FirebaseDatabase.getInstance().getReference("/classes/"+courseCode+"/");
                 key = mDataRef.push().getKey();
-                Classes classes = new Classes(key, title,date, time, venue);
+                Classes classes = new Classes(key, className, classDate, null, classType);
 
                 Map<String, Object> dataMap = new HashMap<String, Object>();
                 dataMap.put(key, classes);
@@ -115,54 +136,33 @@ public class AddClassActivity extends AppCompatDialogFragment {
 
         });
 
-        class_date.setOnClickListener(new View.OnClickListener() {
+        et_classDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar currentDate = Calendar.getInstance();
-                //datepicker
-                int year = currentDate.get(Calendar.YEAR);
-                int month = currentDate.get(Calendar.MONTH);
-                int day = currentDate.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListener, year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
+                Calendar mCurrentDate = Calendar.getInstance();
+                int mYear = mCurrentDate.get(Calendar.YEAR);
+                int mMonth = mCurrentDate.get(Calendar.MONTH);
+                int mDay = mCurrentDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), mDateSetListener, mYear, mMonth, mDay);
+                mDatePicker.setTitle("Select Date");
+                mDatePicker.show();
 
             }
         });
 
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
+            public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay) {
 
-                String date = day+"/"+month+"/"+year;
-                class_date.setText(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+                calendar.set(Calendar.MONTH, selectedMonth);
+                calendar.set(Calendar.YEAR, selectedYear);
 
-            }
-        };
-
-        class_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar currentTime = Calendar.getInstance();
-                int selectedHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int selectedMinute = currentTime.get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, mTimeSetListener,
-                        selectedHour, selectedMinute,true);
-                timePickerDialog.show();
-            }
-        });
-
-
-        mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                DecimalFormat df = new DecimalFormat("00");
-                String time = df.format(hour) +":"+ df.format(minute);
-                class_time.setText(time);
+                String selectedDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(calendar.getTime());
+                et_classDate.setText(selectedDate);
 
             }
         };
@@ -182,7 +182,7 @@ public class AddClassActivity extends AppCompatDialogFragment {
     }
 
     public interface addClassActivityListener{
-        void applyText(String title, String date, String time);
+        void applyText(String className, String classDate, String classType);
     }
 
 }

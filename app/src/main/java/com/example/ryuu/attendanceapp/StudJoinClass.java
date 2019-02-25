@@ -1,6 +1,5 @@
 package com.example.ryuu.attendanceapp;
 
-import android.content.Intent;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +35,7 @@ public class StudJoinClass extends AppCompatActivity {
 
         tv_dateTime = findViewById(R.id.tv_classDateTime);
         tv_attended = findViewById(R.id.tv_students);
-        tv_className = findViewById(R.id.tv_className);
+        tv_className = findViewById(R.id.txt_class_name);
         qrCodeReaderView = findViewById(R.id.qrdecoderview);
         classID = getIntent().getStringExtra("classID");
         courseCode = getIntent().getStringExtra("courseCode");
