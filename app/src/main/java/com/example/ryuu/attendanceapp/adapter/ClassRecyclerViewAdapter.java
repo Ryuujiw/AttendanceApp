@@ -53,7 +53,12 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int position) {
-        int[] img = { R.drawable.viewcourses_image_courseplaceholder1_normal, R.drawable.viewcourses_image_courseplaceholder4_nornal, R.drawable.viewcourses_image_courseplaceholder2_normal,R.drawable.viewcourses_image_courseplaceholder3_normal};
+        int[] img = {
+                R.drawable.viewcourses_image_courseplaceholder1_normal,
+                R.drawable.viewcourses_image_courseplaceholder4_nornal,
+                R.drawable.viewcourses_image_courseplaceholder2_normal,
+                R.drawable.viewcourses_image_courseplaceholder3_normal };
+
         classViewHolder.tvClassName.setText(classList.get(position).getCourse_name());
         if(loginMode.equals("lecturer")){
             classViewHolder.tvClassCode.setText("Code: "+classList.get(position).getCourse_code());
